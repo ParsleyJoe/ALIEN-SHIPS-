@@ -106,8 +106,7 @@ void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawne
 	Vector2 spawnPos = { 0, 0 };
 	spawnPos.x = GetRandomValue(0, 1) == 0 ? 0 : GetScreenWidth();
 
-	//if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval))
-	if (IsKeyPressed(KEY_SPACE))
+	if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval))
 	{
 		std::unique_ptr<Asteroid> asteroid = std::make_unique<Asteroid>();
 		asteroid->health = 300;
