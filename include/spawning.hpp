@@ -18,5 +18,5 @@ void SpawnShips(std::vector<std::unique_ptr<Enemy>>& enemies);
 void SpawnFodder(std::vector<std::unique_ptr<Enemy>>& enemies);
 void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
 
-
+void AsteroidWarning();
 Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies);

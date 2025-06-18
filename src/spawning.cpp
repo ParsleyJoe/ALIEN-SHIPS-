@@ -36,7 +36,7 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 		spawnedEnemies = 0;// TODO: it sets to 0 as soon as enemyAmmount is greater
 		wave++;
 
-		if (wave >= 3) { wave = 1; } // Reset wave, start again from fodders
+		if (wave >= 4) { wave = 1; } // Reset wave, start again from fodders
 	}
 	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
 		return e->rec.y > (GetScreenHeight() + e->rec.height);
@@ -106,6 +106,12 @@ void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawne
 	Vector2 spawnPos = { 0, 0 };
 	spawnPos.x = GetRandomValue(0, 1) == 0 ? 0 : GetScreenWidth();
 
+	float timeUntilTrue = (spawner.lastSpawnTime + spawner.spawnInterval) - GetTime();
+	if (timeUntilTrue <= 2.0f)
+	{
+		// Spawn in 1 second
+		AsteroidWarning();
+	}
 	if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval))
 	{
 		std::unique_ptr<Asteroid> asteroid = std::make_unique<Asteroid>();
@@ -131,6 +137,16 @@ void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawne
 		spawner.lastSpawnTime = GetTime();
 		spawner.spawnInterval = GetRandomValue(15, 25) + 0.0f;
 	}
+}
+
+void AsteroidWarning()
+{
+	int fontSize = 30;
+	int textWidth = MeasureText("GAME OVER", fontSize);
+	int x = (GetScreenWidth() / 2) - (textWidth / 2);
+	int y = (GetScreenHeight() / 2) - (fontSize / 2) - 200; // optional, for vertical center
+	DrawText("Asteroid WARNING!!", x, y, fontSize, DARKGRAY);
+
 }
 
 Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies)

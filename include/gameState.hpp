@@ -5,4 +5,5 @@
 namespace GameState
 {
 	inline std::vector<Bullet> enemyBullets;
+	inline Texture2D shipSprite;
 }

@@ -23,7 +23,7 @@ bool gameActive = false;
 int main()
 {
 	// Raylib Init
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+	//SetConfigFlags();
 	InitWindow(800, 600, "SpaceGame");
 	SetTargetFPS(60);
 
@@ -61,7 +61,7 @@ int main()
 	std::vector<BulletSpawner> bltSpawners;
 
 	Texture2D playerSprite = LoadTexture("resources/ship.png");
-	Texture2D shipSprite = LoadTexture("resources/UFO.png");
+	GameState::shipSprite = LoadTexture("resources/UFO.png");
 
 	Player player;
 	int wave = 1;
@@ -180,10 +180,7 @@ int main()
 			DrawPlayer(player, playerSprite);
 			for (const auto& enemy : enemies)
 			{
-				if (enemy->type == EnemyType::SHIP)
-					DrawTexture(shipSprite, enemy->rec.x, enemy->rec.y, BLUE);
-				else
-					enemy->Draw();
+				enemy->Draw();
 			}
 
 			// Draw Bullets

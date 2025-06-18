@@ -62,7 +62,8 @@ struct Ship : Enemy
 	int speed = 3;
 	void Draw() override
 	{
-		DrawRectangleRec(rec, BLUE);
+		//DrawRectangleRec(rec, BLUE);
+		DrawTexture(GameState::shipSprite, rec.x, rec.y, BLUE);
 	}
 	void Update() override
 	{
