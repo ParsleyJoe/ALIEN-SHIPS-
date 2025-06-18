@@ -19,7 +19,7 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 		}
 		else if (spawner.waveType == EnemyType::CIRCLESHOOTER)
 		{
-       		if (enemies.size() <= 0)
+			if (enemies.size() <= 0)
 				spawner.lastSpawnTime = GetTime();
 			SpawnCircleShooter(enemies, spawner);
 		}
@@ -33,16 +33,20 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 		{
 			spawner.enemyAmmount = 2;
 		}
-		if (spawner.waveType == EnemyType::CIRCLESHOOTER) { wave = 1; }
 		spawnedEnemies = 0;// TODO: it sets to 0 as soon as enemyAmmount is greater
 		wave++;
+
+		if (wave >= 3) { wave = 1; } // Reset wave, start again from fodders
 	}
+	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
+		return e->rec.y > (GetScreenHeight() + e->rec.height);
+		}), enemies.end());
 }
 
 void SpawnCircleShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
 {
 	float shooterCooldown = 0.1f;
-	
+
 	static Vector2 pos;
 	static float posOffset = 250;
 	pos = { GetScreenWidth() / 2.0f, 50.0f };
@@ -51,7 +55,7 @@ void SpawnCircleShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& s
 		Vector2 newPos = pos;
 		do
 		{
-  			newPos.x -= posOffset;
+			newPos.x -= posOffset;
 			posOffset = posOffset * -1;
 		} while (pos.x == newPos.x);
 		pos = newPos;
@@ -102,23 +106,32 @@ void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawne
 	Vector2 spawnPos = { 0, 0 };
 	spawnPos.x = GetRandomValue(0, 1) == 0 ? 0 : GetScreenWidth();
 
-	if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval))
+	//if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval))
+	if (IsKeyPressed(KEY_SPACE))
 	{
 		std::unique_ptr<Asteroid> asteroid = std::make_unique<Asteroid>();
 		asteroid->health = 300;
-		asteroid->rec.x = spawnPos.x;
-		asteroid->rec.y = spawnPos.y;
 		asteroid->rec.width = 250;
 		asteroid->rec.height = 250;
-		if (asteroid->rec.x >= GetScreenWidth())
+		if (spawnPos.x >= GetScreenWidth())
 			asteroid->speedX *= -1;
+
+		if (spawnPos.x >= GetScreenWidth())
+		{
+			asteroid->rec.x = spawnPos.x + asteroid->rec.width;
+			asteroid->rec.y = spawnPos.y - asteroid->rec.height * 1.5;
+		}
+		else
+		{
+			asteroid->rec.x = spawnPos.x - asteroid->rec.width;
+			asteroid->rec.y = spawnPos.y - asteroid->rec.height;
+		}
+
 		asteroid->type = EnemyType::ASTEROID;
 		enemies.push_back(std::move(asteroid));
 		spawner.lastSpawnTime = GetTime();
+		spawner.spawnInterval = GetRandomValue(15, 25) + 0.0f;
 	}
-	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
-		return e->rec.y > (GetScreenHeight() + e->rec.height);
-		}), enemies.end());
 }
 
 Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies)

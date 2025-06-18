@@ -25,7 +25,6 @@ struct Enemy
 
 struct Fodder : Enemy
 {
-
 	int speedX = 5;
 	int speedY = 2;
 	float sizeDivider = 1.3f;
@@ -67,7 +66,7 @@ struct Ship : Enemy
 	}
 	void Update() override
 	{
-		rec.y += speed; // moving only on y 
+		rec.y += speed; // moving only on y
 	}
 	Ship()
 	{
@@ -97,11 +96,12 @@ struct Asteroid : Enemy
 {
 	int speedX = 15;
 	int speedY = 15;
-	float sizeDivider = 1.3f;
+	float sizeDivider = 1.4f;
 
 	void Draw() override
 	{
 		DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
+		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, GREEN);
 	}
 
 	void Update() override

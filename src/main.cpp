@@ -61,6 +61,7 @@ int main()
 	std::vector<BulletSpawner> bltSpawners;
 
 	Texture2D playerSprite = LoadTexture("resources/ship.png");
+	Texture2D shipSprite = LoadTexture("resources/UFO.png");
 
 	Player player;
 	int wave = 1;
@@ -85,7 +86,7 @@ int main()
 
 	Spawner asteroidSpawner;
 	asteroidSpawner.waveType = EnemyType::ASTEROID;
-	asteroidSpawner.spawnInterval = 5.0f;
+	asteroidSpawner.spawnInterval = GetRandomValue(15, 25) + 0.0f;
 	asteroidSpawner.enemyAmmount = 1;
 
 	Button btn;
@@ -179,7 +180,10 @@ int main()
 			DrawPlayer(player, playerSprite);
 			for (const auto& enemy : enemies)
 			{
-				enemy->Draw();
+				if (enemy->type == EnemyType::SHIP)
+					DrawTexture(shipSprite, enemy->rec.x, enemy->rec.y, BLUE);
+				else
+					enemy->Draw();
 			}
 
 			// Draw Bullets
