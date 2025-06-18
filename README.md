@@ -1,8 +1,11 @@
 # ALIEN-SHIPS!
-	Work in progress project, endless bullet hell made in Raylib.
+
+Work in progress project, endless bullet hell made in Raylib.
 
 # Building
-	Cmake Project, build by:
+
+Cmake Project, build by:
+
 		mkdir out
 		cd out
 		cmake ..
