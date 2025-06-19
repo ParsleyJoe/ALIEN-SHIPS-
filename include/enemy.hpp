@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include "bulletSpawning.hpp"
-#include "gameState.hpp"
+#include "gameAssets.hpp"
 
 enum class EnemyType {
 	FODDER, SHIP, CIRCLESHOOTER, ASTEROID
@@ -17,8 +17,6 @@ struct Enemy
 	int health = 30;
 
 	bool alive = true;
-	float shotInterval = (GetRandomValue(1, 3)) / 10.0f;// divide by 10.0f , to avoid integer division and truncation for 0.1, 0.3
-	float time = shotInterval; // So that it fires as it spawns
 	virtual void Draw() = 0;
 	virtual void Update() = 0;
 };
@@ -59,15 +57,18 @@ struct Fodder : Enemy
 
 struct Ship : Enemy
 {
+	BulletSpawner bltSpawner;
 	int speed = 3;
 	void Draw() override
 	{
-		//DrawRectangleRec(rec, BLUE);
-		DrawTexture(GameState::shipSprite, rec.x, rec.y, BLUE);
+		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, BLACK);
+		DrawTexture(GameAssets::shipSprite, rec.x, rec.y, BLUE);
 	}
 	void Update() override
 	{
 		rec.y += speed; // moving only on y
+		bltSpawner.position.y += speed;
+		SpawnBullets(bltSpawner, GameAssets::enemyBullets, GameAssets::bullet, DEG2RAD * 0.0f);
 	}
 	Ship()
 	{
@@ -84,7 +85,7 @@ struct CircleShooter : Enemy
 	{
 		// TODO: Move it, Haven't decided how I'll Move it....
 		sinMultiplier = sinf(GetTime() * 10.0f); // amplify the curve speed by 10.0f
-		SpawnBullets(bltSpawner, GameState::enemyBullets, Rectangle{ 0, 0, 5, 10 }, shootAngle * sinMultiplier);
+		SpawnBullets(bltSpawner, GameAssets::enemyBullets, GameAssets::bullet, shootAngle * sinMultiplier);
 	}
 
 	void Draw() override
@@ -111,6 +112,3 @@ struct Asteroid : Enemy
 		rec.y += speedY;
 	}
 };
-
-// Shooting
-void EnemyShootBullets(std::vector<Bullet>& enemyBullets, std::vector<std::unique_ptr<Enemy>>& enemies, Rectangle bullet);

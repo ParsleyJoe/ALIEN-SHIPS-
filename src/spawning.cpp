@@ -1,5 +1,5 @@
 #include "spawning.hpp"
-#include "gameState.hpp"
+#include "gameAssets.hpp"
 #include <algorithm>
 
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
@@ -76,9 +76,10 @@ void SpawnShips(std::vector<std::unique_ptr<Enemy>>& enemies)
 	Vector2 pos = GetShipSpawnPosition(enemies);
 
 	// Creating enemy
-	std::unique_ptr<Enemy> ship = std::make_unique<Ship>();
+	std::unique_ptr<Ship> ship = std::make_unique<Ship>();
 	ship->rec.x = pos.x;
 	ship->rec.y = pos.y;
+	ship->bltSpawner = MakeSpawner(pos, GetRandomValue(1, 3) / 10.0f);
 	ship->type = EnemyType::SHIP;
 	enemies.push_back(std::move(ship));
 }
@@ -146,7 +147,6 @@ void AsteroidWarning()
 	int x = (GetScreenWidth() / 2) - (textWidth / 2);
 	int y = (GetScreenHeight() / 2) - (fontSize / 2) - 200; // optional, for vertical center
 	DrawText("Asteroid WARNING!!", x, y, fontSize, DARKGRAY);
-
 }
 
 Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies)

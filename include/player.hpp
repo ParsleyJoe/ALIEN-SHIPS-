@@ -24,7 +24,11 @@ struct Player
 void DrawPlayer(Player& player, Texture2D& playerSprite);
 void MovePlayer(Player& player);
 void ShootBullet(Player& player, Rectangle bullet, std::vector<Rectangle>& bullets);
-void BulletsCollision(std::vector<Rectangle>& bullets, std::vector<std::unique_ptr<Enemy>>& enemies);
+
+void BulletsHit(std::vector<Rectangle>& bullets, std::vector<std::unique_ptr<Enemy>>& enemies);
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);
+void ContactCollision(Player& player, std::unique_ptr<Enemy>& enemy);
+void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy);
+
 void PlayerRestart(Player& player);
 bool PlayerStartAnimation(Player& player);

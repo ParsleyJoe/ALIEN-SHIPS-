@@ -61,7 +61,7 @@ int main()
 	std::vector<BulletSpawner> bltSpawners;
 
 	Texture2D playerSprite = LoadTexture("resources/ship.png");
-	GameState::shipSprite = LoadTexture("resources/UFO.png");
+	GameAssets::shipSprite = LoadTexture("resources/UFO.png");
 
 	Player player;
 	int wave = 1;
@@ -133,11 +133,11 @@ int main()
 				enemy->Update();
 			}
 
-			BulletsCollision(player.playerBullets, enemies);
+			BulletsHit(player.playerBullets, enemies);
 
 			ShootBullet(player, bullet, player.playerBullets);
 
-			for (Bullet& blt : GameState::enemyBullets)
+			for (Bullet& blt : GameAssets::enemyBullets)
 			{
 				blt.Update();
 			}
@@ -156,7 +156,7 @@ int main()
 #pragma endregion
 
 		ImGui::Begin("Test");
-		ImGui::Text("Size of bullets Vector: %i", GameState::enemyBullets.size());
+		ImGui::Text("Size of bullets Vector: %i", GameAssets::enemyBullets.size());
 		ImGui::End();
 
 		if (currentScene == Scene::MAIN_MENU)
@@ -171,9 +171,6 @@ int main()
 		}
 		else if (currentScene == Scene::GAME)
 		{
-			if (!gameActive)
-				DrawText("Paused", 600, 300, 40, GRAY);
-
 			DrawText(TextFormat("%d", player.lives), 10, 10, 20, BLACK);
 
 			// Player and enemies Drawing
@@ -188,9 +185,14 @@ int main()
 			{
 				DrawRectangleRec(bullet, RED);
 			}
-			for (auto& blt : GameState::enemyBullets)
+			for (auto& blt : GameAssets::enemyBullets)
 			{
 				DrawRectangleRec(blt.rec, RED);
+			}
+			if (!gameActive)
+			{
+				DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(GRAY, 0.5f));
+				DrawText("Paused", 600, 300, 40, GRAY);
 			}
 		}
 		else if (currentScene == Scene::GAME_OVER)

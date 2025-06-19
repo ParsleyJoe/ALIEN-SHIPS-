@@ -9,7 +9,28 @@ void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemie
 {
 	for (auto& enemy : enemies)
 	{
-		if (CheckCollisionRecs(player.rec, enemy->rec) && (GetTime() - player.lastHit) >= player.hitCooldown)
+		if ((GetTime() - player.lastHit) >= player.hitCooldown)
+		{
+			ContactCollision(player, enemy);
+			BulletCollision(player, enemy);
+		}
+	}
+}
+
+void ContactCollision(Player& player, std::unique_ptr<Enemy>& enemy)
+{
+	if (CheckCollisionRecs(player.rec, enemy->rec))
+	{
+		player.lives--;
+		PlayerRestart(player);
+	}
+}
+
+void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy)
+{
+	for (Bullet& blt : GameAssets::enemyBullets)
+	{
+		if (CheckCollisionRecs(player.rec, blt.rec))
 		{
 			player.lives--;
 			PlayerRestart(player);
@@ -39,7 +60,7 @@ void MovePlayer(Player& player)
 		player.direction.y = -1;
 	if (IsKeyDown(KEY_S) && player.rec.y <= (GetScreenHeight() - player.rec.height))
 		player.direction.y += 1;
-	
+
 	if (Vector2Length(player.direction) > 0)
 		player.direction = Vector2Normalize(player.direction);
 
@@ -50,7 +71,6 @@ void MovePlayer(Player& player)
 
 void ShootBullet(Player& player, Rectangle bullet, std::vector<Rectangle>& bullets)
 {
-
 	if (IsKeyDown(KEY_SPACE) && (GetTime() - player.lastShot) >= player.shotCooldown)
 	{
 		bullet.x = player.rec.x + ((player.rec.width / 2.0f) * 0.5f) - (bullet.width / 2.0f);
@@ -76,7 +96,7 @@ void ShootBullet(Player& player, Rectangle bullet, std::vector<Rectangle>& bulle
 }
 
 // If playerBullets hit enemies
-void BulletsCollision(std::vector<Rectangle>& playerBullets, std::vector<std::unique_ptr<Enemy>>& enemies)
+void BulletsHit(std::vector<Rectangle>& playerBullets, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
 	for (const Rectangle& bullet : playerBullets)
 	{
@@ -99,7 +119,6 @@ void BulletsCollision(std::vector<Rectangle>& playerBullets, std::vector<std::un
 		return (e->rec.y > GetScreenHeight()) || !e->alive;
 		}), enemies.end());
 }
-
 
 void PlayerRestart(Player& player)
 {
