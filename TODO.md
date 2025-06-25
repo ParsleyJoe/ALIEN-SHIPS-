@@ -1,13 +1,20 @@
 # TODO
 
 # REAL IMP (IN ORDER)
-	- ASTEROID, LOSE IF IF HIT PLAYER
 	- MAGIC, ALIEN TELEPORTS PLAYER RANDOM SPOT
 	- MAGIC ALIEN PULLS A ASTEROID
 	- Dodge spin
 	- Score
 	- Menu
 	- BEEG ENEMIES
+
+# BOSS DOING THINGS
+	- Health Bar
+	- Attacks
+		- shoots a sphere that shoot bullets in circle
+		- shoots and moves around
+		- shoots in front from -30deg to 30deg
+
 
 ## Important
 	- Enemy AI
@@ -25,3 +32,5 @@
 ## DONE 
 	- ~~ 2 Bullets(Player) per shot ~~
 	- ~~Enemy bullet spawner~~
+	- ~~ASTEROID, LOSE IF IF HIT PLAYER~~
+

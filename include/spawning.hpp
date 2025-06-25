@@ -16,6 +16,7 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 void SpawnCircleShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
 void SpawnShips(std::vector<std::unique_ptr<Enemy>>& enemies);
 void SpawnFodder(std::vector<std::unique_ptr<Enemy>>& enemies);
+void SpawnBossShip(std::vector<std::unique_ptr<Enemy>>& enemies);
 void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
 
 void AsteroidWarning();

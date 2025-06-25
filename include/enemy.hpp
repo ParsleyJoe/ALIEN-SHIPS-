@@ -4,9 +4,10 @@
 #include <memory>
 #include "bulletSpawning.hpp"
 #include "gameAssets.hpp"
+#include <hud.hpp>
 
 enum class EnemyType {
-	FODDER, SHIP, CIRCLESHOOTER, ASTEROID
+	FODDER, SHIP, CIRCLESHOOTER, ASTEROID, BOSS_SHIP
 };
 
 // Using inheritance for different enemies
@@ -91,6 +92,30 @@ struct CircleShooter : Enemy
 	void Draw() override
 	{
 		DrawRectangleRec(rec, BLUE);
+	}
+};
+
+struct BossShip : Enemy
+{
+	HealthBar healthBar;
+	int startHealth;
+	BossShip()
+	{
+		startHealth = 1500;
+		health = startHealth;
+		healthBar.mainRec = Rectangle{ GetScreenWidth() - 50.0f, 40.0f, 30.0f, GetScreenHeight() - 70.0f };
+		healthBar.fillRec = healthBar.mainRec;
+	}
+
+	void Update()
+	{
+		healthBar.health = health;
+	}
+
+	void Draw()
+	{
+		DrawRectangle(rec.x, rec.y, rec.width, rec.height, GREEN);
+		DrawHealthBar(healthBar, startHealth);
 	}
 };
 

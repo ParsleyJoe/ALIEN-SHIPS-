@@ -23,13 +23,19 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 				spawner.lastSpawnTime = GetTime();
 			SpawnCircleShooter(enemies, spawner);
 		}
+		else if (spawner.waveType == EnemyType::BOSS_SHIP)
+		{
+			if (enemies.size() <= 0)
+				spawner.lastSpawnTime = GetTime();
+			SpawnBossShip(enemies);
+		}
 
 		spawnedEnemies++;
 	}
 
 	if (spawnedEnemies >= spawner.enemyAmmount && enemies.size() <= 0)
 	{
-		if (spawner.enemyAmmount == 1)
+		if (spawner.enemyAmmount == 1 && spawner.waveType == EnemyType::CIRCLESHOOTER)
 		{
 			spawner.enemyAmmount = 2;
 		}
@@ -79,7 +85,9 @@ void SpawnShips(std::vector<std::unique_ptr<Enemy>>& enemies)
 	std::unique_ptr<Ship> ship = std::make_unique<Ship>();
 	ship->rec.x = pos.x;
 	ship->rec.y = pos.y;
-	ship->bltSpawner = MakeSpawner(pos, GetRandomValue(1, 3) / 10.0f);
+	ship->rec.width = 37; // !So that rectangle fits with sprite 37, 20 are needed
+	ship->rec.height = 20;
+	ship->bltSpawner = MakeSpawner(Vector2{ pos.x + (ship->rec.width / 2), ship->rec.y + ship->rec.height }, GetRandomValue(1, 3) / 10.0f);
 	ship->type = EnemyType::SHIP;
 	enemies.push_back(std::move(ship));
 }
@@ -100,6 +108,15 @@ void SpawnFodder(std::vector<std::unique_ptr<Enemy>>& enemies)
 	fodder->rec.y = spawnPos.y;
 	fodder->type = EnemyType::FODDER;
 	enemies.push_back(std::move(fodder));
+}
+
+void SpawnBossShip(std::vector<std::unique_ptr<Enemy>>& enemies)
+{
+	std::unique_ptr<BossShip> boss = std::make_unique<BossShip>();
+	boss->type = EnemyType::BOSS_SHIP;
+	boss->rec = Rectangle{ (GetScreenWidth() / 2.0f) - 50.0f, 50, 100, 100 };
+
+	enemies.push_back(std::move(boss));
 }
 
 void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)

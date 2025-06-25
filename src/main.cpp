@@ -16,6 +16,7 @@
 #include "bulletSpawning.hpp"
 #include "sceneManager.hpp"
 #include "button.hpp"
+#include "stars.hpp"
 
 bool gameActive = false;
 
@@ -26,6 +27,7 @@ int main()
 	//SetConfigFlags();
 	InitWindow(800, 600, "SpaceGame");
 	SetTargetFPS(60);
+	
 
 #pragma region imgui
 	rlImGuiSetup(true);
@@ -59,6 +61,7 @@ int main()
 	Rectangle enemy = { 400, 50, 25, 25 }; // "Template" enemy rectangle
 	std::vector<std::unique_ptr<Enemy>> enemies; // !Polymorphism to store any enemy type
 	std::vector<BulletSpawner> bltSpawners;
+	std::vector<Star> stars;
 
 	Texture2D playerSprite = LoadTexture("resources/ship.png");
 	GameAssets::shipSprite = LoadTexture("resources/UFO.png");
@@ -84,10 +87,19 @@ int main()
 	circleShooter.enemyAmmount = 1;
 	circleShooter.spawnInterval = 2.0f;
 
+	Spawner bossSpawner;
+	bossSpawner.waveType = EnemyType::BOSS_SHIP;
+	bossSpawner.enemyAmmount = 1;
+	bossSpawner.spawnInterval = 4.0f;
+
 	Spawner asteroidSpawner;
 	asteroidSpawner.waveType = EnemyType::ASTEROID;
 	asteroidSpawner.spawnInterval = GetRandomValue(15, 25) + 0.0f;
 	asteroidSpawner.enemyAmmount = 1;
+
+	Spawner starSpawner;
+	starSpawner.enemyAmmount = 40;
+	starSpawner.spawnInterval = 2.0f;
 
 	Button btn;
 	btn.rec = Rectangle{ (GetScreenWidth() / 2) - 50.0f, (GetScreenHeight() / 2) - 0.0f, 120, 50 };
@@ -101,6 +113,9 @@ int main()
 	{
 		if (IsKeyPressed(KEY_P))
 			gameActive = !gameActive;
+
+		SpawnStars(stars, starSpawner);
+		MoveStars(stars);
 
 		// Update Logic, Don't update anything if paused
 		if (gameActive)
@@ -117,7 +132,7 @@ int main()
 			switch (wave)
 			{
 			case 1:
-				SpawnEnemies(wave, enemies, fodderSpawner);
+				SpawnEnemies(wave, enemies, bossSpawner);
 				break;
 			case 2:
 				SpawnEnemies(wave, enemies, shipSpawner);
@@ -144,7 +159,7 @@ int main()
 		}
 
 		BeginDrawing();
-		ClearBackground(RAYWHITE);
+		ClearBackground(Color{13, 13, 13, 255});
 
 #pragma region imgui
 		rlImGuiBegin();
@@ -156,7 +171,9 @@ int main()
 #pragma endregion
 
 		ImGui::Begin("Test");
+		ImGui::Text("FPS: %i", GetFPS());
 		ImGui::Text("Size of bullets Vector: %i", GameAssets::enemyBullets.size());
+		ImGui::Text("Star vector size: %i", stars.size());
 		ImGui::End();
 
 		if (currentScene == Scene::MAIN_MENU)
@@ -171,8 +188,9 @@ int main()
 		}
 		else if (currentScene == Scene::GAME)
 		{
-			DrawText(TextFormat("%d", player.lives), 10, 10, 20, BLACK);
+			DrawText(TextFormat("%d", player.lives), 10, 10, 20, RAYWHITE);
 
+			DrawStars(stars);
 			// Player and enemies Drawing
 			DrawPlayer(player, playerSprite);
 			for (const auto& enemy : enemies)
