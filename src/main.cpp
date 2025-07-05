@@ -27,7 +27,6 @@ int main()
 	//SetConfigFlags();
 	InitWindow(800, 600, "SpaceGame");
 	SetTargetFPS(60);
-	
 
 #pragma region imgui
 	rlImGuiSetup(true);
@@ -55,16 +54,16 @@ int main()
 
 #pragma endregion
 
-	//TODO: Might move it to GameAssets namespace
+#pragma region Init
+	// TODO: Might move it to GameAssets namespace
 	// Game "Assets"
-	Rectangle bullet = { 0, 0, 5, 10 }; // note: x, y, width, height
-	Rectangle enemy = { 400, 50, 25, 25 }; // "Template" enemy rectangle
 	std::vector<std::unique_ptr<Enemy>> enemies; // !Polymorphism to store any enemy type
-	std::vector<BulletSpawner> bltSpawners;
 	std::vector<Star> stars;
 
 	Texture2D playerSprite = LoadTexture("resources/ship.png");
 	GameAssets::shipSprite = LoadTexture("resources/UFO.png");
+	GameAssets::bossHealthBorder = LoadTexture("resources/bossHealthBorder.png");
+	GameAssets::bossSkullSprite = LoadTexture("resources/skull.png");
 
 	Player player;
 	int wave = 1;
@@ -83,7 +82,7 @@ int main()
 	shipSpawner.enemyAmmount = 15;
 
 	Spawner circleShooter;
-	circleShooter.waveType = EnemyType::CIRCLESHOOTER;
+	circleShooter.waveType = EnemyType::SINWAVE_SHOOTER;
 	circleShooter.enemyAmmount = 1;
 	circleShooter.spawnInterval = 2.0f;
 
@@ -101,21 +100,19 @@ int main()
 	starSpawner.enemyAmmount = 40;
 	starSpawner.spawnInterval = 2.0f;
 
-	Button btn;
-	btn.rec = Rectangle{ (GetScreenWidth() / 2) - 50.0f, (GetScreenHeight() / 2) - 0.0f, 120, 50 };
-	btn.color = DARKGRAY;
-	btn.text = "Start Game";
-	btn.txtColor = WHITE;
-	btn.fontSize = 15;
+	Button startBtn;
+	startBtn.rec = Rectangle{ (GetScreenWidth() / 2) - 50.0f, (GetScreenHeight() / 2) - 0.0f, 120, 50 };
+	startBtn.color = DARKGRAY;
+	startBtn.text = "Start Game";
+	startBtn.txtColor = WHITE;
+	startBtn.fontSize = 15;
+# pragma endregion
 
 	//! Game loop
 	while (!WindowShouldClose())
 	{
 		if (IsKeyPressed(KEY_P))
 			gameActive = !gameActive;
-
-		SpawnStars(stars, starSpawner);
-		MoveStars(stars);
 
 		// Update Logic, Don't update anything if paused
 		if (gameActive)
@@ -125,6 +122,9 @@ int main()
 				gameActive = false;
 				currentScene = Scene::GAME_OVER;
 			}
+
+			MoveStars(stars);
+			SpawnStars(stars, starSpawner);
 
 			MovePlayer(player);
 			PlayerCollision(player, enemies);
@@ -143,14 +143,15 @@ int main()
 			}
 			SpawnAsteroid(enemies, asteroidSpawner);
 
-			for (const auto& enemy : enemies)
+			EnemyUpdateContext context = { enemies };
+			for (int i = 0; i < context.enemies.size(); i++)
 			{
-				enemy->Update();
+				enemies[i]->Update(context);
 			}
 
 			BulletsHit(player.playerBullets, enemies);
 
-			ShootBullet(player, bullet, player.playerBullets);
+			ShootBullet(player, GameAssets::bullet, player.playerBullets);
 
 			for (Bullet& blt : GameAssets::enemyBullets)
 			{
@@ -159,7 +160,7 @@ int main()
 		}
 
 		BeginDrawing();
-		ClearBackground(Color{13, 13, 13, 255});
+		ClearBackground(Color{ 13, 13, 13, 255 });
 
 #pragma region imgui
 		rlImGuiBegin();
@@ -179,8 +180,8 @@ int main()
 		if (currentScene == Scene::MAIN_MENU)
 		{
 			DrawText("SPACE BULLET HELL!!", (GetScreenWidth() / 2) - 170, (GetScreenHeight() / 2) - 50, 30, DARKGRAY);
-			DrawButton(btn);
-			if (IsButtonClicked(btn))
+			DrawButton(startBtn);
+			if (IsButtonClicked(startBtn))
 			{
 				gameActive = true;
 				currentScene = Scene::GAME;

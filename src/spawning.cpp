@@ -1,5 +1,6 @@
 #include "spawning.hpp"
 #include "gameAssets.hpp"
+#include "enemy.hpp"
 #include <algorithm>
 
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
@@ -17,7 +18,7 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 			SpawnShips(enemies);
 			spawner.lastSpawnTime = GetTime();
 		}
-		else if (spawner.waveType == EnemyType::CIRCLESHOOTER)
+		else if (spawner.waveType == EnemyType::SINWAVE_SHOOTER)
 		{
 			if (enemies.size() <= 0)
 				spawner.lastSpawnTime = GetTime();
@@ -35,7 +36,7 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 
 	if (spawnedEnemies >= spawner.enemyAmmount && enemies.size() <= 0)
 	{
-		if (spawner.enemyAmmount == 1 && spawner.waveType == EnemyType::CIRCLESHOOTER)
+		if (spawner.enemyAmmount == 1 && spawner.waveType == EnemyType::SINWAVE_SHOOTER)
 		{
 			spawner.enemyAmmount = 2;
 		}
@@ -67,8 +68,8 @@ void SpawnCircleShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& s
 		pos = newPos;
 	}
 
-	std::unique_ptr<CircleShooter> circleShooter = std::make_unique<CircleShooter>();
-	circleShooter->type = EnemyType::CIRCLESHOOTER;
+	std::unique_ptr<SinwaveShooter> circleShooter = std::make_unique<SinwaveShooter>();
+	circleShooter->type = EnemyType::SINWAVE_SHOOTER;
 	circleShooter->shootAngle = DEG2RAD * 15.0f;
 	circleShooter->rec.x = pos.x;
 	circleShooter->rec.y = pos.y;
@@ -119,6 +120,17 @@ void SpawnBossShip(std::vector<std::unique_ptr<Enemy>>& enemies)
 	enemies.push_back(std::move(boss));
 }
 
+void SpawnRadiatingShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner, Rectangle& rec)
+{
+	std::unique_ptr<RadialShooter> radiatingShooter = std::make_unique<RadialShooter>();
+	radiatingShooter->rec = Rectangle{ rec.x + (rec.width / 2.0f), rec.y + rec.height + 5.0f, 20, 20 };
+	radiatingShooter->health = 100;
+	radiatingShooter->type = EnemyType::RADIATING_SHOOTER;
+	radiatingShooter->bltSpawner = MakeSpawner(Vector2{ rec.x, rec.y }, 0.0f);
+
+	enemies.push_back(std::move(radiatingShooter));
+}
+
 void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
 {
 	Vector2 spawnPos = { 0, 0 };
@@ -163,7 +175,7 @@ void AsteroidWarning()
 	int textWidth = MeasureText("GAME OVER", fontSize);
 	int x = (GetScreenWidth() / 2) - (textWidth / 2);
 	int y = (GetScreenHeight() / 2) - (fontSize / 2) - 200; // optional, for vertical center
-	DrawText("Asteroid WARNING!!", x, y, fontSize, DARKGRAY);
+	DrawText("Asteroid WARNING!!", x, y, fontSize, DARKGRAY); // !? Haven't started BeginDrawing() yet when this is called may cause issues
 }
 
 Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies)
