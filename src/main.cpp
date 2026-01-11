@@ -132,7 +132,7 @@ int main()
 			switch (wave)
 			{
 			case 1:
-				SpawnEnemies(wave, enemies, bossSpawner);
+				SpawnEnemies(wave, enemies, fodderSpawner);
 				break;
 			case 2:
 				SpawnEnemies(wave, enemies, shipSpawner);
