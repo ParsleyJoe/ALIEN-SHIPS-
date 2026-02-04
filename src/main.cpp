@@ -1,12 +1,12 @@
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
 #include "raylib.h"
 #include <raymath.h>
 #include <iostream>
 #include <algorithm>
-#pragma region imgui
 #include "imgui.h"
 #include "rlImGui.h"
 #include "imguiThemes.h"
-#pragma endregion
 
 #include <vector>
 
@@ -28,15 +28,8 @@ int main()
 	InitWindow(800, 600, "SpaceGame");
 	SetTargetFPS(60);
 
-#pragma region imgui
 	rlImGuiSetup(true);
 
-	//you can use whatever imgui theme you like!
-	//ImGui::StyleColorsDark();
-	//imguiThemes::yellow();
-	//imguiThemes::gray();
-	//imguiThemes::green();
-	//imguiThemes::red();
 	imguiThemes::embraceTheDarkness();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -47,14 +40,9 @@ int main()
 	ImGuiStyle& style = ImGui::GetStyle();
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
-		//style.WindowRounding = 0.0f;
 		style.Colors[ImGuiCol_WindowBg].w = 0.5f;
-		//style.Colors[ImGuiCol_DockingEmptyBg].w = 0.f;
 	}
 
-#pragma endregion
-
-#pragma region Init
 	// TODO: Might move it to GameAssets namespace
 	// Game "Assets"
 	std::vector<std::unique_ptr<Enemy>> enemies; // !Polymorphism to store any enemy type
@@ -106,7 +94,6 @@ int main()
 	startBtn.text = "Start Game";
 	startBtn.txtColor = WHITE;
 	startBtn.fontSize = 15;
-# pragma endregion
 
 	//! Game loop
 	while (!WindowShouldClose())
@@ -162,18 +149,16 @@ int main()
 		BeginDrawing();
 		ClearBackground(Color{ 13, 13, 13, 255 });
 
-#pragma region imgui
 		rlImGuiBegin();
 
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, {});
 		ImGui::PushStyleColor(ImGuiCol_DockingEmptyBg, {});
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 		ImGui::PopStyleColor(2);
-#pragma endregion
 
 		ImGui::Begin("Test");
 		ImGui::Text("FPS: %i", GetFPS());
-		ImGui::Text("Size of bullets Vector: %i", GameAssets::enemyBullets.size());
+		ImGui::Text("Size of bullets Vector: %i", player.playerBullets.size());
 		ImGui::Text("Star vector size: %i", stars.size());
 		ImGui::End();
 
@@ -221,7 +206,6 @@ int main()
 			int y = (GetScreenHeight() / 2) - (30 / 2); // optional, for vertical center
 			DrawText("GAME OVER", x, y, 30, DARKGRAY);
 		}
-#pragma region imgui
 		rlImGuiEnd();
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -229,14 +213,11 @@ int main()
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
 		}
-#pragma endregion
 
 		EndDrawing();
 	}
 
-#pragma region imgui
 	rlImGuiShutdown();
-#pragma endregion
 
 	UnloadTexture(playerSprite);
 	CloseWindow();

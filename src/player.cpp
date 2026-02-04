@@ -2,7 +2,6 @@
 #include "enemy.hpp"
 #include "raymath.h"
 #include <algorithm>
-#include <iostream>
 
 // If Enemy Collided with player
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies)
@@ -82,17 +81,12 @@ void ShootBullet(Player& player, Rectangle bullet, std::vector<Rectangle>& bulle
 	}
 	for (Rectangle& bullet : bullets) // Iterate through the bullets
 	{
-		if (bullet.y < -bullet.height) // If the bullet goes off the screen
-		{
-			bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](const Rectangle& rec) {
-				return rec.y < -rec.height; // Check if the bullet is off the screen
-				}), bullets.end()); // Remove it from the vector
-		}
-		else
-		{
-			bullet.y -= 17; // Move the bullet up
-		}
+		bullet.y -= 17; // Move the bullet up
 	}
+	bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](const Rectangle& rec) {
+				return rec.y < -rec.height; // Check if the bullet is off the screen
+			}), bullets.end()); // Remove it from the vector
+
 }
 
 // If playerBullets hit enemies
@@ -108,11 +102,16 @@ void BulletsHit(std::vector<Rectangle>& playerBullets, std::vector<std::unique_p
 					enemy->alive = false;
 				else
 					enemy->health -= 20;
-				playerBullets.erase(std::remove_if(playerBullets.begin(), playerBullets.end(), [&enemy](const Rectangle& rec) {
-					return CheckCollisionRecs(rec, enemy->rec); // Check if the bullet collides with the enemy
-					}), playerBullets.end()); // Remove the bullet from the vector
 			}
 		}
+	}
+
+	// NOTE: Have to run loop twice: playerBullets cannot be modified while its being iterated through
+	for (auto& enemy : enemies)
+	{
+		playerBullets.erase(std::remove_if(playerBullets.begin(), playerBullets.end(), [&enemy](const Rectangle& rec) {
+			return CheckCollisionRecs(rec, enemy->rec); // Check if the bullet collides with the enemy
+		}), playerBullets.end()); // Remove the bullet from the vector
 	}
 
 	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
@@ -120,6 +119,7 @@ void BulletsHit(std::vector<Rectangle>& playerBullets, std::vector<std::unique_p
 		}), enemies.end());
 }
 
+// ran when player dies 
 void PlayerRestart(Player& player)
 {
 	player.rec.x = (GetScreenWidth() / 2) - player.rec.width;

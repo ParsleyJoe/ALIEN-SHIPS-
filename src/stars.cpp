@@ -11,7 +11,7 @@ void DrawStars(std::vector<Star>& stars)
 		// star fake glow
 		for (int i = 3; i >= 1; i--)
 		{
-			Vector2 starPos = { star.x, star.y };
+			Vector2 starPos = { static_cast<float>(star.x), static_cast<float>(star.y) };
 			float radius = starSize + i * 1.2f;
 			Color glow = Color{ 255, 255, 255, 30 }; // soft white
 			DrawCircleV(starPos, radius, glow);
