@@ -1,0 +1,59 @@
+#include "raylib.h"
+#include <rlImGui.h>
+#include <imguiThemes.h>
+#include <game.hpp>
+
+void InitGame(Game& game)
+{
+	InitWindow(800, 600, "SpaceGame");
+	SetTargetFPS(60);
+
+	rlImGuiSetup(true);
+
+	imguiThemes::embraceTheDarkness();
+
+	game.io = &ImGui::GetIO(); (void)game.io;
+	game.io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+	game.io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	game.io->FontGlobalScale = 2;
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	if (game.io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		style.Colors[ImGuiCol_WindowBg].w = 0.5f;
+	}
+}
+
+void gDrawingBegin()
+{
+	BeginDrawing();
+	ClearBackground(Color{ 13, 13, 13, 255 });
+
+	rlImGuiBegin();
+
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, {});
+	ImGui::PushStyleColor(ImGuiCol_DockingEmptyBg, {});
+	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+	ImGui::PopStyleColor(2);
+
+	ImGui::Begin("Test");
+	ImGui::Text("FPS: %i", GetFPS());
+//	ImGui::Text("Size of bullets Vector: %zu", player.playerBullets.size());
+//	ImGui::Text("Star vector size: %zu", stars.size());
+	ImGui::End();
+
+}
+
+void gDrawingEnd(Game& game)
+{
+	rlImGuiEnd();
+
+	if (game.io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
+
+	EndDrawing();
+
+}

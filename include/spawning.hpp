@@ -15,6 +15,18 @@ struct Spawner
 	int enemyAmmount = 10;
 };
 
+struct SpawnerHolder
+{
+	Spawner fodderSpawner;
+	Spawner shipSpawner;
+	Spawner circleShooter;
+	Spawner bossSpawner;
+	Spawner asteroidSpawner;
+};
+
+void InitSpawners(SpawnerHolder& holder);
+void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder);
+
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
 
 void SpawnCircleShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);

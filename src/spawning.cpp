@@ -1,7 +1,52 @@
 #include "spawning.hpp"
-#include "gameAssets.hpp"
 #include "enemy.hpp"
 #include <algorithm>
+#include <memory>
+
+
+void InitSpawners(SpawnerHolder& holder)
+{
+	holder.fodderSpawner.enemyAmmount = 10;
+	holder.fodderSpawner.waveType = EnemyType::FODDER;
+	holder.fodderSpawner.spawnInterval = 0.6f;
+
+	holder.shipSpawner.waveType = EnemyType::SHIP;
+	holder.shipSpawner.spawnInterval = 0.3f;
+	holder.shipSpawner.enemyAmmount = 15;
+
+	holder.circleShooter.waveType = EnemyType::SINWAVE_SHOOTER;
+	holder.circleShooter.enemyAmmount = 1;
+	holder.circleShooter.spawnInterval = 2.0f;
+
+	holder.bossSpawner.waveType = EnemyType::BOSS_SHIP;
+	holder.bossSpawner.enemyAmmount = 1;
+	holder.bossSpawner.spawnInterval = 4.0f;
+
+	holder.asteroidSpawner.waveType = EnemyType::ASTEROID;
+	holder.asteroidSpawner.spawnInterval = GetRandomValue(15, 25) + 0.0f;
+	holder.asteroidSpawner.enemyAmmount = 1;
+
+
+}
+
+
+void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder)
+{
+	switch (wave)
+	{
+	case 1:
+		SpawnEnemies(wave, enemies, holder.fodderSpawner);
+		break;
+	case 2:
+		SpawnEnemies(wave, enemies, holder.shipSpawner);
+		break;
+	case 3:
+		SpawnEnemies(wave, enemies, holder.circleShooter);
+		break;
+	}
+	SpawnAsteroid(enemies, holder.asteroidSpawner);
+
+}
 
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
 {

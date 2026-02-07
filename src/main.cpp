@@ -2,14 +2,12 @@
 #define WIN32_LEAN_AND_MEAN
 #include "raylib.h"
 #include <raymath.h>
-#include <iostream>
-#include <algorithm>
 #include "imgui.h"
 #include "rlImGui.h"
-#include "imguiThemes.h"
 
 #include <vector>
 
+#include <game.hpp>
 #include "enemy.hpp"
 #include "spawning.hpp"
 #include "player.hpp"
@@ -25,23 +23,8 @@ int main()
 {
 	// Raylib Init
 	//SetConfigFlags();
-	InitWindow(800, 600, "SpaceGame");
-	SetTargetFPS(60);
-
-	rlImGuiSetup(true);
-
-	imguiThemes::embraceTheDarkness();
-
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-	io.FontGlobalScale = 2;
-
-	ImGuiStyle& style = ImGui::GetStyle();
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		style.Colors[ImGuiCol_WindowBg].w = 0.5f;
-	}
+	Game game;
+	InitGame(game);
 
 	// TODO: Might move it to GameAssets namespace
 	// Game "Assets"
@@ -52,6 +35,7 @@ int main()
 	GameAssets::shipSprite = LoadTexture("resources/UFO.png");
 	GameAssets::bossHealthBorder = LoadTexture("resources/bossHealthBorder.png");
 	GameAssets::bossSkullSprite = LoadTexture("resources/skull.png");
+	GameAssets::starShader = LoadShader("resources/shader/star_vertex.glsl", "resources/shader/star_fragment.glsl");
 
 	Player player;
 	int wave = 1;
@@ -59,31 +43,11 @@ int main()
 
 	Scene currentScene = Scene::MAIN_MENU;
 
-	Spawner fodderSpawner;
-	fodderSpawner.enemyAmmount = 10;
-	fodderSpawner.waveType = EnemyType::FODDER;
-	fodderSpawner.spawnInterval = 0.6f;
+	// Init Spawners and Holder
+	SpawnerHolder spawnerHolder;
+	InitSpawners(spawnerHolder);
 
-	Spawner shipSpawner;
-	shipSpawner.waveType = EnemyType::SHIP;
-	shipSpawner.spawnInterval = 0.3f;
-	shipSpawner.enemyAmmount = 15;
-
-	Spawner circleShooter;
-	circleShooter.waveType = EnemyType::SINWAVE_SHOOTER;
-	circleShooter.enemyAmmount = 1;
-	circleShooter.spawnInterval = 2.0f;
-
-	Spawner bossSpawner;
-	bossSpawner.waveType = EnemyType::BOSS_SHIP;
-	bossSpawner.enemyAmmount = 1;
-	bossSpawner.spawnInterval = 4.0f;
-
-	Spawner asteroidSpawner;
-	asteroidSpawner.waveType = EnemyType::ASTEROID;
-	asteroidSpawner.spawnInterval = GetRandomValue(15, 25) + 0.0f;
-	asteroidSpawner.enemyAmmount = 1;
-
+	// For Drawing background stars
 	Spawner starSpawner;
 	starSpawner.enemyAmmount = 40;
 	starSpawner.spawnInterval = 2.0f;
@@ -101,7 +65,8 @@ int main()
 		if (IsKeyPressed(KEY_P))
 			gameActive = !gameActive;
 
-		// Update Logic, Don't update anything if paused
+		// Updating Logic ================================
+		// -----------------------------------------------
 		if (gameActive)
 		{
 			if (player.lives <= 0)
@@ -116,20 +81,8 @@ int main()
 			MovePlayer(player);
 			PlayerCollision(player, enemies);
 
-			switch (wave)
-			{
-			case 1:
-				SpawnEnemies(wave, enemies, fodderSpawner);
-				break;
-			case 2:
-				SpawnEnemies(wave, enemies, shipSpawner);
-				break;
-			case 3:
-				SpawnEnemies(wave, enemies, circleShooter);
-				break;
-			}
-			SpawnAsteroid(enemies, asteroidSpawner);
-
+			StartSpawning(wave, enemies, spawnerHolder);
+			
 			EnemyUpdateContext context = { enemies };
 			for (int i = 0; i < context.enemies.size(); i++)
 			{
@@ -146,21 +99,9 @@ int main()
 			}
 		}
 
-		BeginDrawing();
-		ClearBackground(Color{ 13, 13, 13, 255 });
-
-		rlImGuiBegin();
-
-		ImGui::PushStyleColor(ImGuiCol_WindowBg, {});
-		ImGui::PushStyleColor(ImGuiCol_DockingEmptyBg, {});
-		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-		ImGui::PopStyleColor(2);
-
-		ImGui::Begin("Test");
-		ImGui::Text("FPS: %i", GetFPS());
-		ImGui::Text("Size of bullets Vector: %i", player.playerBullets.size());
-		ImGui::Text("Star vector size: %i", stars.size());
-		ImGui::End();
+		// Drawing =======================================
+		// -----------------------------------------------
+		gDrawingBegin();
 
 		if (currentScene == Scene::MAIN_MENU)
 		{
@@ -206,15 +147,8 @@ int main()
 			int y = (GetScreenHeight() / 2) - (30 / 2); // optional, for vertical center
 			DrawText("GAME OVER", x, y, 30, DARKGRAY);
 		}
-		rlImGuiEnd();
-
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-		}
-
-		EndDrawing();
+		
+		gDrawingEnd(game);
 	}
 
 	rlImGuiShutdown();
