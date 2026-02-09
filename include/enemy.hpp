@@ -166,7 +166,7 @@ struct BossShip : Enemy
 		}
 	}
 
-	void Draw()
+	void Draw() override
 	{
 		// Drawing the boss
 		DrawRectangle(rec.x, rec.y, rec.width, rec.height, GREEN);

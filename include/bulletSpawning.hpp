@@ -27,6 +27,7 @@ struct Bullet
 	{
 		dir = Vector2Normalize(dir);
 		rec.y += dir.y * speed;
+		rec.x += dir.x * speed;
 	}
 };
 

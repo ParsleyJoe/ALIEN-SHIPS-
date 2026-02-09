@@ -83,6 +83,7 @@ void ShootBullet(Player& player, Rectangle bullet)
 	if (IsKeyDown(KEY_SPACE) && (GetTime() - player.lastShot) >= player.shotCooldown)
 	{
 		Bullet blt;
+		blt.dir = {0, 1};
 		blt.sprite = player.bulletSprite;
 		blt.rec = bullet; // Reset to Give correct width and height
 		blt.rec.x = player.rec.x + ((player.rec.width / 2.0f) * 0.5f) - (bullet.width / 2.0f);
