@@ -1,6 +1,7 @@
 # TODO
 
 # REAL IMP (IN ORDER)
+    - USE Bullet Texture Player
     - Use delta time, remove SetTargetFPS
 	- MAGIC, ALIEN TELEPORTS PLAYER RANDOM SPOT
 	- MAGIC ALIEN PULLS A ASTEROID

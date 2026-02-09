@@ -1,7 +1,15 @@
 #include "player.hpp"
 #include "enemy.hpp"
+#include "raylib.h"
 #include "raymath.h"
 #include <algorithm>
+
+// Load Player Textures
+void pLoadTxt(Player& player)
+{
+	player.playerSprite = LoadTexture("resources/ship.png");
+	player.bulletSprite = LoadTexture("resources/bullet.png");
+}
 
 // If Enemy Collided with player
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies)
@@ -37,10 +45,12 @@ void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy)
 	}
 }
 
-void DrawPlayer(Player& player, Texture2D& playerSprite)
+void DrawPlayer(Player& player)
 {
 	DrawRectangleLines(player.rec.x, player.rec.y, player.rec.width, player.rec.height, RED);
-	DrawTexture(playerSprite, player.rec.x, player.rec.y, WHITE);
+
+	if (IsTextureReady(player.playerSprite))
+		DrawTexture(player.playerSprite, player.rec.x, player.rec.y, WHITE);
 }
 
 void MovePlayer(Player& player)
@@ -68,35 +78,41 @@ void MovePlayer(Player& player)
 	player.direction = { 0, 0 };
 }
 
-void ShootBullet(Player& player, Rectangle bullet, std::vector<Rectangle>& bullets)
+void ShootBullet(Player& player, Rectangle bullet)
 {
 	if (IsKeyDown(KEY_SPACE) && (GetTime() - player.lastShot) >= player.shotCooldown)
 	{
-		bullet.x = player.rec.x + ((player.rec.width / 2.0f) * 0.5f) - (bullet.width / 2.0f);
-		bullet.y = player.rec.y - bullet.height;
-		bullets.push_back(bullet); // Add the bullet to the vector
-		bullet.x += ((player.rec.width / 2.0f) * 1.0f);
-		bullets.push_back(bullet);
+		Bullet blt;
+		blt.sprite = player.bulletSprite;
+		blt.rec = bullet; // Reset to Give correct width and height
+		blt.rec.x = player.rec.x + ((player.rec.width / 2.0f) * 0.5f) - (bullet.width / 2.0f);
+		blt.rec.y = player.rec.y - bullet.height;
+		blt.speed = -17;
+		player.playerBullets.push_back(blt); // Add the bullet to the vector
+
+		// Shoot two bullets
+		blt.rec.x += ((player.rec.width / 2.0f) * 1.0f);
+		player.playerBullets.push_back(blt);
+
 		player.lastShot = GetTime();
 	}
-	for (Rectangle& bullet : bullets) // Iterate through the bullets
-	{
-		bullet.y -= 17; // Move the bullet up
-	}
-	bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](const Rectangle& rec) {
-				return rec.y < -rec.height; // Check if the bullet is off the screen
-			}), bullets.end()); // Remove it from the vector
+
+	// Remove Bullets out of bounds
+	player.playerBullets.erase(
+		std::remove_if(player.playerBullets.begin(), player.playerBullets.end(), [](const Bullet& blt) {
+				return blt.rec.y < -blt.rec.height; // Check if the bullet is off the screen
+			}), player.playerBullets.end()); // Remove it from the vector
 
 }
 
 // If playerBullets hit enemies
-void BulletsHit(std::vector<Rectangle>& playerBullets, std::vector<std::unique_ptr<Enemy>>& enemies)
+void BulletsHit(std::vector<Bullet>& playerBullets, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
-	for (const Rectangle& bullet : playerBullets)
+	for (const Bullet& bullet : playerBullets)
 	{
 		for (auto& enemy : enemies)
 		{
-			if (enemy->alive && CheckCollisionRecs(bullet, enemy->rec))
+			if (enemy->alive && CheckCollisionRecs(bullet.rec, enemy->rec))
 			{
 				if (enemy->health <= 0)
 					enemy->alive = false;
@@ -109,8 +125,8 @@ void BulletsHit(std::vector<Rectangle>& playerBullets, std::vector<std::unique_p
 	// NOTE: Have to run loop twice: playerBullets cannot be modified while its being iterated through
 	for (auto& enemy : enemies)
 	{
-		playerBullets.erase(std::remove_if(playerBullets.begin(), playerBullets.end(), [&enemy](const Rectangle& rec) {
-			return CheckCollisionRecs(rec, enemy->rec); // Check if the bullet collides with the enemy
+		playerBullets.erase(std::remove_if(playerBullets.begin(), playerBullets.end(), [&enemy](const Bullet& blt) {
+			return CheckCollisionRecs(blt.rec, enemy->rec); // Check if the bullet collides with the enemy
 		}), playerBullets.end()); // Remove the bullet from the vector
 	}
 

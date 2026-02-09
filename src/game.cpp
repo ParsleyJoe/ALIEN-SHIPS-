@@ -3,7 +3,13 @@
 #include <imguiThemes.h>
 #include <game.hpp>
 
-void InitGame(Game& game)
+void gLoadTextures(Game& game)
+{
+	game.player.playerSprite = LoadTexture("resources/ship.png");
+	game.player.bulletSprite = LoadTexture("resources/bullet.png");
+}
+
+void gInitGame(Game& game)
 {
 	InitWindow(800, 600, "SpaceGame");
 	SetTargetFPS(60);

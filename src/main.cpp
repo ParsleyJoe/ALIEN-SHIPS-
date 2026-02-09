@@ -1,8 +1,5 @@
-#define NOMINMAX
-#define WIN32_LEAN_AND_MEAN
 #include "raylib.h"
 #include <raymath.h>
-#include "imgui.h"
 #include "rlImGui.h"
 
 #include <vector>
@@ -16,7 +13,6 @@
 #include "button.hpp"
 #include "stars.hpp"
 
-bool gameActive = false;
 
 //----------------------------------------------------------------------------------
 int main()
@@ -24,23 +20,22 @@ int main()
 	// Raylib Init
 	//SetConfigFlags();
 	Game game;
-	InitGame(game);
+	gInitGame(game);
+	gLoadTextures(game);
 
 	// TODO: Might move it to GameAssets namespace
-	// Game "Assets"
-	std::vector<std::unique_ptr<Enemy>> enemies; // !Polymorphism to store any enemy type
+	std::vector<std::unique_ptr<Enemy>> enemies; // NOTE: Polymorphism to store any enemy type
 	std::vector<Star> stars;
 
-	Texture2D playerSprite = LoadTexture("resources/ship.png");
 	GameAssets::shipSprite = LoadTexture("resources/UFO.png");
 	GameAssets::bossHealthBorder = LoadTexture("resources/bossHealthBorder.png");
 	GameAssets::bossSkullSprite = LoadTexture("resources/skull.png");
 	GameAssets::starShader = LoadShader("resources/shader/star_vertex.glsl", "resources/shader/star_fragment.glsl");
 
-	Player player;
 	int wave = 1;
 	int lives = 3;
-
+	
+	bool gameActive = false;
 	Scene currentScene = Scene::MAIN_MENU;
 
 	// Init Spawners and Holder
@@ -62,14 +57,15 @@ int main()
 	//! Game loop
 	while (!WindowShouldClose())
 	{
-		if (IsKeyPressed(KEY_P))
+		if (IsKeyPressed(KEY_P) && currentScene == Scene::GAME)
 			gameActive = !gameActive;
+
 
 		// Updating Logic ================================
 		// -----------------------------------------------
 		if (gameActive)
 		{
-			if (player.lives <= 0)
+			if (game.player.lives <= 0)
 			{
 				gameActive = false;
 				currentScene = Scene::GAME_OVER;
@@ -78,8 +74,8 @@ int main()
 			MoveStars(stars);
 			SpawnStars(stars, starSpawner);
 
-			MovePlayer(player);
-			PlayerCollision(player, enemies);
+			MovePlayer(game.player);
+			PlayerCollision(game.player, enemies);
 
 			StartSpawning(wave, enemies, spawnerHolder);
 			
@@ -89,11 +85,15 @@ int main()
 				enemies[i]->Update(context);
 			}
 
-			BulletsHit(player.playerBullets, enemies);
+			BulletsHit(game.player.playerBullets, enemies);
 
-			ShootBullet(player, GameAssets::bullet, player.playerBullets);
+			ShootBullet(game.player, GameAssets::bullet);
 
 			for (Bullet& blt : GameAssets::enemyBullets)
+			{
+				blt.Update();
+			}
+			for (Bullet& blt : game.player.playerBullets)
 			{
 				blt.Update();
 			}
@@ -115,20 +115,20 @@ int main()
 		}
 		else if (currentScene == Scene::GAME)
 		{
-			DrawText(TextFormat("%d", player.lives), 10, 10, 20, RAYWHITE);
+			DrawText(TextFormat("%d", game.player.lives), 10, 10, 20, RAYWHITE);
 
 			DrawStars(stars);
 			// Player and enemies Drawing
-			DrawPlayer(player, playerSprite);
+			DrawPlayer(game.player);
 			for (const auto& enemy : enemies)
 			{
 				enemy->Draw();
 			}
 
 			// Draw Bullets
-			for (Rectangle& bullet : player.playerBullets)
+			for (Bullet& bullet : game.player.playerBullets)
 			{
-				DrawRectangleRec(bullet, RED);
+				bullet.Draw();
 			}
 			for (auto& blt : GameAssets::enemyBullets)
 			{
@@ -153,7 +153,6 @@ int main()
 
 	rlImGuiShutdown();
 
-	UnloadTexture(playerSprite);
 	CloseWindow();
 
 	return 0;
