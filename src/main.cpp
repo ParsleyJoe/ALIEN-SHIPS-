@@ -71,12 +71,11 @@ int main()
 				currentScene = Scene::GAME_OVER;
 			}
 
-			MoveStars(stars);
-			SpawnStars(stars, starSpawner);
+			UpdateStars(stars, starSpawner);
 
-			MovePlayer(game.player);
-			PlayerCollision(game.player, enemies);
+			UpdatePlayer(game.player);
 
+			// Enemy Spawning
 			StartSpawning(wave, enemies, spawnerHolder);
 			
 			EnemyUpdateContext context = { enemies };
@@ -85,9 +84,6 @@ int main()
 				enemies[i]->Update(context);
 			}
 
-			BulletsHit(game.player.playerBullets, enemies);
-
-			ShootBullet(game.player, GameAssets::bullet);
 
 			for (Bullet& blt : GameAssets::enemyBullets)
 			{

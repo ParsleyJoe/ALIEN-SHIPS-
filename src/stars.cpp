@@ -1,6 +1,13 @@
 #include "stars.hpp"
+#include "spawning.hpp"
 #include <raylib.h>
 #include <gameAssets.hpp>
+
+void UpdateStars(std::vector<Star>& stars, Spawner starSpawner)
+{
+	MoveStars(stars);
+	SpawnStars(stars, starSpawner);
+}
 
 void DrawStars(std::vector<Star>& stars)
 {

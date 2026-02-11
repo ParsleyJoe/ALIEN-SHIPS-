@@ -1,14 +1,26 @@
 #include "player.hpp"
 #include "enemy.hpp"
+#include "gameAssets.hpp"
 #include "raylib.h"
 #include "raymath.h"
 #include <algorithm>
+#include <memory>
 
 // Load Player Textures
 void pLoadTxt(Player& player)
 {
 	player.playerSprite = LoadTexture("resources/ship.png");
 	player.bulletSprite = LoadTexture("resources/bullet.png");
+}
+
+void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>> enemies)
+{
+	MovePlayer(player);
+	PlayerCollision(player, enemies);
+
+	ShootBullet(player, GameAssets::bullet);
+
+	BulletsHit(player.playerBullets, enemies);
 }
 
 // If Enemy Collided with player

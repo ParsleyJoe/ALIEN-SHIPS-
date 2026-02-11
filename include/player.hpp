@@ -26,6 +26,8 @@ struct Player
 void pLoadTxt(Player& player);
 
 void DrawPlayer(Player& player);
+
+void UpdatePlayer(Player& player);
 void MovePlayer(Player& player);
 void ShootBullet(Player& player, Rectangle bullet);
 
