@@ -17,20 +17,16 @@
 //----------------------------------------------------------------------------------
 int main()
 {
-	// Raylib Init
-	//SetConfigFlags();
 	Game game;
+
+	// Initialize Raylib and Load game textures
 	gInitGame(game);
 	gLoadTextures(game);
 
-	// TODO: Might move it to GameAssets namespace
+	Shader bloom = LoadShader(0, "resources/shader/bloom_fragment.glsl");
+
 	std::vector<std::unique_ptr<Enemy>> enemies; // NOTE: Polymorphism to store any enemy type
 	std::vector<Star> stars;
-
-	GameAssets::shipSprite = LoadTexture("resources/UFO.png");
-	GameAssets::bossHealthBorder = LoadTexture("resources/bossHealthBorder.png");
-	GameAssets::bossSkullSprite = LoadTexture("resources/skull.png");
-	GameAssets::starShader = LoadShader("resources/shader/star_vertex.glsl", "resources/shader/star_fragment.glsl");
 
 	int wave = 1;
 	int lives = 3;
@@ -73,7 +69,7 @@ int main()
 
 			UpdateStars(stars, starSpawner);
 
-			UpdatePlayer(game.player);
+			UpdatePlayer(game.player, enemies);
 
 			// Enemy Spawning
 			StartSpawning(wave, enemies, spawnerHolder);
@@ -99,6 +95,8 @@ int main()
 		// -----------------------------------------------
 		gDrawingBegin();
 
+		//BeginShaderMode(bloom);
+
 		if (currentScene == Scene::MAIN_MENU)
 		{
 			DrawText("SPACE BULLET HELL!!", (GetScreenWidth() / 2) - 170, (GetScreenHeight() / 2) - 50, 30, DARKGRAY);
@@ -111,6 +109,7 @@ int main()
 		}
 		else if (currentScene == Scene::GAME)
 		{
+
 			DrawText(TextFormat("%d", game.player.lives), 10, 10, 20, RAYWHITE);
 
 			DrawStars(stars);
@@ -143,7 +142,8 @@ int main()
 			int y = (GetScreenHeight() / 2) - (30 / 2); // optional, for vertical center
 			DrawText("GAME OVER", x, y, 30, DARKGRAY);
 		}
-		
+
+		//EndShaderMode();
 		gDrawingEnd(game);
 	}
 

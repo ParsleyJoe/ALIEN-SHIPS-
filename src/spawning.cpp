@@ -67,7 +67,7 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 		{
 			if (enemies.size() <= 0)
 				spawner.lastSpawnTime = GetTime();
-			SpawnCircleShooter(enemies, spawner);
+			SpawnSinShooter(enemies, spawner);
 		}
 		else if (spawner.waveType == EnemyType::BOSS_SHIP)
 		{
@@ -95,7 +95,7 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 		}), enemies.end());
 }
 
-void SpawnCircleShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
+void SpawnSinShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
 {
 	float shooterCooldown = 0.1f;
 
@@ -165,7 +165,8 @@ void SpawnBossShip(std::vector<std::unique_ptr<Enemy>>& enemies)
 	enemies.push_back(std::move(boss));
 }
 
-void SpawnRadiatingShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner, Rectangle& rec)
+// NOTE: The enemies that boss spawns
+void SpawnRadialShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner, Rectangle& rec)
 {
 	std::unique_ptr<RadialShooter> radiatingShooter = std::make_unique<RadialShooter>();
 	radiatingShooter->rec = Rectangle{ rec.x + (rec.width / 2.0f), rec.y + rec.height + 5.0f, 20, 20 };

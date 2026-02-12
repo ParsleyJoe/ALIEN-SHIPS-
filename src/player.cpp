@@ -13,7 +13,7 @@ void pLoadTxt(Player& player)
 	player.bulletSprite = LoadTexture("resources/bullet.png");
 }
 
-void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>> enemies)
+void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
 	MovePlayer(player);
 	PlayerCollision(player, enemies);

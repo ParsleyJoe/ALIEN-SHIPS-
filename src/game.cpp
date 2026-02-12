@@ -1,3 +1,4 @@
+#include "gameAssets.hpp"
 #include "raylib.h"
 #include <rlImGui.h>
 #include <imguiThemes.h>
@@ -7,7 +8,20 @@ void gLoadTextures(Game& game)
 {
 	game.player.playerSprite = LoadTexture("resources/ship.png");
 	game.player.bulletSprite = LoadTexture("resources/bullet.png");
+
+	// Player Sprite
+	GameAssets::shipSprite = LoadTexture("resources/UFO.png");
+
+	// Boss Sprites
+	GameAssets::bossHealthBorder = LoadTexture("resources/bossHealthBorder.png");
+	GameAssets::bossSkullSprite = LoadTexture("resources/skull.png");
+
+	GameAssets::fodderSprite = LoadTexture("resources/fodder.png");
+	GameAssets::asteroidSprite = LoadTexture("resources/assteroid.png");
+	GameAssets::sinSprite = LoadTexture("resources/sinShooter.png");
 }
+
+
 
 void gInitGame(Game& game)
 {

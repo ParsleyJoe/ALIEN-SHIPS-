@@ -34,7 +34,12 @@ struct Fodder : Enemy
 	float sizeDivider = 1.3f;
 	void Draw() override
 	{
-		DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
+		if (IsTextureReady(GameAssets::fodderSprite))
+			DrawTexturePro(GameAssets::fodderSprite, {0, 0, (float)GameAssets::fodderSprite.width, (float)GameAssets::fodderSprite.height}
+		  , rec, {0}, 0.0f, WHITE);
+		else
+			DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
+
 		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, DARKGREEN);
 	}
 	void Update(EnemyUpdateContext& ctx) override
@@ -58,6 +63,7 @@ struct Fodder : Enemy
 	Fodder()
 	{
 		type = EnemyType::FODDER;
+		rec = {0, 0, 60, 60};
 	}
 };
 
@@ -68,7 +74,7 @@ struct Ship : Enemy
 	void Draw() override
 	{
 		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, BLACK);
-		DrawTexture(GameAssets::shipSprite, rec.x, rec.y, BLUE);
+		DrawTexture(GameAssets::shipSprite, rec.x, rec.y, WHITE);
 	}
 
 	void Update(EnemyUpdateContext& ctx) override
@@ -97,7 +103,16 @@ struct SinwaveShooter : Enemy
 
 	void Draw() override
 	{
-		DrawRectangleRec(rec, BLUE);
+		if (IsTextureReady(GameAssets::sinSprite))
+			DrawTexturePro(GameAssets::sinSprite, {0, 0, static_cast<float>(GameAssets::sinSprite.width), static_cast<float>(GameAssets::sinSprite.height)},
+		  rec, {rec.width, rec.height}, 180.0f, WHITE);
+		else
+			DrawRectangleRec(rec, BLUE);
+		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, WHITE);
+	}
+	SinwaveShooter()
+	{
+		rec = {0, 0, 40, 40};
 	}
 };
 
@@ -122,7 +137,7 @@ struct RadialShooter : Enemy
 		}
 	}
 
-	void Draw()
+	void Draw() override
 	{
 		DrawRectangleRec(rec, RED);
 	}
@@ -161,7 +176,7 @@ struct BossShip : Enemy
 
 		if (GetTime() - radialShooterSpawner.lastSpawnTime >= radialShooterSpawner.spawnInterval)
 		{
-			SpawnRadiatingShooter(ctx.enemies, radialShooterSpawner, rec);
+			SpawnRadialShooter(ctx.enemies, radialShooterSpawner, rec);
 			radialShooterSpawner.lastSpawnTime = GetTime();
 		}
 	}
@@ -185,7 +200,13 @@ struct Asteroid : Enemy
 
 	void Draw() override
 	{
-		DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
+		if (IsTextureReady(GameAssets::asteroidSprite))
+		{
+			DrawTexturePro(GameAssets::asteroidSprite, {0, 0, (float)GameAssets::asteroidSprite.width, (float)GameAssets::asteroidSprite.height},
+		  rec, {0}, 0.0f, WHITE);
+		}
+		else
+			DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
 		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, GREEN);
 	}
 

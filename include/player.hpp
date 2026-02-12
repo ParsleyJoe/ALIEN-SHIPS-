@@ -27,7 +27,7 @@ void pLoadTxt(Player& player);
 
 void DrawPlayer(Player& player);
 
-void UpdatePlayer(Player& player);
+void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);
 void MovePlayer(Player& player);
 void ShootBullet(Player& player, Rectangle bullet);
 
