@@ -1,5 +1,7 @@
 #pragma once
+#include "powerup.hpp"
 #include "raylib.h"
+#include <random>
 #include <vector>
 #include <memory>
 #include "bulletSpawning.hpp"
@@ -25,6 +27,15 @@ struct Enemy
 	bool alive = true;
 	virtual void Draw() = 0;
 	virtual void Update(EnemyUpdateContext& ctx) = 0;
+	void Die()
+	{
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> chance(0,4);
+
+		if (chance(gen) == 0)
+			SpawnPowerUp({rec.x, rec.y});
+	}
 };
 
 struct Fodder : Enemy
@@ -229,5 +240,6 @@ struct Asteroid : Enemy
 	Asteroid()
 	{
 		type = EnemyType::ASTEROID;
+		health = 999;
 	}
 };

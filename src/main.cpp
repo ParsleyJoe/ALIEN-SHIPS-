@@ -1,4 +1,5 @@
 #include "UI.hpp"
+#include "powerup.hpp"
 #include "raylib.h"
 #include <raymath.h>
 #include "rlImGui.h"
@@ -100,6 +101,8 @@ int main()
 			DrawText(TextFormat("%d", game.player.lives), 10, 10, 20, RAYWHITE);
 
 			DrawStars(stars);
+			DrawPowerUps();
+
 			// Player and enemies Drawing
 			DrawPlayer(game.player);
 			for (const auto& enemy : enemies)

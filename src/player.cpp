@@ -139,6 +139,9 @@ void BulletsHit(std::vector<Bullet>& playerBullets, std::vector<std::unique_ptr<
 	// NOTE: Have to run loop twice: playerBullets cannot be modified while its being iterated through
 	for (auto& enemy : enemies)
 	{
+		if (!enemy->alive)
+			enemy->Die();
+
 		playerBullets.erase(std::remove_if(playerBullets.begin(), playerBullets.end(), [&enemy](const Bullet& blt) {
 			return CheckCollisionRecs(blt.rec, enemy->rec); // Check if the bullet collides with the enemy
 		}), playerBullets.end()); // Remove the bullet from the vector
@@ -152,7 +155,7 @@ void BulletsHit(std::vector<Bullet>& playerBullets, std::vector<std::unique_ptr<
 // ran when player dies 
 void PlayerRestart(Player& player)
 {
-	player.rec.x = (GetScreenWidth() / 2) - player.rec.width;
+	player.rec.x = (GetScreenWidth() / 2.0f) - player.rec.width;
 	player.rec.y = GetScreenHeight();
 	player.active = PlayerStartAnimation(player);
 	player.lastHit = GetTime();

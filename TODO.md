@@ -1,6 +1,7 @@
 # TODO
 
 # REAL IMP (IN ORDER)
+    - Add PowerUps
     - Use delta time, remove SetTargetFPS {TOO BIG to Apply at this point}
 	- MAGIC, ALIEN TELEPORTS PLAYER RANDOM SPOT
 	- MAGIC ALIEN PULLS A ASTEROID

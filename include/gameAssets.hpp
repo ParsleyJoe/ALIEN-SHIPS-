@@ -1,11 +1,13 @@
 #pragma once
 #include <vector>
 #include "bulletSpawning.hpp"
+#include <powerup.hpp>
 
 namespace GameAssets
 {
 	// vector with bullet of every enemy
 	inline std::vector<Bullet> enemyBullets;
+	inline std::vector<PowerUp> powerUps;
 
 	// Sprites
 	inline Texture2D shipSprite;

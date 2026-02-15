@@ -57,6 +57,8 @@ void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies)
 	enemies.clear();
 
 	GameAssets::enemyBullets.clear();
+	GameAssets::powerUps.clear();
+
 	game.player.playerBullets.clear();
 	InitSpawners(game.spawnerHolder);
 }
