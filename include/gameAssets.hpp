@@ -14,6 +14,7 @@ namespace GameAssets
 
 	// Sprites
 	inline Texture2D shipSprite;
+	inline Texture2D enemyBulletSprite;
 	inline Texture2D bossHealthBorder;
 	inline Texture2D bossSkullSprite;
 	inline Texture2D fodderSprite;

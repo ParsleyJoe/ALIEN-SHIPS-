@@ -22,6 +22,7 @@ void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies)
 	ShootBullet(player, GameAssets::bullet);
 
 	BulletsHit(player.playerBullets, enemies);
+	CheckEffects(player);
 }
 
 
@@ -173,14 +174,46 @@ bool PlayerStartAnimation(Player& player)
 	return false;
 }
 
-void PerformPowerUp(Player& player, PowerUp powerUp)
+void AddPowerUpEffect(Player& player, PowerUp powerUp)
 {
-	switch (powerUp.type) 
-	{
-	case PowerUpType::POWER:
-		player.damage += 10;
-		break;
-	case PowerUpType::SPEED:
-		break;
+	PowerUpEffect effect;
+	effect = {powerUp.type, 2.0f};
+	player.activeEffects.push_back(effect);
+}
+
+void CheckEffects(Player& player)
+{
+	for (auto& p : player.activeEffects) {
+		switch (p.type) 
+		{
+		case PowerUpType::SPEED:
+			player.speed = player.baseSpeed + 5;
+			break;
+		case PowerUpType::POWER:
+			player.damage = player.baseDamage + 10;
+			break;
+		case PowerUpType::ONEUP:
+			player.lives++;
+			p.timeLeft = -1.0f;
+			break;
+		}
+		p.timeLeft -= GetFrameTime();
+
+		// Reset For TimeOver
+		if (p.timeLeft <= 0.0f)
+		{
+			switch (p.type) 
+			{
+			case PowerUpType::SPEED:
+				player.speed = player.baseSpeed;
+				break;
+			case PowerUpType::POWER:
+				player.damage = player.baseDamage;
+				break;
+			}
+		}
 	}
+	player.activeEffects.erase(std::remove_if(player.activeEffects.begin(), player.activeEffects.end(), [](const auto& p){
+		return (p.timeLeft <= 0);
+	}), player.activeEffects.end());
 }

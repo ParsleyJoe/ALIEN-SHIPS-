@@ -9,6 +9,7 @@ struct Player
 	bool active = false;
 	int lives = 3;
 
+	int baseDamage = 20;
 	int damage = 20;
 	float hitCooldown = 2.0f;
 	float lastHit = 0;
@@ -19,8 +20,11 @@ struct Player
 	Texture2D playerSprite;
 	Texture2D bulletSprite;
 
+	int baseSpeed = 7;
 	int speed = 7;
 	Vector2 direction = { 0 };
+
+	std::vector<PowerUpEffect> activeEffects;
 };
 
 void pLoadTxt(Player& player);
@@ -31,7 +35,8 @@ void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);
 void MovePlayer(Player& player);
 void ShootBullet(Player& player, Rectangle bullet);
 
-void PerformPowerUp(Player& player, PowerUp powerUp);
+void AddPowerUpEffect(Player& player, PowerUp powerUp);
+void CheckEffects(Player& player);
 
 void BulletsHit(std::vector<Bullet>& bullets, std::vector<std::unique_ptr<Enemy>>& enemies);
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);

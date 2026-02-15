@@ -42,7 +42,7 @@ void PowerUpCollision(Player& player)
 	{
 		if (CheckCollisionRecs(player.rec, p.rec))
 		{
-			PerformPowerUp(player, p);
+			AddPowerUpEffect(player, p);
 			p.used = true;
 			std::cout << "PowerUPCollision" << '\n';
 		}

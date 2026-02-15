@@ -20,7 +20,7 @@ struct Bullet
 		else
 			DrawRectangleRec(rec, BLACK);
 
-		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, GREEN);
+		//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, GREEN);
 	}
 
 	void Update()

@@ -117,7 +117,7 @@ int main()
 			}
 			for (auto& blt : GameAssets::enemyBullets)
 			{
-				DrawRectangleRec(blt.rec, RED);
+				blt.Draw();
 			}
 			if (!game.active)
 			{

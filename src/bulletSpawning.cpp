@@ -1,5 +1,6 @@
 #include "bulletSpawning.hpp"
 #include "enemy.hpp"
+#include "gameAssets.hpp"
 #include <vector>
 
 void SpawnBullets(BulletSpawner& bltSpawner, std::vector<Bullet>& enemyBullets, Rectangle bullet, float angle)
@@ -11,6 +12,7 @@ void SpawnBullets(BulletSpawner& bltSpawner, std::vector<Bullet>& enemyBullets, 
 		blt.rec.x = bltSpawner.position.x;
 		blt.rec.y = bltSpawner.position.y;
 		blt.dir = Vector2Rotate(bltSpawner.direction, angle);
+		blt.sprite = GameAssets::enemyBulletSprite;
 		enemyBullets.push_back(blt);
 		bltSpawner.lastSpawned = GetTime();
 	}
