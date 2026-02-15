@@ -1,5 +1,3 @@
-#include "UI.hpp"
-#include "powerup.hpp"
 #include "raylib.h"
 #include <raymath.h>
 #include "rlImGui.h"
@@ -14,7 +12,8 @@
 #include "sceneManager.hpp"
 #include "button.hpp"
 #include "stars.hpp"
-
+#include "powerup.hpp"
+#include "UI.hpp"
 
 //----------------------------------------------------------------------------------
 int main()
@@ -61,6 +60,7 @@ int main()
 			UpdateStars(stars, starSpawner);
 
 			UpdatePlayer(game.player, enemies);
+			PowerUpCollision(game.player);
 
 			// Enemy Spawning
 			StartSpawning(game.wave, enemies, game.spawnerHolder);

@@ -31,6 +31,8 @@ void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);
 void MovePlayer(Player& player);
 void ShootBullet(Player& player, Rectangle bullet);
 
+void PerformPowerUp(Player& player, PowerUp powerUp);
+
 void BulletsHit(std::vector<Bullet>& bullets, std::vector<std::unique_ptr<Enemy>>& enemies);
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);
 void ContactCollision(Player& player, std::unique_ptr<Enemy>& enemy);
@@ -38,3 +40,4 @@ void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy);
 
 void PlayerRestart(Player& player);
 bool PlayerStartAnimation(Player& player);
+

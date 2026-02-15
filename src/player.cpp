@@ -1,6 +1,7 @@
 #include "player.hpp"
 #include "enemy.hpp"
 #include "gameAssets.hpp"
+#include "powerup.hpp"
 #include "raylib.h"
 #include "raymath.h"
 #include <algorithm>
@@ -170,4 +171,16 @@ bool PlayerStartAnimation(Player& player)
 	}
 	player.rec.y -= 4.0f;
 	return false;
+}
+
+void PerformPowerUp(Player& player, PowerUp powerUp)
+{
+	switch (powerUp.type) 
+	{
+	case PowerUpType::POWER:
+		player.damage += 10;
+		break;
+	case PowerUpType::SPEED:
+		break;
+	}
 }
