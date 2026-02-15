@@ -1,4 +1,6 @@
 #pragma once
+#include <map>
+#include <string>
 #include <vector>
 #include "bulletSpawning.hpp"
 #include <powerup.hpp>
@@ -7,6 +9,7 @@ namespace GameAssets
 {
 	// vector with bullet of every enemy
 	inline std::vector<Bullet> enemyBullets;
+
 	inline std::vector<PowerUp> powerUps;
 
 	// Sprites
@@ -16,5 +19,6 @@ namespace GameAssets
 	inline Texture2D fodderSprite;
 	inline Texture2D sinSprite;
 	inline Texture2D asteroidSprite;
+	inline std::map<std::string, Texture2D> powerUpSprites; // Speed, Power, OneUp
 	constexpr inline Rectangle bullet = { 0, 0, 5, 10 }; // note: x, y, width, height
 }

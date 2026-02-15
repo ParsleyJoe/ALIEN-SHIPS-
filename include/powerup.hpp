@@ -3,8 +3,8 @@
 
 struct Player;
 
-enum class PowerUpType {
-	SPEED, POWER
+enum PowerUpType {
+	SPEED = 0, POWER = 1, ONEUP = 2
 };
 
 struct PowerUp {
@@ -12,6 +12,7 @@ struct PowerUp {
 	PowerUpType type;
 
 	bool used = false;
+	Texture2D sprite;
 };
 
 void SpawnPowerUp(Vector2 pos);

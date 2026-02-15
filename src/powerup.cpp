@@ -2,13 +2,26 @@
 #include "player.hpp"
 #include <algorithm>
 #include <iostream>
+#include <memory>
 #include <powerup.hpp>
 #include <raylib.h>
 
 void SpawnPowerUp(Vector2 pos)
 {
-	PowerUpType type = (GetRandomValue(0, 1) == 0) ? PowerUpType::SPEED : PowerUpType::POWER;
+	PowerUpType type = (PowerUpType)(GetRandomValue(0, 2));
+
 	PowerUp powerUp = {.rec = {pos.x, pos.y, 30.0f, 30.0f}, .type = type};
+	switch (type) {
+	case PowerUpType::SPEED:
+		powerUp.sprite = GameAssets::powerUpSprites["Speed"];
+		break;
+	case PowerUpType::POWER:
+		powerUp.sprite = GameAssets::powerUpSprites["Power"];
+		break;
+	case PowerUpType::ONEUP:
+		powerUp.sprite = GameAssets::powerUpSprites["OneUp"];
+		break;
+	}
 	GameAssets::powerUps.push_back(powerUp);
 }
 
@@ -16,7 +29,10 @@ void DrawPowerUps()
 {
 	// NOTE: PlaceHolder for sprites
 	for (auto p : GameAssets::powerUps) {
-		DrawRectangleRec(p.rec, GREEN);
+		if (IsTextureReady(p.sprite))
+			DrawTexturePro(p.sprite, {0.0f, 0.0f, static_cast<float>(p.sprite.width), static_cast<float>(p.sprite.height)}, p.rec, {0.0f}, 0.0f, WHITE);
+		else
+			DrawRectangleRec(p.rec, GREEN);
 	}
 }
 
