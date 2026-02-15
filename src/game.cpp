@@ -1,5 +1,8 @@
 #include "gameAssets.hpp"
+#include "player.hpp"
 #include "raylib.h"
+#include "spawning.hpp"
+#include <memory>
 #include <rlImGui.h>
 #include <imguiThemes.h>
 #include <game.hpp>
@@ -42,6 +45,20 @@ void gInitGame(Game& game)
 	{
 		style.Colors[ImGuiCol_WindowBg].w = 0.5f;
 	}
+}
+
+void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies)
+{
+	PlayerRestart(game.player);
+	game.player.lives = 3;
+	game.wave = 1;
+	game.active = true;
+
+	enemies.clear();
+
+	GameAssets::enemyBullets.clear();
+	game.player.playerBullets.clear();
+	InitSpawners(game.spawnerHolder);
 }
 
 void gDrawingBegin()

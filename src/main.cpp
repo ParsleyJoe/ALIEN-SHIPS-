@@ -1,3 +1,4 @@
+#include "UI.hpp"
 #include "raylib.h"
 #include <raymath.h>
 #include "rlImGui.h"
@@ -23,47 +24,36 @@ int main()
 	gInitGame(game);
 	gLoadTextures(game);
 
-	Shader bloom = LoadShader(0, "resources/shader/bloom_fragment.glsl");
-
 	std::vector<std::unique_ptr<Enemy>> enemies; // NOTE: Polymorphism to store any enemy type
 	std::vector<Star> stars;
 
-	int wave = 1;
-	int lives = 3;
-	
-	bool gameActive = false;
 	Scene currentScene = Scene::MAIN_MENU;
 
 	// Init Spawners and Holder
-	SpawnerHolder spawnerHolder;
-	InitSpawners(spawnerHolder);
+	InitSpawners(game.spawnerHolder);
+
+	UIAssets uiAssets;
+	InitUI(uiAssets);
 
 	// For Drawing background stars
 	Spawner starSpawner;
 	starSpawner.enemyAmmount = 40;
 	starSpawner.spawnInterval = 2.0f;
 
-	Button startBtn;
-	startBtn.rec = Rectangle{ (GetScreenWidth() / 2) - 50.0f, (GetScreenHeight() / 2) - 0.0f, 120, 50 };
-	startBtn.color = DARKGRAY;
-	startBtn.text = "Start Game";
-	startBtn.txtColor = WHITE;
-	startBtn.fontSize = 15;
-
+	
 	//! Game loop
 	while (!WindowShouldClose())
 	{
 		if (IsKeyPressed(KEY_P) && currentScene == Scene::GAME)
-			gameActive = !gameActive;
-
+			game.active = !game.active;
 
 		// Updating Logic ================================
 		// -----------------------------------------------
-		if (gameActive)
+		if (game.active)
 		{
 			if (game.player.lives <= 0)
 			{
-				gameActive = false;
+				game.active = false;
 				currentScene = Scene::GAME_OVER;
 			}
 
@@ -72,7 +62,7 @@ int main()
 			UpdatePlayer(game.player, enemies);
 
 			// Enemy Spawning
-			StartSpawning(wave, enemies, spawnerHolder);
+			StartSpawning(game.wave, enemies, game.spawnerHolder);
 			
 			EnemyUpdateContext context = { enemies };
 			for (int i = 0; i < context.enemies.size(); i++)
@@ -95,15 +85,12 @@ int main()
 		// -----------------------------------------------
 		gDrawingBegin();
 
-		//BeginShaderMode(bloom);
-
+		DrawUI(uiAssets, currentScene);
 		if (currentScene == Scene::MAIN_MENU)
 		{
-			DrawText("SPACE BULLET HELL!!", (GetScreenWidth() / 2) - 170, (GetScreenHeight() / 2) - 50, 30, DARKGRAY);
-			DrawButton(startBtn);
-			if (IsButtonClicked(startBtn))
+			if (IsButtonClicked(uiAssets.btns["Start"]))
 			{
-				gameActive = true;
+				game.active = true;
 				currentScene = Scene::GAME;
 			}
 		}
@@ -129,7 +116,7 @@ int main()
 			{
 				DrawRectangleRec(blt.rec, RED);
 			}
-			if (!gameActive)
+			if (!game.active)
 			{
 				DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(GRAY, 0.5f));
 				DrawText("Paused", 600, 300, 40, GRAY);
@@ -137,13 +124,14 @@ int main()
 		}
 		else if (currentScene == Scene::GAME_OVER)
 		{
-			int textWidth = MeasureText("GAME OVER", 30);
-			int x = (GetScreenWidth() / 2) - (textWidth / 2);
-			int y = (GetScreenHeight() / 2) - (30 / 2); // optional, for vertical center
-			DrawText("GAME OVER", x, y, 30, DARKGRAY);
+			if (IsButtonClicked(uiAssets.btns["Restart"]))
+			{
+				gRestartGame(game, enemies);
+				currentScene = Scene::GAME;
+				
+			}
 		}
 
-		//EndShaderMode();
 		gDrawingEnd(game);
 	}
 

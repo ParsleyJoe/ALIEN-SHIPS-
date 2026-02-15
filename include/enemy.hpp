@@ -113,6 +113,7 @@ struct SinwaveShooter : Enemy
 	SinwaveShooter()
 	{
 		rec = {0, 0, 40, 40};
+		type = EnemyType::SINWAVE_SHOOTER;
 	}
 };
 
@@ -152,6 +153,12 @@ struct RadialShooter : Enemy
 		}
 		bltSpawner.lastSpawned = GetTime();
 	}
+
+	RadialShooter()
+	{
+		type = EnemyType::RADIATING_SHOOTER;
+	}
+
 };
 
 struct BossShip : Enemy
@@ -168,6 +175,8 @@ struct BossShip : Enemy
 
 		radialShooterSpawner.waveType = EnemyType::RADIATING_SHOOTER;
 		radialShooterSpawner.spawnInterval = 5.0f;
+
+		type = EnemyType::BOSS_SHIP;
 	}
 
 	void Update(EnemyUpdateContext& ctx) override
@@ -190,6 +199,7 @@ struct BossShip : Enemy
 		DrawHealthBar(healthBar, startHealth);
 		DrawTexture(GameAssets::bossSkullSprite, healthBar.mainRec.x, healthBar.mainRec.y + healthBar.mainRec.height + 10, WHITE);
 	}
+
 };
 
 struct Asteroid : Enemy
@@ -214,5 +224,10 @@ struct Asteroid : Enemy
 	{
 		rec.x += speedX;
 		rec.y += speedY;
+	}
+
+	Asteroid()
+	{
+		type = EnemyType::ASTEROID;
 	}
 };

@@ -9,22 +9,27 @@ void InitSpawners(SpawnerHolder& holder)
 	holder.fodderSpawner.enemyAmmount = 10;
 	holder.fodderSpawner.waveType = EnemyType::FODDER;
 	holder.fodderSpawner.spawnInterval = 0.6f;
+	holder.fodderSpawner.spawnedEnemies = 0;
 
 	holder.shipSpawner.waveType = EnemyType::SHIP;
 	holder.shipSpawner.spawnInterval = 0.3f;
 	holder.shipSpawner.enemyAmmount = 15;
+	holder.circleShooter.spawnedEnemies = 0;
 
 	holder.circleShooter.waveType = EnemyType::SINWAVE_SHOOTER;
 	holder.circleShooter.enemyAmmount = 1;
 	holder.circleShooter.spawnInterval = 2.0f;
+	holder.circleShooter.spawnedEnemies = 0;
 
 	holder.bossSpawner.waveType = EnemyType::BOSS_SHIP;
 	holder.bossSpawner.enemyAmmount = 1;
 	holder.bossSpawner.spawnInterval = 4.0f;
+	holder.bossSpawner.spawnedEnemies = 0;
 
 	holder.asteroidSpawner.waveType = EnemyType::ASTEROID;
 	holder.asteroidSpawner.spawnInterval = GetRandomValue(15, 25) + 0.0f;
 	holder.asteroidSpawner.enemyAmmount = 1;
+	holder.asteroidSpawner.spawnedEnemies = 0;
 
 
 }
@@ -50,8 +55,7 @@ void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spaw
 
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
 {
-	static int spawnedEnemies = 0;
-	if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval) && spawnedEnemies < spawner.enemyAmmount)
+	if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval) && spawner.spawnedEnemies < spawner.enemyAmmount)
 	{
 		if (spawner.waveType == EnemyType::FODDER)
 		{
@@ -76,23 +80,23 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 			SpawnBossShip(enemies);
 		}
 
-		spawnedEnemies++;
+		spawner.spawnedEnemies++;
 	}
-
-	if (spawnedEnemies >= spawner.enemyAmmount && enemies.size() <= 0)
+	
+	if (spawner.spawnedEnemies >= spawner.enemyAmmount && enemies.size() <= 0)
 	{
 		if (spawner.enemyAmmount == 1 && spawner.waveType == EnemyType::SINWAVE_SHOOTER)
 		{
 			spawner.enemyAmmount = 2;
 		}
-		spawnedEnemies = 0;// TODO: it sets to 0 as soon as enemyAmmount is greater
+		spawner.spawnedEnemies = 0;// TODO: it sets to 0 as soon as enemyAmmount is greater
 		wave++;
 
 		if (wave >= 4) { wave = 1; } // Reset wave, start again from fodders
 	}
 	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
 		return e->rec.y > (GetScreenHeight() + e->rec.height);
-		}), enemies.end());
+	}), enemies.end());
 }
 
 void SpawnSinShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)

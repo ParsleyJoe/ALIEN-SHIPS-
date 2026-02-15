@@ -13,6 +13,7 @@ struct Spawner
 	float lastSpawnTime = 0.0f;
 	EnemyType waveType;
 	int enemyAmmount = 10;
+	int spawnedEnemies = 0;
 };
 
 struct SpawnerHolder

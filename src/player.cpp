@@ -23,6 +23,7 @@ void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies)
 	BulletsHit(player.playerBullets, enemies);
 }
 
+
 // If Enemy Collided with player
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
@@ -144,7 +145,7 @@ void BulletsHit(std::vector<Bullet>& playerBullets, std::vector<std::unique_ptr<
 	}
 
 	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
-		return (e->rec.y > GetScreenHeight()) || !e->alive;
+		return !e->alive;
 		}), enemies.end());
 }
 
