@@ -18,6 +18,7 @@ struct PowerUp {
 struct PowerUpEffect {
 	PowerUpType type;
 	float timeLeft;
+	float totalTime = 5.0f;
 };
 
 void SpawnPowerUp(Vector2 pos);

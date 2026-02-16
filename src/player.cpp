@@ -177,7 +177,7 @@ bool PlayerStartAnimation(Player& player)
 void AddPowerUpEffect(Player& player, PowerUp powerUp)
 {
 	PowerUpEffect effect;
-	effect = {powerUp.type, 2.0f};
+	effect = {.type = powerUp.type, .timeLeft = effect.totalTime};
 	player.activeEffects.push_back(effect);
 }
 
