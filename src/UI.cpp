@@ -1,4 +1,5 @@
 #include "button.hpp"
+#include "game.hpp"
 #include "gameAssets.hpp"
 #include "player.hpp"
 #include "powerup.hpp"
@@ -6,7 +7,7 @@
 #include <UI.hpp>
 #include <sceneManager.hpp>
 
-void DrawUI(UIAssets& assets, Scene& currentScene, Player& player)
+void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
 {
 	switch (currentScene)
 	{
@@ -15,7 +16,8 @@ void DrawUI(UIAssets& assets, Scene& currentScene, Player& player)
 		DrawButton(assets.btns["Start"]);
 		break;
 	case Scene::GAME:
-		DrawEffectTimers(player);
+		DrawEffectTimers(game.player);
+		DrawScore(game);
 		break;
 	case Scene::GAME_OVER:
 		int textWidth = MeasureText("GAME OVER", 30);
@@ -27,6 +29,12 @@ void DrawUI(UIAssets& assets, Scene& currentScene, Player& player)
 		DrawButton(btn);
 		break;
 	}
+}
+
+void DrawScore(Game& game)
+{
+	float size = MeasureText(TextFormat("%d", game.score), 20);
+	DrawText(TextFormat("%d", game.score), (GetScreenWidth() * 0.5f) - size, 20.0f, 20, RAYWHITE);
 }
 
 // Draw Player powerup effect timers

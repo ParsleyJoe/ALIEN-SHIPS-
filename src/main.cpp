@@ -86,7 +86,7 @@ int main()
 		// -----------------------------------------------
 		gDrawingBegin();
 
-		DrawUI(uiAssets, currentScene, game.player);
+		DrawUI(uiAssets, currentScene, game);
 		if (currentScene == Scene::MAIN_MENU)
 		{
 			if (IsButtonClicked(uiAssets.btns["Start"]))
