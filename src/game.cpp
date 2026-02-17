@@ -2,6 +2,7 @@
 #include "player.hpp"
 #include "raylib.h"
 #include "spawning.hpp"
+#include <iostream>
 #include <memory>
 #include <rlImGui.h>
 #include <imguiThemes.h>
@@ -66,6 +67,12 @@ void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies)
 
 	game.player.playerBullets.clear();
 	InitSpawners(game.spawnerHolder);
+}
+
+void gEnemyKilled(Game &game, std::unique_ptr<Enemy>& enemy)
+{
+	game.score += enemy->scoreIncrement;
+	std::cout << "Score is now: " << game.score << std::endl;
 }
 
 void gDrawingBegin()

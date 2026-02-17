@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 
+struct Game;
+
 struct Player
 {
 	bool active = false;
@@ -31,14 +33,14 @@ void pLoadTxt(Player& player);
 
 void DrawPlayer(Player& player);
 
-void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);
+void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies);
 void MovePlayer(Player& player);
 void ShootBullet(Player& player, Rectangle bullet);
 
 void AddPowerUpEffect(Player& player, PowerUp powerUp);
 void CheckEffects(Player& player);
 
-void BulletsHit(std::vector<Bullet>& bullets, std::vector<std::unique_ptr<Enemy>>& enemies);
+void BulletsHit(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies);
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);
 void ContactCollision(Player& player, std::unique_ptr<Enemy>& enemy);
 void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy);

@@ -1,5 +1,6 @@
 #include "player.hpp"
 #include "enemy.hpp"
+#include "game.hpp"
 #include "gameAssets.hpp"
 #include "powerup.hpp"
 #include "raylib.h"
@@ -14,15 +15,15 @@ void pLoadTxt(Player& player)
 	player.bulletSprite = LoadTexture("resources/bullet.png");
 }
 
-void UpdatePlayer(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies)
+void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
-	MovePlayer(player);
-	PlayerCollision(player, enemies);
+	MovePlayer(game.player);
+	PlayerCollision(game.player, enemies);
 
-	ShootBullet(player, GameAssets::bullet);
+	ShootBullet(game.player, GameAssets::bullet);
 
-	BulletsHit(player.playerBullets, enemies);
-	CheckEffects(player);
+	BulletsHit(game, enemies);
+	CheckEffects(game.player);
 }
 
 
@@ -122,9 +123,9 @@ void ShootBullet(Player& player, Rectangle bullet)
 }
 
 // If playerBullets hit enemies
-void BulletsHit(std::vector<Bullet>& playerBullets, std::vector<std::unique_ptr<Enemy>>& enemies)
+void BulletsHit(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
-	for (const Bullet& bullet : playerBullets)
+	for (const Bullet& bullet : game.player.playerBullets)
 	{
 		for (auto& enemy : enemies)
 		{
@@ -142,16 +143,19 @@ void BulletsHit(std::vector<Bullet>& playerBullets, std::vector<std::unique_ptr<
 	for (auto& enemy : enemies)
 	{
 		if (!enemy->alive)
+		{
 			enemy->Die();
+			gEnemyKilled(game, enemy);
+		}
 
-		playerBullets.erase(std::remove_if(playerBullets.begin(), playerBullets.end(), [&enemy](const Bullet& blt) {
+		game.player.playerBullets.erase(std::remove_if(game.player.playerBullets.begin(), game.player.playerBullets.end(), [&enemy](const Bullet& blt) {
 			return CheckCollisionRecs(blt.rec, enemy->rec); // Check if the bullet collides with the enemy
-		}), playerBullets.end()); // Remove the bullet from the vector
+		}), game.player.playerBullets.end()); // Remove the bullet from the vector
 	}
 
 	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
 		return !e->alive;
-		}), enemies.end());
+	}), enemies.end());
 }
 
 // ran when player dies 

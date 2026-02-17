@@ -59,7 +59,7 @@ int main()
 
 			UpdateStars(stars, starSpawner);
 
-			UpdatePlayer(game.player, enemies);
+			UpdatePlayer(game, enemies);
 			PowerUpCollision(game.player);
 
 			// Enemy Spawning

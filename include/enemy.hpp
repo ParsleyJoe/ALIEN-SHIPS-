@@ -25,6 +25,9 @@ struct Enemy
 	int health = 30;
 
 	bool alive = true;
+
+	int scoreIncrement = 5;
+
 	virtual void Draw() = 0;
 	virtual void Update(EnemyUpdateContext& ctx) = 0;
 	void Die()

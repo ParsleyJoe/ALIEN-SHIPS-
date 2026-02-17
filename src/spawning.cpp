@@ -137,7 +137,7 @@ void SpawnShips(std::vector<std::unique_ptr<Enemy>>& enemies)
 	ship->rec.y = pos.y;
 	ship->rec.width = 37; // !So that rectangle fits with sprite 37, 20 are needed
 	ship->rec.height = 20;
-	ship->bltSpawner = MakeSpawner(Vector2{ pos.x + (ship->rec.width / 2), ship->rec.y + ship->rec.height }, GetRandomValue(1, 3) / 10.0f);
+	ship->bltSpawner = MakeSpawner(Vector2{ (pos.x + (ship->rec.width / 2.0f)) - GameAssets::bullet.width, ship->rec.y + ship->rec.height }, GetRandomValue(1, 3) / 10.0f);
 	ship->type = EnemyType::SHIP;
 	enemies.push_back(std::move(ship));
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "player.hpp"
+#include <memory>
 
 struct ImGuiIO;
 
@@ -10,6 +11,8 @@ struct Game {
 	int wave = 1;
 	bool active = false;
 	SpawnerHolder spawnerHolder;
+
+	int score = 0;
 };
 
 void gInitGame(Game& game);
@@ -20,4 +23,7 @@ void gDrawingEnd(Game& game);
 
 void gLoadTextures(Game& game);
 
-void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies);
+void gRestartGame(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies);
+
+// Called when player kills an enemy
+void gEnemyKilled(Game& game, std::unique_ptr<Enemy>& enemy);
