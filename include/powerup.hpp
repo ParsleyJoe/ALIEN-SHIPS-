@@ -4,7 +4,7 @@
 struct Player;
 
 enum PowerUpType {
-	SPEED = 0, POWER = 1, ONEUP = 2
+	SPEED = 0, POWER = 1, ONEUP = 2, SHIELD = 3
 };
 
 struct PowerUp {

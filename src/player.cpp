@@ -57,6 +57,7 @@ void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy)
 		{
 			player.lives--;
 			PlayerRestart(player);
+			blt.rec = {GetScreenWidth() + blt.rec.width, GetScreenHeight() + blt.rec.height, 0.0f, 0.0f};
 		}
 	}
 }
@@ -165,6 +166,11 @@ void PlayerRestart(Player& player)
 	player.rec.y = GetScreenHeight();
 	player.active = PlayerStartAnimation(player);
 	player.lastHit = GetTime();
+	
+	// Reset PowerUps
+	player.activeEffects.clear();
+	player.speed = player.baseSpeed;
+	player.damage = player.baseDamage;
 }
 
 // Returns if animation is done

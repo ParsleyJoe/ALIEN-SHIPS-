@@ -25,7 +25,7 @@ void RemoveBullets(std::vector<Bullet>& enemyBullets)
 {
 	enemyBullets.erase(std::remove_if(enemyBullets.begin(), enemyBullets.end(), [](const auto& b) {
 		return b.rec.y > (GetScreenHeight() + b.rec.height);
-		}), enemyBullets.end());
+	}), enemyBullets.end());
 }
 
 BulletSpawner MakeSpawner(Vector2 pos, float cooldown)

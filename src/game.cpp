@@ -89,7 +89,7 @@ void gDrawingBegin()
 
 	ImGui::Begin("Test");
 	ImGui::Text("FPS: %i", GetFPS());
-//	ImGui::Text("Size of bullets Vector: %zu", player.playerBullets.size());
+	ImGui::Text("Size of bullets Vector: %zu", GameAssets::enemyBullets.size());
 //	ImGui::Text("Star vector size: %zu", stars.size());
 	ImGui::End();
 

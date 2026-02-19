@@ -54,7 +54,7 @@ struct Fodder : Enemy
 		else
 			DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
 
-		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, DARKGREEN);
+		//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, DARKGREEN);
 	}
 	void Update(EnemyUpdateContext& ctx) override
 	{
@@ -87,7 +87,7 @@ struct Ship : Enemy
 	int speed = 3;
 	void Draw() override
 	{
-		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, BLACK);
+		//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, BLACK);
 		DrawTexture(GameAssets::shipSprite, rec.x, rec.y, WHITE);
 	}
 
@@ -122,7 +122,7 @@ struct SinwaveShooter : Enemy
 		  rec, {rec.width, rec.height}, 180.0f, WHITE);
 		else
 			DrawRectangleRec(rec, BLUE);
-		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, WHITE);
+		//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, WHITE);
 	}
 	SinwaveShooter()
 	{
@@ -231,7 +231,7 @@ struct Asteroid : Enemy
 		}
 		else
 			DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
-		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, GREEN);
+		//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, GREEN);
 	}
 
 	void Update(EnemyUpdateContext& ctx) override

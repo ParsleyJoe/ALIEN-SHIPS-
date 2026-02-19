@@ -17,7 +17,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 option(PRODUCTION_BUILD "Make this a production build" OFF)
 #DELETE THE OUT FOLDER AFTER CHANGING THIS BECAUSE VISUAL STUDIO DOESN'T SEEM TO RECOGNIZE THIS CHANGE AND REBUILD!
 
-if(MSVC) 
+if(MSVC)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Release>:Release>")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 add_compile_options(/arch:AVX2) #make sure SIMD optimizations take place

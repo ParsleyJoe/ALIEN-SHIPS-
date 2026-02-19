@@ -21,6 +21,9 @@ void SpawnPowerUp(Vector2 pos)
 	case PowerUpType::ONEUP:
 		powerUp.sprite = GameAssets::powerUpSprites["OneUp"];
 		break;
+	case PowerUpType::SHIELD:
+		std::cout << "Shield Sprite not loaded [powerup.cpp]\n";
+		break;
 	}
 	GameAssets::powerUps.push_back(powerUp);
 }
