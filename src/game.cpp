@@ -108,3 +108,10 @@ void gDrawingEnd(Game& game)
 	EndDrawing();
 
 }
+
+SaveData gGetSaveData(Game& game)
+{
+	SaveData saveData;
+	saveData.score = game.score;
+	return saveData;
+}

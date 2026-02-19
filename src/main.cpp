@@ -15,6 +15,8 @@
 #include "powerup.hpp"
 #include "UI.hpp"
 
+#include <safeSave.h>
+
 //----------------------------------------------------------------------------------
 int main()
 {
@@ -55,6 +57,9 @@ int main()
 			{
 				game.active = false;
 				currentScene = Scene::GAME_OVER;
+
+				SaveData sav = gGetSaveData(game);
+				sfs::writeEntireFileWithCheckSum( (void*)&sav, sizeof(SaveData), "saveData.sav");
 			}
 
 			UpdateStars(stars, starSpawner);

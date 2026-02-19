@@ -50,4 +50,3 @@ void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy);
 
 void PlayerRestart(Player& player);
 bool PlayerStartAnimation(Player& player);
-

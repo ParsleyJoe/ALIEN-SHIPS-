@@ -15,6 +15,10 @@ struct Game {
 	int score = 0;
 };
 
+struct SaveData {
+	int score = 0;
+};
+
 void gInitGame(Game& game);
 
 // InitEverything before drawing
@@ -27,3 +31,6 @@ void gRestartGame(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies);
 
 // Called when player kills an enemy
 void gEnemyKilled(Game& game, std::unique_ptr<Enemy>& enemy);
+
+// Returns updated data based on game struct
+SaveData gGetSaveData(Game& game);
