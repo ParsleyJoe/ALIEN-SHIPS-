@@ -8,7 +8,7 @@
 
 void SpawnPowerUp(Vector2 pos)
 {
-	PowerUpType type = (PowerUpType)(GetRandomValue(0, 2));
+	PowerUpType type = (PowerUpType)(GetRandomValue(0, 3));
 
 	PowerUp powerUp = {.rec = {pos.x, pos.y, 30.0f, 30.0f}, .type = type};
 	switch (type) {

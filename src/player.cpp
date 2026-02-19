@@ -42,7 +42,7 @@ void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemie
 
 void ContactCollision(Player& player, std::unique_ptr<Enemy>& enemy)
 {
-	if (CheckCollisionRecs(player.rec, enemy->rec))
+	if (!player.shieldActive && CheckCollisionRecs(player.rec, enemy->rec))
 	{
 		player.lives--;
 		PlayerRestart(player);
@@ -55,8 +55,11 @@ void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy)
 	{
 		if (CheckCollisionRecs(player.rec, blt.rec))
 		{
-			player.lives--;
-			PlayerRestart(player);
+			if (!player.shieldActive)
+			{
+				player.lives--;
+				PlayerRestart(player);
+			}
 			blt.rec = {GetScreenWidth() + blt.rec.width, GetScreenHeight() + blt.rec.height, 0.0f, 0.0f};
 		}
 	}
@@ -206,6 +209,9 @@ void CheckEffects(Player& player)
 			player.lives++;
 			p.timeLeft = -1.0f;
 			break;
+		case PowerUpType::SHIELD:
+			player.shieldActive = true;
+			break;
 		}
 		p.timeLeft -= GetFrameTime();
 
@@ -219,6 +225,9 @@ void CheckEffects(Player& player)
 				break;
 			case PowerUpType::POWER:
 				player.damage = player.baseDamage;
+				break;
+			case PowerUpType::SHIELD:
+				player.shieldActive = false;
 				break;
 			}
 		}

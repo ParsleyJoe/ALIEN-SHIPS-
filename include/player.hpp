@@ -11,13 +11,16 @@ struct Player
 	bool active = false;
 	int lives = 3;
 
+	bool shieldActive = false;
 	int baseDamage = 20;
 	int damage = 20;
 	float hitCooldown = 2.0f;
 	float lastHit = 0;
+
 	float shotCooldown = 0.1f;
 	float lastShot = 0;
 	std::vector<Bullet> playerBullets;
+
 	Rectangle rec = { (GetScreenWidth() / 2) - (25.0f), (float)GetScreenHeight(), 33, 33 };
 	Texture2D playerSprite;
 	Texture2D bulletSprite;
