@@ -38,6 +38,8 @@ void gInitGame(Game& game)
 	InitWindow(800, 600, "SpaceGame");
 	SetTargetFPS(60);
 
+	SetExitKey(KEY_F4);
+
 	rlImGuiSetup(true);
 
 	imguiThemes::embraceTheDarkness();

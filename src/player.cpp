@@ -229,8 +229,11 @@ void CheckEffects(Player& player)
 			case PowerUpType::SHIELD:
 				player.shieldActive = false;
 				break;
-			}
-		}
+			case PowerUpType::ONEUP:
+				// Empty Switch to silence warning
+				break;
+                        }
+                }
 	}
 	player.activeEffects.erase(std::remove_if(player.activeEffects.begin(), player.activeEffects.end(), [](const auto& p){
 		return (p.timeLeft <= 0);

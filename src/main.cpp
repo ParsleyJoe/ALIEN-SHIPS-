@@ -1,11 +1,11 @@
 #include "gameAssets.hpp"
-#include "raylib.h"
+#include <raylib.h>
 #include <raymath.h>
-#include "rlImGui.h"
+#include <rlImGui.h>
 
 #include <vector>
 
-#include <game.hpp>
+#include "game.hpp"
 #include "enemy.hpp"
 #include "spawning.hpp"
 #include "player.hpp"
@@ -43,11 +43,11 @@ int main()
 	starSpawner.enemyAmmount = 40;
 	starSpawner.spawnInterval = 2.0f;
 
-	
+
 	//! Game loop
 	while (!WindowShouldClose())
 	{
-		if (IsKeyPressed(KEY_P) && currentScene == Scene::GAME)
+		if (IsKeyPressed(KEY_ESCAPE) && currentScene == Scene::GAME)
 			game.active = !game.active;
 
 		// Updating Logic ================================
