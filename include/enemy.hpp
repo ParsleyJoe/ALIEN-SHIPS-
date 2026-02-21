@@ -30,15 +30,7 @@ struct Enemy
 
 	virtual void Draw() = 0;
 	virtual void Update(EnemyUpdateContext& ctx) = 0;
-	void Die()
-	{
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> chance(0,4);
-
-		if (chance(gen) == 0)
-			SpawnPowerUp({rec.x, rec.y});
-	}
+	void Die();
 };
 
 struct Fodder : Enemy
@@ -46,61 +38,18 @@ struct Fodder : Enemy
 	int speedX = 5;
 	int speedY = 2;
 	float sizeDivider = 1.3f;
-	void Draw() override
-	{
-		if (IsTextureReady(GameAssets::fodderSprite))
-			DrawTexturePro(GameAssets::fodderSprite, {0, 0, (float)GameAssets::fodderSprite.width, (float)GameAssets::fodderSprite.height}
-		  , rec, {0}, 0.0f, WHITE);
-		else
-			DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
-
-		//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, DARKGREEN);
-	}
-	void Update(EnemyUpdateContext& ctx) override
-	{
-		int rightBound = GetScreenWidth() - rec.width;
-		if ((rec.x) >= rightBound)
-		{
-			rec.x = rightBound;
-			speedX = -speedX;
-		}
-		else if (rec.x <= 0)
-		{
-			rec.x = 0;
-			speedX = -speedX;
-		}
-
-		// Move
-		rec.x += speedX;
-		rec.y += speedY;
-	}
-	Fodder()
-	{
-		type = EnemyType::FODDER;
-		rec = {0, 0, 60, 60};
-	}
+	void Draw() override;
+	void Update(EnemyUpdateContext& ctx) override;
+	Fodder();
 };
 
 struct Ship : Enemy
 {
 	BulletSpawner bltSpawner;
 	int speed = 3;
-	void Draw() override
-	{
-		//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, BLACK);
-		DrawTexture(GameAssets::shipSprite, rec.x, rec.y, WHITE);
-	}
-
-	void Update(EnemyUpdateContext& ctx) override
-	{
-		rec.y += speed; // moving only on y
-		bltSpawner.position.y += speed;
-		SpawnBullets(bltSpawner, GameAssets::enemyBullets, GameAssets::bullet, DEG2RAD * 0.0f);
-	}
-	Ship()
-	{
-		type = EnemyType::SHIP;
-	}
+	void Draw() override;
+	void Update(EnemyUpdateContext& ctx) override;
+	Ship();
 };
 
 struct SinwaveShooter : Enemy
@@ -108,27 +57,9 @@ struct SinwaveShooter : Enemy
 	BulletSpawner bltSpawner;
 	float shootAngle;
 	float sinMultiplier = 0.0f;
-	void Update(EnemyUpdateContext& ctx) override
-	{
-		// TODO: Move it, Haven't decided how I'll Move it....
-		sinMultiplier = sinf(GetTime() * 10.0f); // amplify the curve speed by 10.0f
-		SpawnBullets(bltSpawner, GameAssets::enemyBullets, GameAssets::bullet, shootAngle * sinMultiplier);
-	}
-
-	void Draw() override
-	{
-		if (IsTextureReady(GameAssets::sinSprite))
-			DrawTexturePro(GameAssets::sinSprite, {0, 0, static_cast<float>(GameAssets::sinSprite.width), static_cast<float>(GameAssets::sinSprite.height)},
-		  rec, {rec.width, rec.height}, 180.0f, WHITE);
-		else
-			DrawRectangleRec(rec, BLUE);
-		//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, WHITE);
-	}
-	SinwaveShooter()
-	{
-		rec = {0, 0, 40, 40};
-		type = EnemyType::SINWAVE_SHOOTER;
-	}
+	void Update(EnemyUpdateContext& ctx) override;
+	void Draw() override;
+	SinwaveShooter();
 };
 
 struct RadialShooter : Enemy
@@ -137,42 +68,10 @@ struct RadialShooter : Enemy
 	float angle = 36;
 	BulletSpawner bltSpawner;
 	int cooldown = 3.0f;
-	void Update(EnemyUpdateContext& ctx) override
-	{
-		float timeUntilShoot = (bltSpawner.lastSpawned + cooldown) - GetTime();
-		float timeSinceShot = (GetTime() - bltSpawner.lastSpawned);
-		if (!(timeUntilShoot <= 1.0f) && (timeSinceShot >= 1.0f)) // If not about to shoot move
-		{
-			rec.y += speed;
-		}
-
-		if (GetTime() - bltSpawner.lastSpawned >= cooldown)
-		{
-			Shoot();
-		}
-	}
-
-	void Draw() override
-	{
-		DrawRectangleRec(rec, RED);
-	}
-
-	void Shoot()
-	{
-		for (int i = 0; i < 10; i++)
-		{
-			bltSpawner.position = Vector2{ rec.x, rec.y };
-			SpawnBullets(bltSpawner, GameAssets::enemyBullets, GameAssets::bullet, angle);
-			bltSpawner.direction = Vector2Rotate(bltSpawner.direction, angle);
-		}
-		bltSpawner.lastSpawned = GetTime();
-	}
-
-	RadialShooter()
-	{
-		type = EnemyType::RADIATING_SHOOTER;
-	}
-
+	void Update(EnemyUpdateContext& ctx) override;
+	void Draw() override;
+	void Shoot();
+	RadialShooter();
 };
 
 struct BossShip : Enemy
@@ -180,40 +79,9 @@ struct BossShip : Enemy
 	HealthBar healthBar;
 	int startHealth;
 	Spawner radialShooterSpawner;
-	BossShip()
-	{
-		startHealth = 1500;
-		health = startHealth;
-		healthBar.mainRec = Rectangle{ GetScreenWidth() - 50.0f, 40.0f, 30.0f, GetScreenHeight() - 170.0f };
-		healthBar.fillRec = Rectangle{ healthBar.mainRec.x + 3, healthBar.mainRec.y + 3, healthBar.mainRec.width - 6, healthBar.mainRec.height - 6 };
-
-		radialShooterSpawner.waveType = EnemyType::RADIATING_SHOOTER;
-		radialShooterSpawner.spawnInterval = 5.0f;
-
-		type = EnemyType::BOSS_SHIP;
-	}
-
-	void Update(EnemyUpdateContext& ctx) override
-	{
-		healthBar.health = health;
-
-		if (GetTime() - radialShooterSpawner.lastSpawnTime >= radialShooterSpawner.spawnInterval)
-		{
-			SpawnRadialShooter(ctx.enemies, radialShooterSpawner, rec);
-			radialShooterSpawner.lastSpawnTime = GetTime();
-		}
-	}
-
-	void Draw() override
-	{
-		// Drawing the boss
-		DrawRectangle(rec.x, rec.y, rec.width, rec.height, GREEN);
-
-		// Drawing health bar and skull sprite
-		DrawHealthBar(healthBar, startHealth);
-		DrawTexture(GameAssets::bossSkullSprite, healthBar.mainRec.x, healthBar.mainRec.y + healthBar.mainRec.height + 10, WHITE);
-	}
-
+	BossShip();
+	void Update(EnemyUpdateContext& ctx) override;
+	void Draw() override;
 };
 
 struct Asteroid : Enemy
@@ -222,27 +90,7 @@ struct Asteroid : Enemy
 	int speedY = 15;
 	float sizeDivider = 1.4f;
 
-	void Draw() override
-	{
-		if (IsTextureReady(GameAssets::asteroidSprite))
-		{
-			DrawTexturePro(GameAssets::asteroidSprite, {0, 0, (float)GameAssets::asteroidSprite.width, (float)GameAssets::asteroidSprite.height},
-		  rec, {0}, 0.0f, WHITE);
-		}
-		else
-			DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
-		//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, GREEN);
-	}
-
-	void Update(EnemyUpdateContext& ctx) override
-	{
-		rec.x += speedX;
-		rec.y += speedY;
-	}
-
-	Asteroid()
-	{
-		type = EnemyType::ASTEROID;
-		health = 999;
-	}
+	void Draw() override;
+	void Update(EnemyUpdateContext& ctx) override;
+	Asteroid();
 };
