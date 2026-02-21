@@ -1,3 +1,4 @@
+#include "gameAssets.hpp"
 #include "raylib.h"
 #include <raymath.h>
 #include "rlImGui.h"
@@ -59,7 +60,7 @@ int main()
 				currentScene = Scene::GAME_OVER;
 
 				SaveData sav = gGetSaveData(game);
-				sfs::writeEntireFileWithCheckSum( (void*)&sav, sizeof(SaveData), "saveData.sav");
+				sfs::writeEntireFileWithCheckSum( (void*)&sav, sizeof(SaveData), GameAssets::saveFileName);
 			}
 
 			UpdateStars(stars, starSpawner);

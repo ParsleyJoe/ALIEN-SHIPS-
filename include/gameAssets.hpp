@@ -5,6 +5,8 @@
 #include "bulletSpawning.hpp"
 #include <powerup.hpp>
 
+// Global Variables
+// ----------------
 namespace GameAssets
 {
 	// vector with bullet of every enemy
@@ -22,4 +24,6 @@ namespace GameAssets
 	inline Texture2D asteroidSprite;
 	inline std::map<std::string, Texture2D> powerUpSprites; // Speed, Power, OneUp
 	constexpr inline Rectangle bullet = { 0, 0, 5, 10 }; // note: x, y, width, height
+	
+	inline const char* saveFileName = "saveData.sav";
 }

@@ -1,6 +1,7 @@
 #include "gameAssets.hpp"
 #include "player.hpp"
 #include "raylib.h"
+#include "safeSave.h"
 #include "spawning.hpp"
 #include <iostream>
 #include <memory>
@@ -59,6 +60,7 @@ void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies)
 	game.player.lives = 3;
 	game.wave = 1;
 	game.active = true;
+	game.score = 0;
 
 	enemies.clear();
 
@@ -111,7 +113,12 @@ void gDrawingEnd(Game& game)
 
 SaveData gGetSaveData(Game& game)
 {
-	SaveData saveData;
-	saveData.score = game.score;
-	return saveData;
+	void* rawData = new SaveData;
+	sfs::readEntireFileWithCheckSum(rawData, sizeof(SaveData),  GameAssets::saveFileName);
+	SaveData* saveData = static_cast<SaveData*>(rawData);
+
+	if (game.score > saveData->score)
+		saveData->score = game.score;
+	std::cout << "HighScore: " << saveData->score << std::endl;
+	return (SaveData)*saveData;
 }
