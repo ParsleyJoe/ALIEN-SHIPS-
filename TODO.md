@@ -1,10 +1,9 @@
 # TODO
 
-# REAL IMP (IN ORDER)
-    - Use delta time, remove SetTargetFPS {TOO BIG to Apply at this point}
-	- Score
-	- Menu
-	- BEEG ENEMIES
+# Future Features
+
+    - Dynamic Borders [like in Vampire Survivors]
+    - Different Ships and ship abilities
 
 
 ## Enemy Types
