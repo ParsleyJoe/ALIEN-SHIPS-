@@ -1,5 +1,7 @@
 #include "spawning.hpp"
+#include "gameAssets.hpp"
 #include "enemy.hpp"
+#include "raylib.h"
 #include <algorithm>
 #include <memory>
 
@@ -31,6 +33,11 @@ void InitSpawners(SpawnerHolder& holder)
 	holder.asteroidSpawner.enemyAmmount = 1;
 	holder.asteroidSpawner.spawnedEnemies = 0;
 
+	holder.barrierSpawner.waveType = EnemyType::BARRIER;
+	holder.barrierSpawner.spawnInterval = 1.0f;
+	holder.barrierSpawner.enemyAmmount = GetRandomValue(1, 3);
+	holder.barrierSpawner.spawnedEnemies = 0;
+
 
 }
 
@@ -50,6 +57,7 @@ void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spaw
 		break;
 	}
 	SpawnAsteroid(enemies, holder.asteroidSpawner);
+	SpawnBarrier(enemies, holder.barrierSpawner);
 
 }
 
@@ -137,7 +145,8 @@ void SpawnShips(std::vector<std::unique_ptr<Enemy>>& enemies)
 	ship->rec.y = pos.y;
 	ship->rec.width = 37; // !So that rectangle fits with sprite 37, 20 are needed
 	ship->rec.height = 20;
-	ship->bltSpawner = MakeSpawner(Vector2{ (pos.x + (ship->rec.width / 2.0f)) - GameAssets::bullet.width, ship->rec.y + ship->rec.height }, GetRandomValue(1, 3) / 10.0f);
+	ship->bltSpawner = MakeSpawner(Vector2{ (pos.x + (ship->rec.width / 2.0f)) - GameAssets::bullet.width,
+		ship->rec.y + ship->rec.height }, GetRandomValue(1, 3) / 10.0f);
 	ship->type = EnemyType::SHIP;
 	enemies.push_back(std::move(ship));
 }
@@ -243,4 +252,13 @@ Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies)
 	} while (positionTaken); // Checks if any enemy has the position 'pos'
 
 	return pos;
+}
+
+void SpawnBarrier(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
+{
+	if (GetTime() - spawner.lastSpawnTime >= spawner.spawnInterval)
+	{
+		std::unique_ptr<Barrier> barrier = std::make_unique<Barrier>();
+		enemies.push_back(std::move(barrier));
+	}
 }

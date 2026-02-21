@@ -1,16 +1,13 @@
 #pragma once
-#include "powerup.hpp"
 #include "raylib.h"
-#include <random>
 #include <vector>
 #include <memory>
 #include "bulletSpawning.hpp"
-#include "gameAssets.hpp"
 #include "hud.hpp"
 #include "spawning.hpp"
 
 enum class EnemyType {
-	FODDER, SHIP, SINWAVE_SHOOTER, ASTEROID, BOSS_SHIP, RADIATING_SHOOTER
+	FODDER, SHIP, SINWAVE_SHOOTER, ASTEROID, BOSS_SHIP, RADIATING_SHOOTER, BARRIER
 };
 
 struct EnemyUpdateContext 
@@ -93,4 +90,11 @@ struct Asteroid : Enemy
 	void Draw() override;
 	void Update(EnemyUpdateContext& ctx) override;
 	Asteroid();
+};
+
+struct Barrier : Enemy
+{
+	void Draw() override;
+	void Update(EnemyUpdateContext& ctx) override;
+	Barrier();
 };

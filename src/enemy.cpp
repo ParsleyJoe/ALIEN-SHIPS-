@@ -1,4 +1,9 @@
 #include "enemy.hpp"
+#include "raylib.h"
+#include <iostream>
+#include <random>
+#include "powerup.hpp"
+#include "gameAssets.hpp"
 
 
 // NOTE: Base Enemy Class Functions
@@ -194,4 +199,42 @@ Asteroid::Asteroid()
 {
 	type = EnemyType::ASTEROID;
 	health = 999;
+}
+
+
+// NOTE: Barrier Functions
+// -----------------------
+Barrier::Barrier()
+{
+	type = EnemyType::BARRIER;
+	health = 9999;
+
+	int t = GetRandomValue(0, 2); // Type of barrier
+	t = 0;
+	switch (t) 
+	{
+	case 0:
+		rec = {
+			GetScreenWidth() / 2.0f,
+			0.0f,
+			GetScreenWidth() / 2.0f,
+			(float)GetScreenHeight()
+		};
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	default:
+		std::cout << "Barrier Constructor Undefined t var" << '\n';
+	}
+}
+
+void Barrier::Draw()
+{
+	DrawRectangleRec(rec, Fade(GREEN, 0.7f));
+}
+
+void Barrier::Update(EnemyUpdateContext& ctx)
+{
 }

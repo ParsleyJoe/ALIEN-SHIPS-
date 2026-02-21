@@ -1,4 +1,5 @@
 #pragma once
+#include "powerup.hpp"
 #include "raylib.h"
 #include "enemy.hpp"
 #include <vector>
@@ -21,7 +22,7 @@ struct Player
 	float lastShot = 0;
 	std::vector<Bullet> playerBullets;
 
-	Rectangle rec = { (GetScreenWidth() / 2) - (25.0f), (float)GetScreenHeight(), 33, 33 };
+	Rectangle rec = { (GetScreenWidth() / 2.0f) - (25.0f), (float)GetScreenHeight(), 33, 33 };
 	Texture2D playerSprite;
 	Texture2D bulletSprite;
 

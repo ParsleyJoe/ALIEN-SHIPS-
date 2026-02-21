@@ -23,6 +23,7 @@ struct SpawnerHolder
 	Spawner circleShooter;
 	Spawner bossSpawner;
 	Spawner asteroidSpawner;
+	Spawner barrierSpawner;
 };
 
 void InitSpawners(SpawnerHolder& holder);
@@ -40,3 +41,5 @@ void SpawnRadialShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& s
 
 void AsteroidWarning();
 Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies);
+
+void SpawnBarrier(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
