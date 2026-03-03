@@ -157,9 +157,7 @@ void BulletsHit(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 		}), game.player.playerBullets.end()); // Remove the bullet from the vector
 	}
 
-	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
-		return !e->alive;
-	}), enemies.end());
+
 }
 
 // ran when player dies 

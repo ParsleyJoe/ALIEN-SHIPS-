@@ -20,15 +20,22 @@ struct SpawnerHolder
 {
 	Spawner fodderSpawner;
 	Spawner shipSpawner;
-	Spawner circleShooter;
+	Spawner sinwaveShooter;
 	Spawner bossSpawner;
 	Spawner asteroidSpawner;
 	Spawner barrierSpawner;
 };
 
+// Initiate spawner structs
 void InitSpawners(SpawnerHolder& holder);
+
+// Initiate enemy spawning, called everyframe
 void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder);
 
+// Helper Function for clearing enemy vector
+void ClearEnemies(std::vector<std::unique_ptr<Enemy>>& enemies);
+
+// Main function that calls other enemy specific functions
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
 
 void SpawnSinShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);

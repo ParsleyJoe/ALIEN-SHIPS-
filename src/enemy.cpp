@@ -208,6 +208,7 @@ Barrier::Barrier()
 {
 	type = EnemyType::BARRIER;
 	health = 9999;
+	activeFor = 0.0f;
 
 	int t = GetRandomValue(0, 2); // Type of barrier
 	t = 0;
@@ -237,4 +238,7 @@ void Barrier::Draw()
 
 void Barrier::Update(EnemyUpdateContext& ctx)
 {
+	activeFor += GetFrameTime();
+	if (activeFor >= activeTime)
+		alive = false;
 }

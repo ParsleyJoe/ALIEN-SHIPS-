@@ -1,4 +1,5 @@
 #include "spawning.hpp"
+#include <iostream>
 #include "gameAssets.hpp"
 #include "enemy.hpp"
 #include "raylib.h"
@@ -16,12 +17,12 @@ void InitSpawners(SpawnerHolder& holder)
 	holder.shipSpawner.waveType = EnemyType::SHIP;
 	holder.shipSpawner.spawnInterval = 0.3f;
 	holder.shipSpawner.enemyAmmount = 15;
-	holder.circleShooter.spawnedEnemies = 0;
+	holder.sinwaveShooter.spawnedEnemies = 0;
 
-	holder.circleShooter.waveType = EnemyType::SINWAVE_SHOOTER;
-	holder.circleShooter.enemyAmmount = 1;
-	holder.circleShooter.spawnInterval = 2.0f;
-	holder.circleShooter.spawnedEnemies = 0;
+	holder.sinwaveShooter.waveType = EnemyType::SINWAVE_SHOOTER;
+	holder.sinwaveShooter.enemyAmmount = 1;
+	holder.sinwaveShooter.spawnInterval = 2.0f;
+	holder.sinwaveShooter.spawnedEnemies = 0;
 
 	holder.bossSpawner.waveType = EnemyType::BOSS_SHIP;
 	holder.bossSpawner.enemyAmmount = 1;
@@ -34,7 +35,7 @@ void InitSpawners(SpawnerHolder& holder)
 	holder.asteroidSpawner.spawnedEnemies = 0;
 
 	holder.barrierSpawner.waveType = EnemyType::BARRIER;
-	holder.barrierSpawner.spawnInterval = 1.0f;
+	holder.barrierSpawner.spawnInterval = 5.0f;
 	holder.barrierSpawner.enemyAmmount = GetRandomValue(1, 3);
 	holder.barrierSpawner.spawnedEnemies = 0;
 
@@ -44,6 +45,7 @@ void InitSpawners(SpawnerHolder& holder)
 
 void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder)
 {
+	ClearEnemies(enemies);
 	switch (wave)
 	{
 	case 1:
@@ -53,16 +55,22 @@ void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spaw
 		SpawnEnemies(wave, enemies, holder.shipSpawner);
 		break;
 	case 3:
-		SpawnEnemies(wave, enemies, holder.circleShooter);
+		SpawnEnemies(wave, enemies, holder.sinwaveShooter);
 		break;
 	}
 	SpawnAsteroid(enemies, holder.asteroidSpawner);
 	SpawnBarrier(enemies, holder.barrierSpawner);
-
 }
 
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
 {
+	int count = 0;
+	for (auto& e : enemies)
+	{
+		if (e->type != EnemyType::BARRIER && e->type != EnemyType::ASTEROID)
+			count++;
+	}
+
 	if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval) && spawner.spawnedEnemies < spawner.enemyAmmount)
 	{
 		if (spawner.waveType == EnemyType::FODDER)
@@ -77,34 +85,34 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 		}
 		else if (spawner.waveType == EnemyType::SINWAVE_SHOOTER)
 		{
-			if (enemies.size() <= 0)
+			if (count <= 0)
 				spawner.lastSpawnTime = GetTime();
 			SpawnSinShooter(enemies, spawner);
 		}
 		else if (spawner.waveType == EnemyType::BOSS_SHIP)
 		{
-			if (enemies.size() <= 0)
+			if (count <= 0)
 				spawner.lastSpawnTime = GetTime();
 			SpawnBossShip(enemies);
 		}
 
 		spawner.spawnedEnemies++;
+		count++;
+		std::cout << "Enemy vector Size: " << enemies.size() << std::endl;
 	}
 	
-	if (spawner.spawnedEnemies >= spawner.enemyAmmount && enemies.size() <= 0)
+	if (spawner.spawnedEnemies >= spawner.enemyAmmount && count <= 0)
 	{
 		if (spawner.enemyAmmount == 1 && spawner.waveType == EnemyType::SINWAVE_SHOOTER)
 		{
 			spawner.enemyAmmount = 2;
 		}
+
 		spawner.spawnedEnemies = 0;// TODO: it sets to 0 as soon as enemyAmmount is greater
 		wave++;
 
 		if (wave >= 4) { wave = 1; } // Reset wave, start again from fodders
 	}
-	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
-		return e->rec.y > (GetScreenHeight() + e->rec.height);
-	}), enemies.end());
 }
 
 void SpawnSinShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
@@ -117,6 +125,7 @@ void SpawnSinShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spaw
 	if (spawner.enemyAmmount == 2)
 	{
 		Vector2 newPos = pos;
+
 		do
 		{
 			newPos.x -= posOffset;
@@ -125,13 +134,13 @@ void SpawnSinShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spaw
 		pos = newPos;
 	}
 
-	std::unique_ptr<SinwaveShooter> circleShooter = std::make_unique<SinwaveShooter>();
-	circleShooter->type = EnemyType::SINWAVE_SHOOTER;
-	circleShooter->shootAngle = DEG2RAD * 15.0f;
-	circleShooter->rec.x = pos.x;
-	circleShooter->rec.y = pos.y;
-	circleShooter->bltSpawner = MakeSpawner(Vector2{ (pos.x + circleShooter->rec.width / 2), (pos.y + circleShooter->rec.height) }, shooterCooldown);
-	enemies.push_back(std::move(circleShooter));
+	std::unique_ptr<SinwaveShooter> sinShooter = std::make_unique<SinwaveShooter>();
+	sinShooter->type = EnemyType::SINWAVE_SHOOTER;
+	sinShooter->shootAngle = DEG2RAD * 15.0f;
+	sinShooter->rec.x = pos.x;
+	sinShooter->rec.y = pos.y;
+	sinShooter->bltSpawner = MakeSpawner(Vector2{ (pos.x + sinShooter->rec.width / 2), (pos.y + sinShooter->rec.height) }, shooterCooldown);
+	enemies.push_back(std::move(sinShooter));
 }
 
 void SpawnShips(std::vector<std::unique_ptr<Enemy>>& enemies)
@@ -256,9 +265,23 @@ Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies)
 
 void SpawnBarrier(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
 {
-	if (GetTime() - spawner.lastSpawnTime >= spawner.spawnInterval)
+	bool barrierExists = std::any_of(enemies.begin(), enemies.end(), [](const auto& e){
+		return e->type == EnemyType::BARRIER;
+	});
+	
+	if (!barrierExists && GetTime() - spawner.lastSpawnTime >= spawner.spawnInterval)
 	{
+		std::cout << "Spawned Barrier" << std::endl;
 		std::unique_ptr<Barrier> barrier = std::make_unique<Barrier>();
+		spawner.lastSpawnTime = GetTime() + barrier->activeTime;
 		enemies.push_back(std::move(barrier));
 	}
+}
+void ClearEnemies(std::vector<std::unique_ptr<Enemy>>& enemies)
+{
+	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
+		return !e ||
+			e->rec.y > GetScreenHeight() + e->rec.height ||
+			!e->alive;
+	}), enemies.end());	
 }
