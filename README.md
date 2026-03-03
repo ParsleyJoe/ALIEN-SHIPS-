@@ -13,4 +13,4 @@ cmake --build build/
 
 Linux and Mac not supported, may work on them but not tested.
 
-![hippo]([https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExanpwa3A0NHRlMzluMDN1ZWVyM2NkY3lnNjVoaDV6c3JiNmFweDY3MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/lUAWyRGj5RLhJZJiV6/giphy.gif](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjRiaDI5aWJ2am9wemxndmczZmc5YjFqdG8wOWF4Z3E3NHRwMnFrbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UdDLkDXY8Wa5hf6zSg/giphy.gif))
+![hippo](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWdmajBsaWcwYjBmN2Q3cjJuZTI3dWdncDIxYzE1bWUzdXVteHV3MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/R1KvwYjxcx6BZFV0Dr/giphy.gif)
