@@ -6,7 +6,7 @@
     - Different Ships and ship abilities
 
 
-## Enemy Types
+# Enemy Types
 	- "Explodes" bullets around a radius
 	- double laser
 	

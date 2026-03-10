@@ -1,4 +1,5 @@
 #include "enemy.hpp"
+#include "bulletSpawning.hpp"
 #include "raylib.h"
 #include <iostream>
 #include <random>
@@ -28,7 +29,8 @@ void Fodder::Draw()
 	else
 		DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
 
-	//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, DARKGREEN);
+	if (DEBUG)
+		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, DARKGREEN);
 }
 void Fodder::Update(EnemyUpdateContext& ctx)
 {
@@ -207,20 +209,14 @@ Asteroid::Asteroid()
 Barrier::Barrier()
 {
 	type = EnemyType::BARRIER;
-	health = 9999;
-	activeFor = 0.0f;
+	health = 300;
 
 	int t = GetRandomValue(0, 2); // Type of barrier
 	t = 0;
 	switch (t) 
 	{
 	case 0:
-		rec = {
-			GetScreenWidth() / 2.0f,
-			0.0f,
-			GetScreenWidth() / 2.0f,
-			(float)GetScreenHeight()
-		};
+		rec = {150.0f, GetScreenHeight() - 50.0f, 30.0f, 30.0f};
 		break;
 	case 1:
 		break;
@@ -229,6 +225,9 @@ Barrier::Barrier()
 	default:
 		std::cout << "Barrier Constructor Undefined t var" << '\n';
 	}
+
+	bltSpawner = MakeSpawner({rec.x, rec.y}, 0.0f);
+	bltSpawner.direction = {0, -1};
 }
 
 void Barrier::Draw()
@@ -238,7 +237,11 @@ void Barrier::Draw()
 
 void Barrier::Update(EnemyUpdateContext& ctx)
 {
-	activeFor += GetFrameTime();
-	if (activeFor >= activeTime)
-		alive = false;
+	aliveFor += GetFrameTime();
+	
+	if (aliveFor > startMovingIn)
+		rec.y += speed;
+
+	bltSpawner.position = {rec.x, rec.y};
+	SpawnBullets(bltSpawner, GameAssets::enemyBullets, GameAssets::bullet, DEG2RAD * 0.0f);
 }

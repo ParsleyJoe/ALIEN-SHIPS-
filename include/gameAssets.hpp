@@ -5,6 +5,10 @@
 #include "bulletSpawning.hpp"
 #include <powerup.hpp>
 
+
+
+#define DEBUG 0
+
 // Global Variables
 // ----------------
 namespace GameAssets
@@ -26,4 +30,6 @@ namespace GameAssets
 	constexpr inline Rectangle bullet = { 0, 0, 5, 10 }; // note: x, y, width, height
 	
 	inline const char* saveFileName = "saveData.sav";
+
+	inline float gameStartTime = 0.0f;
 }

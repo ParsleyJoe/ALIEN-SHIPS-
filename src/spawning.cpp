@@ -1,4 +1,4 @@
-#include "spawning.hpp"
+#include <spawning.hpp>
 #include <iostream>
 #include "gameAssets.hpp"
 #include "enemy.hpp"
@@ -59,7 +59,7 @@ void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spaw
 		break;
 	}
 	SpawnAsteroid(enemies, holder.asteroidSpawner);
-	SpawnBarrier(enemies, holder.barrierSpawner);
+	SpawnBarrier(enemies, holder);
 }
 
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
@@ -71,28 +71,29 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 			count++;
 	}
 
-	if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval) && spawner.spawnedEnemies < spawner.enemyAmmount)
+	float gameTime = GetTime() - GameAssets::gameStartTime;
+	if (((gameTime - spawner.lastSpawnTime) >= spawner.spawnInterval) && spawner.spawnedEnemies < spawner.enemyAmmount)
 	{
 		if (spawner.waveType == EnemyType::FODDER)
 		{
 			SpawnFodder(enemies);
-			spawner.lastSpawnTime = GetTime();
+			spawner.lastSpawnTime = gameTime;
 		}
 		else if (spawner.waveType == EnemyType::SHIP)
 		{
 			SpawnShips(enemies);
-			spawner.lastSpawnTime = GetTime();
+			spawner.lastSpawnTime = gameTime;
 		}
 		else if (spawner.waveType == EnemyType::SINWAVE_SHOOTER)
 		{
 			if (count <= 0)
-				spawner.lastSpawnTime = GetTime();
+				spawner.lastSpawnTime = gameTime;
 			SpawnSinShooter(enemies, spawner);
 		}
 		else if (spawner.waveType == EnemyType::BOSS_SHIP)
 		{
 			if (count <= 0)
-				spawner.lastSpawnTime = GetTime();
+				spawner.lastSpawnTime = gameTime;
 			SpawnBossShip(enemies);
 		}
 
@@ -204,13 +205,14 @@ void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawne
 	Vector2 spawnPos = { 0, 0 };
 	spawnPos.x = GetRandomValue(0, 1) == 0 ? 0 : GetScreenWidth();
 
-	float timeUntilTrue = (spawner.lastSpawnTime + spawner.spawnInterval) - GetTime();
+	float gameTime = GetTime() - GameAssets::gameStartTime;
+	float timeUntilTrue = (spawner.lastSpawnTime + spawner.spawnInterval) - gameTime;
 	if (timeUntilTrue <= 2.0f)
 	{
 		// Spawn in 1 second
 		AsteroidWarning();
 	}
-	if (((GetTime() - spawner.lastSpawnTime) >= spawner.spawnInterval))
+	if (((gameTime - spawner.lastSpawnTime) >= spawner.spawnInterval))
 	{
 		std::unique_ptr<Asteroid> asteroid = std::make_unique<Asteroid>();
 		asteroid->health = 300;
@@ -263,17 +265,24 @@ Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies)
 	return pos;
 }
 
-void SpawnBarrier(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
+void SpawnBarrier(std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder)
 {
+
 	bool barrierExists = std::any_of(enemies.begin(), enemies.end(), [](const auto& e){
 		return e->type == EnemyType::BARRIER;
 	});
+
+	float gameTime = GetTime() - GameAssets::gameStartTime;
+	if (gameTime < holder.barrierStartSpawnTime)
+	{
+		return;
+	}
 	
-	if (!barrierExists && GetTime() - spawner.lastSpawnTime >= spawner.spawnInterval)
+	if (!barrierExists && gameTime - holder.barrierSpawner.lastSpawnTime >= holder.barrierSpawner.spawnInterval)
 	{
 		std::cout << "Spawned Barrier" << std::endl;
 		std::unique_ptr<Barrier> barrier = std::make_unique<Barrier>();
-		spawner.lastSpawnTime = GetTime() + barrier->activeTime;
+		holder.barrierSpawner.lastSpawnTime = GetTime();
 		enemies.push_back(std::move(barrier));
 	}
 }

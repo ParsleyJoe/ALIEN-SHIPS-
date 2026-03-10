@@ -18,6 +18,8 @@ struct Spawner
 
 struct SpawnerHolder
 {
+	float barrierStartSpawnTime = 2.0f;
+
 	Spawner fodderSpawner;
 	Spawner shipSpawner;
 	Spawner sinwaveShooter;
@@ -49,4 +51,4 @@ void SpawnRadialShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& s
 void AsteroidWarning();
 Vector2 GetShipSpawnPosition(std::vector<std::unique_ptr<Enemy>>& enemies);
 
-void SpawnBarrier(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
+void SpawnBarrier(std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder);

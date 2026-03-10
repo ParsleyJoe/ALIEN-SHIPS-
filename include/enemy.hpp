@@ -94,9 +94,10 @@ struct Asteroid : Enemy
 
 struct Barrier : Enemy
 {
-	float activeTime = 4.0f; // Should be active for 
-	float activeFor = 0.0f;  // Is active for
-
+	int speed = -4;
+	float aliveFor = 0.0f;
+	float startMovingIn = 3.0f;
+	BulletSpawner bltSpawner;
 	void Draw() override;
 	void Update(EnemyUpdateContext& ctx) override;
 	Barrier();

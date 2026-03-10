@@ -54,11 +54,14 @@ void gInitGame(Game& game)
 	{
 		style.Colors[ImGuiCol_WindowBg].w = 0.5f;
 	}
+
+	GameAssets::gameStartTime = GetTime();
 }
 
 void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
 	PlayerRestart(game.player);
+
 	game.player.lives = 3;
 	game.wave = 1;
 	game.active = true;
@@ -68,6 +71,8 @@ void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies)
 
 	GameAssets::enemyBullets.clear();
 	GameAssets::powerUps.clear();
+
+	GameAssets::gameStartTime = GetTime();
 
 	game.player.playerBullets.clear();
 	InitSpawners(game.spawnerHolder);

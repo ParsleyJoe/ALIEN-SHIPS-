@@ -99,6 +99,7 @@ int main()
 			{
 				game.active = true;
 				currentScene = Scene::GAME;
+				gRestartGame(game, enemies);
 			}
 		}
 		else if (currentScene == Scene::GAME)
@@ -140,6 +141,8 @@ int main()
 				
 			}
 		}
+
+		DrawText(TextFormat("Game Time: %.2f", GetTime() - GameAssets::gameStartTime), 20, 20, 20, WHITE);
 
 		gDrawingEnd(game);
 	}

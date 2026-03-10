@@ -23,12 +23,24 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 add_compile_options(/arch:AVX2) #make sure SIMD optimizations take place
 endif()
 
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE) #link time optimization
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported)
+
+if (ipo_supported)
+	set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
 
 # Ensure SFML is built as static libraries
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Raylib as static libraries" FORCE)
 
 
+if (NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release)
+endif()
+
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 
 project(mygame)
@@ -85,10 +97,21 @@ endif()
 target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
 
+
 # Link raylib library statically, Here wou would add other libraries!
 target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE 
 	raylib_static imgui rlimgui
 )
+
+if (PRODUCTION_BUILD)
+	if (WIN32)
+		set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
+		target_link_options(mygame PRIVATE
+			-Xlinker /ENTRY:mainCRTStartup)
+
+		
+	endif()
+endif()
 
 # Set where the .exe and resources will go
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/)
