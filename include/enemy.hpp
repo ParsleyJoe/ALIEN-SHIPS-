@@ -6,8 +6,10 @@
 #include "hud.hpp"
 #include "spawning.hpp"
 
+struct Player;
+
 enum class EnemyType {
-	FODDER, SHIP, SINWAVE_SHOOTER, ASTEROID, BOSS_SHIP, RADIATING_SHOOTER, BARRIER
+	FODDER, SHIP, SINWAVE_SHOOTER, ASTEROID, BOSS_SHIP, RADIATING_SHOOTER, BARRIER, CREEPER
 };
 
 struct EnemyUpdateContext 
@@ -101,4 +103,13 @@ struct Barrier : Enemy
 	void Draw() override;
 	void Update(EnemyUpdateContext& ctx) override;
 	Barrier();
+};
+
+struct Creeper : Enemy
+{
+	int speed = 4;
+	Player* player;
+	void Draw() override;
+	void Update(EnemyUpdateContext& ctx) override;
+	Creeper();
 };

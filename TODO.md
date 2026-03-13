@@ -2,7 +2,8 @@
 
 # Future Features
 
-    - Dynamic Borders [like in Vampire Survivors]
+    - Dynamic Borders 
+    - A creeper like enemy, which explodes in close range
     - Different Ships and ship abilities
 
 

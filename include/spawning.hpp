@@ -4,6 +4,7 @@
 #include <raylib.h>
 
 struct Enemy;
+struct Player;
 
 enum class EnemyType;
 
@@ -26,13 +27,14 @@ struct SpawnerHolder
 	Spawner bossSpawner;
 	Spawner asteroidSpawner;
 	Spawner barrierSpawner;
+	Spawner creeperSpawner;
 };
 
 // Initiate spawner structs
 void InitSpawners(SpawnerHolder& holder);
 
 // Initiate enemy spawning, called everyframe
-void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder);
+void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder, Player* player);
 
 // Helper Function for clearing enemy vector
 void ClearEnemies(std::vector<std::unique_ptr<Enemy>>& enemies);
@@ -43,6 +45,7 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 void SpawnSinShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
 void SpawnShips(std::vector<std::unique_ptr<Enemy>>& enemies);
 void SpawnFodder(std::vector<std::unique_ptr<Enemy>>& enemies);
+void SpawnCreeper(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner, Player* player);
 void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
 
 void SpawnBossShip(std::vector<std::unique_ptr<Enemy>>& enemies);

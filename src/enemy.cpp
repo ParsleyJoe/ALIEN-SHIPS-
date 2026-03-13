@@ -1,5 +1,6 @@
 #include "enemy.hpp"
 #include "bulletSpawning.hpp"
+#include "player.hpp"
 #include "raylib.h"
 #include <iostream>
 #include <random>
@@ -244,4 +245,27 @@ void Barrier::Update(EnemyUpdateContext& ctx)
 
 	bltSpawner.position = {rec.x, rec.y};
 	SpawnBullets(bltSpawner, GameAssets::enemyBullets, GameAssets::bullet, DEG2RAD * 0.0f);
+}
+
+// NOTE: Barrier Functions
+// -----------------------
+Creeper::Creeper()
+{
+	health = 40;
+
+
+}
+
+void Creeper::Draw()
+{
+	DrawRectangleRec(rec, RED);
+}
+
+void Creeper::Update(EnemyUpdateContext& ctx)
+{
+	Vector2 playerPos = {player->rec.x, player->rec.y};
+	Vector2 pos =  {rec.x, rec.y};
+	Vector2 dir = Vector2Normalize(Vector2Subtract(playerPos, pos));
+	rec.x += dir.x * speed;
+	rec.y += dir.y * speed;
 }

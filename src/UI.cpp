@@ -27,6 +27,8 @@ void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
 
 		Button btn = assets.btns["Restart"];
 		DrawButton(btn);
+		btn = assets.btns["Menu"];
+		DrawButton(btn);
 		break;
 	}
 }
@@ -59,8 +61,10 @@ void DrawEffectTimers(Player& player)
 			break;
 		case PowerUpType::ONEUP:
 			break;
+		case PowerUpType::SHIELD:
+			break;
                 }
-		float progress = effect.timeLeft / effect.totalTime;
+                float progress = effect.timeLeft / effect.totalTime;
 		float angle = progress * 360.0f;
 
 		Vector2 center = {destRect.x + destRect.width * 0.5f, destRect.y + destRect.height * 0.5f};
@@ -74,13 +78,7 @@ void DrawEffectTimers(Player& player)
 
 void InitUI(UIAssets& assets)
 {
-	Button restartBtn;
-	restartBtn.text = "Restart";
-	restartBtn.txtColor = RAYWHITE;
-	restartBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 50.0f, (GetScreenHeight() / 2.0f) + 20.0f, 120, 50 };
-	restartBtn.fontSize = 20;
-	restartBtn.color = GRAY;
-	assets.btns.insert({"Restart", restartBtn});
+
 
 	Button startBtn;
 	startBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 50.0f, (GetScreenHeight() / 2.0f) - 0.0f, 120, 50 };
@@ -89,4 +87,45 @@ void InitUI(UIAssets& assets)
 	startBtn.txtColor = WHITE;
 	startBtn.fontSize = 15;
 	assets.btns.insert({"Start", startBtn});
+
+	Button restartBtn;
+	restartBtn.text = "Restart";
+	restartBtn.txtColor = RAYWHITE;
+	restartBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 50.0f, (GetScreenHeight() / 2.0f) + 20.0f, 120, 50 };
+	restartBtn.fontSize = 20;
+	restartBtn.color = GRAY;
+	assets.btns.insert({"Restart", restartBtn});
+
+	Button menuBtn;
+	menuBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 50.0f, (GetScreenHeight() / 2.0f) + 80.0f, 120, 50 };
+	menuBtn.text = "Menu";
+	menuBtn.txtColor = RAYWHITE;
+	menuBtn.fontSize = 20;
+	menuBtn.color = GRAY;
+	assets.btns.insert({"Menu", menuBtn});
+
+}
+
+void UIUpdate(Scene &currentScene, UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies)
+{
+	switch (currentScene)
+	{
+        case Scene::MAIN_MENU:
+		if (IsButtonClicked(uiAssets.btns["Start"]))
+		{
+			currentScene = Scene::GAME;
+			gRestartGame(game, enemies);
+		}
+		break;
+        case Scene::GAME:
+		break;
+        case Scene::GAME_OVER:
+		if (IsButtonClicked(uiAssets.btns["Restart"]))
+			gRestartGame(game, enemies);
+		if (IsButtonClicked(uiAssets.btns["Menu"]))
+		{
+			currentScene = Scene::MAIN_MENU;
+		}
+		break;
+        }
 }

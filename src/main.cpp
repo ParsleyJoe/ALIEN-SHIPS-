@@ -69,7 +69,7 @@ int main()
 			PowerUpCollision(game.player);
 
 			// Enemy Spawning
-			StartSpawning(game.wave, enemies, game.spawnerHolder);
+			StartSpawning(game.wave, enemies, game.spawnerHolder, &game.player);
 			
 			EnemyUpdateContext context = { enemies };
 			for (int i = 0; i < context.enemies.size(); i++)
@@ -93,14 +93,9 @@ int main()
 		gDrawingBegin();
 
 		DrawUI(uiAssets, currentScene, game);
+		UIUpdate(currentScene, uiAssets, game, enemies);
 		if (currentScene == Scene::MAIN_MENU)
 		{
-			if (IsButtonClicked(uiAssets.btns["Start"]))
-			{
-				game.active = true;
-				currentScene = Scene::GAME;
-				gRestartGame(game, enemies);
-			}
 		}
 		else if (currentScene == Scene::GAME)
 		{
@@ -134,12 +129,6 @@ int main()
 		}
 		else if (currentScene == Scene::GAME_OVER)
 		{
-			if (IsButtonClicked(uiAssets.btns["Restart"]))
-			{
-				gRestartGame(game, enemies);
-				currentScene = Scene::GAME;
-				
-			}
 		}
 
 		DrawText(TextFormat("Game Time: %.2f", GetTime() - GameAssets::gameStartTime), 20, 20, 20, WHITE);

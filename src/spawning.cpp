@@ -5,6 +5,7 @@
 #include "raylib.h"
 #include <algorithm>
 #include <memory>
+#include <vector>
 
 
 void InitSpawners(SpawnerHolder& holder)
@@ -39,11 +40,15 @@ void InitSpawners(SpawnerHolder& holder)
 	holder.barrierSpawner.enemyAmmount = GetRandomValue(1, 3);
 	holder.barrierSpawner.spawnedEnemies = 0;
 
+	holder.creeperSpawner.waveType = EnemyType::CREEPER;
+	holder.creeperSpawner.spawnedEnemies = 0;
+	holder.creeperSpawner.enemyAmmount = 1;
+	holder.creeperSpawner.spawnInterval = 1.0f;
 
 }
 
 
-void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder)
+void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder, Player* player)
 {
 	ClearEnemies(enemies);
 	switch (wave)
@@ -60,6 +65,7 @@ void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spaw
 	}
 	SpawnAsteroid(enemies, holder.asteroidSpawner);
 	SpawnBarrier(enemies, holder);
+	SpawnCreeper(enemies, holder.creeperSpawner, player);
 }
 
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
@@ -179,6 +185,20 @@ void SpawnFodder(std::vector<std::unique_ptr<Enemy>>& enemies)
 	enemies.push_back(std::move(fodder));
 }
 
+void SpawnCreeper(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner, Player* player)
+{
+	float gameTime = GetTime() - GameAssets::gameStartTime;
+	if (gameTime - spawner.lastSpawnTime >= spawner.spawnInterval)
+	{
+		std::unique_ptr<Creeper> creeper = std::make_unique<Creeper>();
+		creeper->rec.x = 300;
+		creeper->rec.y = 300;
+		creeper->player = player;
+		enemies.push_back(std::move(creeper));
+		spawner.lastSpawnTime = gameTime;
+	}
+}
+
 void SpawnBossShip(std::vector<std::unique_ptr<Enemy>>& enemies)
 {
 	std::unique_ptr<BossShip> boss = std::make_unique<BossShip>();
@@ -234,7 +254,7 @@ void SpawnAsteroid(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawne
 
 		asteroid->type = EnemyType::ASTEROID;
 		enemies.push_back(std::move(asteroid));
-		spawner.lastSpawnTime = GetTime();
+		spawner.lastSpawnTime = gameTime;
 		spawner.spawnInterval = GetRandomValue(15, 25) + 0.0f;
 	}
 }
@@ -282,7 +302,7 @@ void SpawnBarrier(std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& h
 	{
 		std::cout << "Spawned Barrier" << std::endl;
 		std::unique_ptr<Barrier> barrier = std::make_unique<Barrier>();
-		holder.barrierSpawner.lastSpawnTime = GetTime();
+		holder.barrierSpawner.lastSpawnTime = gameTime;
 		enemies.push_back(std::move(barrier));
 	}
 }

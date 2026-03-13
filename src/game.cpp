@@ -100,12 +100,12 @@ void gDrawingBegin()
 	ImGui::Text("FPS: %i", GetFPS());
 	ImGui::Text("Size of bullets Vector: %zu", GameAssets::enemyBullets.size());
 //	ImGui::Text("Star vector size: %zu", stars.size());
-	ImGui::End();
 
 }
 
 void gDrawingEnd(Game& game)
 {
+	ImGui::End();
 	rlImGuiEnd();
 
 	if (game.io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
