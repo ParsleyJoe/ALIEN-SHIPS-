@@ -63,9 +63,34 @@ void StartSpawning(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spaw
 		SpawnEnemies(wave, enemies, holder.sinwaveShooter);
 		break;
 	}
-	SpawnAsteroid(enemies, holder.asteroidSpawner);
-	SpawnBarrier(enemies, holder);
-	SpawnCreeper(enemies, holder.creeperSpawner, player);
+
+	SpawnEvents(enemies, holder, player);
+}
+
+void SpawnEvents(std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder, Player* player)
+{
+	bool exists = std::any_of(enemies.begin(), enemies.end(), [](const auto& e){
+		return e->type == EnemyType::CREEPER
+			|| e->type == EnemyType::BARRIER
+			|| e->type == EnemyType::ASTEROID;
+	});
+
+	if (exists)
+		return;
+
+	int type = GetRandomValue(1, 3);
+	switch (type) {
+	case 1:
+		SpawnAsteroid(enemies, holder.asteroidSpawner);
+		break;
+	case 2:
+		SpawnBarrier(enemies, holder);
+		break;
+	case 3:
+		SpawnCreeper(enemies, holder.creeperSpawner, player);
+		break;
+	}
+
 }
 
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)

@@ -252,8 +252,7 @@ void Barrier::Update(EnemyUpdateContext& ctx)
 Creeper::Creeper()
 {
 	health = 40;
-
-
+	type = EnemyType::CREEPER;
 }
 
 void Creeper::Draw()

@@ -42,6 +42,7 @@ void ClearEnemies(std::vector<std::unique_ptr<Enemy>>& enemies);
 // Main function that calls other enemy specific functions
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
 
+void SpawnEvents(std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& holder, Player* player);
 void SpawnSinShooter(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner);
 void SpawnShips(std::vector<std::unique_ptr<Enemy>>& enemies);
 void SpawnFodder(std::vector<std::unique_ptr<Enemy>>& enemies);
