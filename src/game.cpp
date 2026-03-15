@@ -87,7 +87,6 @@ void gEnemyKilled(Game &game, std::unique_ptr<Enemy>& enemy)
 void gDrawingBegin()
 {
 	BeginDrawing();
-	ClearBackground(Color{ 13, 13, 13, 255 });
 
 	rlImGuiBegin();
 

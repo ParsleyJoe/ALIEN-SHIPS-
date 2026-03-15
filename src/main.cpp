@@ -44,7 +44,7 @@ int main()
 	starSpawner.spawnInterval = 2.0f;
 
 	RenderTexture2D target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
-	Shader bloom = LoadShader(0, "resources/shader/bloom_fragment.fs");
+	Shader bloom = LoadShader(0, "resources/shader/bloom_fragment.glsl");
 
 	//! Game loop
 	while (!WindowShouldClose())
@@ -92,8 +92,9 @@ int main()
 
 		// Drawing =======================================
 		// -----------------------------------------------
-		gDrawingBegin();
+		BeginTextureMode(target);
 
+		ClearBackground(Color{ 13, 13, 13, 255 });
 		DrawUI(uiAssets, currentScene, game);
 		UIUpdate(currentScene, uiAssets, game, enemies);
 		if (currentScene == Scene::MAIN_MENU)
@@ -134,6 +135,21 @@ int main()
 		}
 
 		DrawText(TextFormat("Game Time: %.2f", GetTime() - GameAssets::gameStartTime), 20, 20, 20, WHITE);
+		EndTextureMode();
+
+		gDrawingBegin();
+
+		ClearBackground(Color{ 13, 13, 13, 255 });
+
+		BeginShaderMode(bloom);
+
+		DrawTextureRec(
+			target.texture, 
+			Rectangle{0, 0, (float)target.texture.width, (float)-target.texture.height},
+			{},
+			WHITE);
+
+		EndShaderMode();
 
 		gDrawingEnd(game);
 	}

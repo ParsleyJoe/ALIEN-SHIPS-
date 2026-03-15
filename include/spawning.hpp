@@ -28,6 +28,7 @@ struct SpawnerHolder
 	Spawner asteroidSpawner;
 	Spawner barrierSpawner;
 	Spawner creeperSpawner;
+	Spawner eventSpawner;
 };
 
 // Initiate spawner structs
