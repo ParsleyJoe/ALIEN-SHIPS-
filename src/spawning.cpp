@@ -43,7 +43,10 @@ void InitSpawners(SpawnerHolder& holder)
 	holder.creeperSpawner.waveType = EnemyType::CREEPER;
 	holder.creeperSpawner.spawnedEnemies = 0;
 	holder.creeperSpawner.enemyAmmount = 1;
-	holder.creeperSpawner.spawnInterval = 1.0f;
+	holder.creeperSpawner.spawnInterval = 3.0f;
+
+	holder.eventSpawner.enemyAmmount = 1;
+	holder.eventSpawner.spawnInterval = 3.0f;
 
 }
 
@@ -78,6 +81,13 @@ void SpawnEvents(std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& ho
 	if (exists)
 		return;
 
+
+	float gameTime = GetTime() - GameAssets::gameStartTime;
+	if (gameTime - holder.eventSpawner.lastSpawnTime < holder.eventSpawner.spawnInterval)
+	{
+		return;
+	}
+
 	int type = GetRandomValue(1, 3);
 	switch (type) {
 	case 1:
@@ -90,6 +100,7 @@ void SpawnEvents(std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& ho
 		SpawnCreeper(enemies, holder.creeperSpawner, player);
 		break;
 	}
+	holder.eventSpawner.lastSpawnTime = gameTime;
 
 }
 
@@ -336,6 +347,7 @@ void ClearEnemies(std::vector<std::unique_ptr<Enemy>>& enemies)
 	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const auto& e) {
 		return !e ||
 			e->rec.y > GetScreenHeight() + e->rec.height ||
-			!e->alive;
+			(e->rec.y < 0.0f && e->type != EnemyType::ASTEROID) ||
+			!e->alive; 
 	}), enemies.end());	
 }

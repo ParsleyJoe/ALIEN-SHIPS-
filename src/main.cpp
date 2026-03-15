@@ -43,6 +43,8 @@ int main()
 	starSpawner.enemyAmmount = 40;
 	starSpawner.spawnInterval = 2.0f;
 
+	RenderTexture2D target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+	Shader bloom = LoadShader(0, "resources/shader/bloom_fragment.fs");
 
 	//! Game loop
 	while (!WindowShouldClose())
