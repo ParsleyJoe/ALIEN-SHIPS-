@@ -32,4 +32,6 @@ namespace GameAssets
 	inline const char* saveFileName = "saveData.sav";
 
 	inline float gameStartTime = 0.0f;
+
+	inline Font gameFont;
 }

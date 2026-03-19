@@ -11,7 +11,6 @@
 #include "player.hpp"
 #include "bulletSpawning.hpp"
 #include "sceneManager.hpp"
-#include "button.hpp"
 #include "stars.hpp"
 #include "powerup.hpp"
 #include "UI.hpp"
@@ -45,6 +44,7 @@ int main()
 
 	RenderTexture2D target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 	Shader bloom = LoadShader(0, "resources/shader/bloom_fragment.glsl");
+	GameAssets::gameFont = LoadFont("resources/PixelifySans.ttf");
 
 	//! Game loop
 	while (!WindowShouldClose())

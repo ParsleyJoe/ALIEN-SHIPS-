@@ -9,11 +9,16 @@
 
 void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
 {
+	static bool showGrid = true;
+	if (IsKeyPressed(KEY_G))
+		showGrid = !showGrid;
+
+	if (showGrid)
+		DrawGridLines(GetScreenWidth(), GetScreenHeight(), 32);
 	switch (currentScene)
 	{
 	case Scene::MAIN_MENU:
-		DrawText("SPACE BULLET HELL!!", (GetScreenWidth() / 2) - 170, (GetScreenHeight() / 2) - 50, 30, DARKGRAY);
-		DrawButton(assets.btns["Start"]);
+		DrawMainMenu(assets, game.player.playerSprite);
 		break;
 	case Scene::GAME:
 		DrawEffectTimers(game.player);
@@ -31,6 +36,20 @@ void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
 		DrawButton(btn);
 		break;
 	}
+}
+
+void DrawMainMenu(UIAssets& assets, Texture2D& playerSprite)
+{
+	DrawCenteredText(GameAssets::gameFont, "Alien Ships", 60.0f, 40.0f, 0.0f, RAYWHITE);
+	DrawButton(assets.btns["Start"]);
+
+	float sizeIncrease = 40.0f;
+	// Draw Cycling of Ships
+	DrawTexturePro(playerSprite, {0.0f, 0.0f, (float)playerSprite.width, (float)playerSprite.height},{(GetScreenWidth() / 2.0f) - ((playerSprite.width + sizeIncrease) / 2.0f),
+	     (GetScreenHeight() / 2.0f) - sizeIncrease * 1.4f, (float)playerSprite.width + sizeIncrease, (float)playerSprite.height + sizeIncrease},{}, 0.0f, WHITE);
+
+	DrawButton(assets.btns["LeftCycle"]);
+	DrawButton(assets.btns["RightCycle"]);
 }
 
 void DrawScore(Game& game)
@@ -81,9 +100,9 @@ void InitUI(UIAssets& assets)
 
 
 	Button startBtn;
-	startBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 50.0f, (GetScreenHeight() / 2.0f) - 0.0f, 120, 50 };
+	startBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) + 90.0f, 120, 50 };
 	startBtn.color = DARKGRAY;
-	startBtn.text = "Start Game";
+	startBtn.text = "Play";
 	startBtn.txtColor = WHITE;
 	startBtn.fontSize = 15;
 	assets.btns.insert({"Start", startBtn});
@@ -103,7 +122,20 @@ void InitUI(UIAssets& assets)
 	menuBtn.fontSize = 20;
 	menuBtn.color = GRAY;
 	assets.btns.insert({"Menu", menuBtn});
+	
 
+	// Cycling Buttons
+	Button leftCycle;
+	leftCycle.customSprite = LoadTexture("resources/cycleButton.png");
+	leftCycle.rec = {(GetScreenWidth() / 2.0f) - 120.0f, (GetScreenHeight() / 2.0f) - 30, 50.0f, 40.0f};
+	leftCycle.srcRec = {0.0f, 0.0f, -(float)leftCycle.customSprite.width, (float)leftCycle.customSprite.height};
+	assets.btns.insert({"LeftCycle", leftCycle});
+
+	Button rightCycle;
+	rightCycle.customSprite = leftCycle.customSprite;
+	rightCycle.rec = {(GetScreenWidth() / 2.0f) + 70.0f , (GetScreenHeight() / 2.0f) - 30, 50.0f, 40.0f};
+	rightCycle.srcRec = {0.0f, 0.0f, (float)leftCycle.customSprite.width, (float)leftCycle.customSprite.height};
+	assets.btns.insert({"RightCycle", rightCycle});
 }
 
 void UIUpdate(Scene &currentScene, UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies)
@@ -128,4 +160,32 @@ void UIUpdate(Scene &currentScene, UIAssets &uiAssets, Game &game, std::vector<s
 		}
 		break;
         }
+}
+
+void DrawCenteredText(Font font, const char* text, float y, float size, float spacing, Color color)
+{
+	Vector2 textSize = MeasureTextEx(font, text, size, spacing);
+	DrawTextEx(
+		font,
+		text,
+		{ GetScreenWidth() / 2.0f - textSize.x / 2.0f, y},
+		size,
+		spacing,
+		color
+	);
+}
+
+void DrawGridLines(int screenWidth, int screenHeight, int cellSize)
+{
+    // Vertical lines
+    for (int x = 0; x <= screenWidth; x += cellSize)
+    {
+        DrawLine(x, 0, x, screenHeight, LIGHTGRAY);
+    }
+
+    // Horizontal lines
+    for (int y = 0; y <= screenHeight; y += cellSize)
+    {
+        DrawLine(0, y, screenWidth, y, LIGHTGRAY);
+    }
 }

@@ -9,6 +9,10 @@ struct Button
 	std::string text;
 	Color txtColor;
 	int fontSize;
+
+	// Optional Sprite
+	Texture2D customSprite = {0};
+	Rectangle srcRec = {0};
 };
 
 bool IsButtonClicked(Button& button);

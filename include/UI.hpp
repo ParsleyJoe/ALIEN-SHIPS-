@@ -1,5 +1,6 @@
 #pragma once
 #include "button.hpp"
+#include "raylib.h"
 #include <map>
 #include <memory>
 #include <vector>
@@ -14,8 +15,11 @@ struct UIAssets {
 	Font defaultFont;
 };
 
+void DrawCenteredText(Font font, const char* text, float y, float size, float spacing, Color color);
+void DrawMainMenu(UIAssets& assets, Texture2D& playerSprite);
 void DrawUI(UIAssets& assets, Scene& currentScene, Game& game);
 void InitUI(UIAssets& assets);
 void DrawEffectTimers(Player& player);
 void DrawScore(Game& game);
 void UIUpdate(Scene &currentScene, UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies);
+void DrawGridLines(int screenWidth, int screenHeight, int cellSize);

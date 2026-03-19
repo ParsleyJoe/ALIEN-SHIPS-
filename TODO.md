@@ -2,8 +2,7 @@
 
 # Future Features
 
-    - Dynamic Borders 
-    - A creeper like enemy, which explodes in close range
+    - Better Main Menu
     - Different Ships and ship abilities
 
 
