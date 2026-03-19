@@ -18,7 +18,7 @@ void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
 	switch (currentScene)
 	{
 	case Scene::MAIN_MENU:
-		DrawMainMenu(assets, game.player.playerSprite);
+		DrawMainMenu(assets, game.player.shipTextures[game.player.selectedShipIndex]);
 		break;
 	case Scene::GAME:
 		DrawEffectTimers(game.player);
@@ -148,6 +148,10 @@ void UIUpdate(Scene &currentScene, UIAssets &uiAssets, Game &game, std::vector<s
 			currentScene = Scene::GAME;
 			gRestartGame(game, enemies);
 		}
+		if (IsButtonClicked(uiAssets.btns["LeftCycle"]))
+			CycleSelectedShip(game.player, -1);
+		if (IsButtonClicked(uiAssets.btns["RightCycle"]))
+			CycleSelectedShip(game.player, 1);
 		break;
         case Scene::GAME:
 		break;
@@ -177,15 +181,15 @@ void DrawCenteredText(Font font, const char* text, float y, float size, float sp
 
 void DrawGridLines(int screenWidth, int screenHeight, int cellSize)
 {
-    // Vertical lines
-    for (int x = 0; x <= screenWidth; x += cellSize)
-    {
-        DrawLine(x, 0, x, screenHeight, LIGHTGRAY);
-    }
+	// Vertical lines
+	for (int x = 0; x <= screenWidth; x += cellSize)
+	{
+		DrawLine(x, 0, x, screenHeight, LIGHTGRAY);
+	}
 
-    // Horizontal lines
-    for (int y = 0; y <= screenHeight; y += cellSize)
-    {
-        DrawLine(0, y, screenWidth, y, LIGHTGRAY);
-    }
+	// Horizontal lines
+	for (int y = 0; y <= screenHeight; y += cellSize)
+	{
+		DrawLine(0, y, screenWidth, y, LIGHTGRAY);
+	}
 }

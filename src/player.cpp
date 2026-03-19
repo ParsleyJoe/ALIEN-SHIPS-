@@ -6,12 +6,15 @@
 #include "raylib.h"
 #include "raymath.h"
 #include <algorithm>
+#include <iostream>
 #include <memory>
 
 // Load Player Textures
 void pLoadTxt(Player& player)
 {
-	player.playerSprite = LoadTexture("resources/ship.png");
+	player.shipTextures[0] = LoadTexture("resources/ship.png");
+	player.shipTextures[1] = LoadTexture("resources/rollingship.png");
+	player.shipTextures[2] = LoadTexture("resources/extrabulletsship.png");
 	player.bulletSprite = LoadTexture("resources/bullet.png");
 }
 
@@ -69,8 +72,7 @@ void DrawPlayer(Player& player)
 {
 	DrawRectangleLines(player.rec.x, player.rec.y, player.rec.width, player.rec.height, RED);
 
-	if (IsTextureReady(player.playerSprite))
-		DrawTexture(player.playerSprite, player.rec.x, player.rec.y, WHITE);
+	DrawTexture(player.shipTextures[player.selectedShipIndex], player.rec.x, player.rec.y, WHITE);
 }
 
 void MovePlayer(Player& player)
@@ -236,4 +238,15 @@ void CheckEffects(Player& player)
 	player.activeEffects.erase(std::remove_if(player.activeEffects.begin(), player.activeEffects.end(), [](const auto& p){
 		return (p.timeLeft <= 0);
 	}), player.activeEffects.end());
+}
+
+void CycleSelectedShip(Player& player, int dir)
+{
+	player.selectedShipIndex += dir;
+
+	if (player.selectedShipIndex < 0)
+		player.selectedShipIndex = 0;
+
+	if (player.selectedShipIndex >= player.shipTextures.size())
+		player.selectedShipIndex = player.shipTextures.size() - 1;
 }

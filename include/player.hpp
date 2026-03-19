@@ -2,6 +2,7 @@
 #include "powerup.hpp"
 #include "raylib.h"
 #include "enemy.hpp"
+#include <array>
 #include <vector>
 #include <memory>
 
@@ -23,7 +24,6 @@ struct Player
 	std::vector<Bullet> playerBullets;
 
 	Rectangle rec = { 500.0f, 350.0f, 33, 33 };
-	Texture2D playerSprite;
 	Texture2D bulletSprite;
 
 	int baseSpeed = 7;
@@ -31,6 +31,9 @@ struct Player
 	Vector2 direction = { 0 };
 
 	std::vector<PowerUpEffect> activeEffects;
+
+	int selectedShipIndex = 0;
+	std::array<Texture2D, 3> shipTextures;
 };
 
 void pLoadTxt(Player& player);
@@ -51,3 +54,5 @@ void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy);
 
 void PlayerRestart(Player& player);
 bool PlayerStartAnimation(Player& player);
+
+void CycleSelectedShip(Player& player, int dir);

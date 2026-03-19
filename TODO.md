@@ -2,8 +2,10 @@
 
 # Future Features
 
-    - Better Main Menu
     - Different Ships and ship abilities
+        - Dodge rolling ship
+        - ability to get a extra wide shot
+        - ability to activate shield at will
 
 
 # Enemy Types

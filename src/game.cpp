@@ -11,8 +11,7 @@
 
 void gLoadTextures(Game& game)
 {
-	game.player.playerSprite = LoadTexture("resources/ship.png");
-	game.player.bulletSprite = LoadTexture("resources/bullet.png");
+	pLoadTxt(game.player);
 
 	// Player Sprite
 	GameAssets::shipSprite = LoadTexture("resources/UFO.png");
