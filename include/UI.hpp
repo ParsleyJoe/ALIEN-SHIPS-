@@ -17,9 +17,9 @@ struct UIAssets {
 
 void DrawCenteredText(Font font, const char* text, float y, float size, float spacing, Color color);
 void DrawMainMenu(UIAssets& assets, Player& player);
-void DrawUI(UIAssets& assets, Scene& currentScene, Game& game);
+void DrawUI(UIAssets& assets, Game& game);
 void InitUI(UIAssets& assets);
 void DrawEffectTimers(Player& player);
 void DrawScore(Game& game);
-void UIUpdate(Scene &currentScene, UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies);
+void UIUpdate(UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies);
 void DrawGridLines(int screenWidth, int screenHeight, int cellSize);

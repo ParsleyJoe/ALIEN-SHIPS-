@@ -7,7 +7,7 @@
 #include <UI.hpp>
 #include <sceneManager.hpp>
 
-void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
+void DrawUI(UIAssets& assets, Game& game)
 {
 	static bool showGrid = false;
 	if (IsKeyPressed(KEY_G))
@@ -15,7 +15,7 @@ void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
 
 	if (showGrid)
 		DrawGridLines(GetScreenWidth(), GetScreenHeight(), 32);
-	switch (currentScene)
+	switch (game.currentScene)
 	{
 	case Scene::MAIN_MENU:
 		DrawMainMenu(assets, game.player);
@@ -164,16 +164,15 @@ void InitUI(UIAssets& assets)
 	assets.btns.insert({"RightCycle", rightCycle});
 }
 
-void UIUpdate(Scene &currentScene, UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies)
+void UIUpdate(UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies)
 {
-	switch (currentScene)
+	switch (game.currentScene)
 	{
         case Scene::MAIN_MENU:
 		if (IsButtonClicked(uiAssets.btns["Start"]))
-		{
-			currentScene = Scene::GAME;
 			gRestartGame(game, enemies);
-		}
+
+
 		if (IsButtonClicked(uiAssets.btns["LeftCycle"]))
 			CycleSelectedShip(game.player, -1);
 		if (IsButtonClicked(uiAssets.btns["RightCycle"]))
@@ -186,7 +185,7 @@ void UIUpdate(Scene &currentScene, UIAssets &uiAssets, Game &game, std::vector<s
 			gRestartGame(game, enemies);
 		if (IsButtonClicked(uiAssets.btns["Menu"]))
 		{
-			currentScene = Scene::MAIN_MENU;
+			game.currentScene = Scene::MAIN_MENU;
 		}
 		break;
         }

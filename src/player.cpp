@@ -28,7 +28,7 @@ void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 	BulletsHit(game, enemies);
 	CheckEffects(game.player);
 
-	if (game.player.abilityAvailable && IsKeyDown(KEY_R))
+	if (IsKeyDown(KEY_R))
 		SpecialAbility(game.player);
 }
 
@@ -105,6 +105,12 @@ void MovePlayer(Player& player)
 
 void SpecialAbility(Player& player)
 {
+	if (player.specialMeter < player.specialFullLevel)
+	{
+		std::cout << "Ability not ready yet, Special Meter at: " << player.specialMeter << std::endl;
+		return;
+	}
+
 	switch (player.selectedShipIndex) 
 	{
 	case 0:
@@ -117,7 +123,7 @@ void SpecialAbility(Player& player)
 		std::cout << "Extra Shots" << '\n';
 		break;
 	}
-	player.abilityAvailable = false;
+	player.specialMeter = 0;
 }
 
 void ShootBullet(Player& player, Rectangle bullet)
@@ -172,6 +178,7 @@ void BulletsHit(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 		{
 			enemy->Die();
 			gEnemyKilled(game, enemy);
+			game.player.specialMeter += game.player.specialIncrement;
 		}
 
 		game.player.playerBullets.erase(std::remove_if(game.player.playerBullets.begin(), game.player.playerBullets.end(), [&enemy](const Bullet& blt) {

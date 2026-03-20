@@ -65,6 +65,7 @@ void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies)
 	game.wave = 1;
 	game.active = true;
 	game.score = 0;
+	game.currentScene = Scene::GAME;
 
 	enemies.clear();
 

@@ -29,8 +29,6 @@ int main()
 	std::vector<std::unique_ptr<Enemy>> enemies; // NOTE: Polymorphism to store any enemy type
 	std::vector<Star> stars;
 
-	Scene currentScene = Scene::MAIN_MENU;
-
 	// Init Spawners and Holder
 	InitSpawners(game.spawnerHolder);
 
@@ -49,7 +47,7 @@ int main()
 	//! Game loop
 	while (!WindowShouldClose())
 	{
-		if (IsKeyPressed(KEY_ESCAPE) && currentScene == Scene::GAME)
+		if (IsKeyPressed(KEY_ESCAPE) && game.currentScene == Scene::GAME)
 			game.active = !game.active;
 
 		// Updating Logic ================================
@@ -59,7 +57,7 @@ int main()
 			if (game.player.lives <= 0)
 			{
 				game.active = false;
-				currentScene = Scene::GAME_OVER;
+				game.currentScene = Scene::GAME_OVER;
 
 				SaveData sav = gGetSaveData(game);
 				sfs::writeEntireFileWithCheckSum( (void*)&sav, sizeof(SaveData), GameAssets::saveFileName);
@@ -95,12 +93,12 @@ int main()
 		BeginTextureMode(target);
 
 		ClearBackground(Color{ 13, 13, 13, 255 });
-		DrawUI(uiAssets, currentScene, game);
-		UIUpdate(currentScene, uiAssets, game, enemies);
-		if (currentScene == Scene::MAIN_MENU)
+		DrawUI(uiAssets, game);
+		UIUpdate(uiAssets, game, enemies);
+		if (game.currentScene == Scene::MAIN_MENU)
 		{
 		}
-		else if (currentScene == Scene::GAME)
+		else if (game.currentScene == Scene::GAME)
 		{
 
 			DrawText(TextFormat("%d", game.player.lives), 10, 10, 20, RAYWHITE);
@@ -130,7 +128,7 @@ int main()
 				DrawText("Paused", 600, 300, 40, GRAY);
 			}
 		}
-		else if (currentScene == Scene::GAME_OVER)
+		else if (game.currentScene == Scene::GAME_OVER)
 		{
 		}
 

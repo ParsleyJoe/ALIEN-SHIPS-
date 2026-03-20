@@ -1,6 +1,7 @@
 #pragma once
 
 #include "player.hpp"
+#include "sceneManager.hpp"
 #include <memory>
 
 struct ImGuiIO;
@@ -11,7 +12,8 @@ struct Game {
 	int wave = 1;
 	bool active = false;
 	SpawnerHolder spawnerHolder;
-
+	Scene currentScene = Scene::MAIN_MENU;
+	
 	int score = 0;
 };
 

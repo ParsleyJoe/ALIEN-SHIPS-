@@ -18,7 +18,9 @@ struct Player
 	int damage = 20;
 	float hitCooldown = 2.0f;
 	float lastHit = 0;
-	bool abilityAvailable = true;
+	int specialFullLevel = 40;
+	int specialMeter = 0;
+	int specialIncrement = 5;
 
 	float shotCooldown = 0.1f;
 	float lastShot = 0;
