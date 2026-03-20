@@ -18,6 +18,7 @@ struct Player
 	int damage = 20;
 	float hitCooldown = 2.0f;
 	float lastHit = 0;
+	bool abilityAvailable = true;
 
 	float shotCooldown = 0.1f;
 	float lastShot = 0;
@@ -46,6 +47,8 @@ void ShootBullet(Player& player, Rectangle bullet);
 
 void AddPowerUpEffect(Player& player, PowerUp powerUp);
 void CheckEffects(Player& player);
+
+void SpecialAbility(Player& player);
 
 void BulletsHit(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies);
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);

@@ -27,6 +27,9 @@ void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 
 	BulletsHit(game, enemies);
 	CheckEffects(game.player);
+
+	if (game.player.abilityAvailable && IsKeyDown(KEY_R))
+		SpecialAbility(game.player);
 }
 
 
@@ -98,6 +101,23 @@ void MovePlayer(Player& player)
 	player.rec.x += player.direction.x * player.speed;
 	player.rec.y += player.direction.y * player.speed;
 	player.direction = { 0, 0 };
+}
+
+void SpecialAbility(Player& player)
+{
+	switch (player.selectedShipIndex) 
+	{
+	case 0:
+		std::cout << "This ship has no ability" << '\n';
+		break;
+	case 1:
+		std::cout << "Dodge Roll" << '\n';
+		break;
+	case 2:
+		std::cout << "Extra Shots" << '\n';
+		break;
+	}
+	player.abilityAvailable = false;
 }
 
 void ShootBullet(Player& player, Rectangle bullet)
