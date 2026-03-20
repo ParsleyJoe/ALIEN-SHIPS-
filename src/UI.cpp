@@ -21,6 +21,7 @@ void DrawUI(UIAssets& assets, Game& game)
 		DrawMainMenu(assets, game.player);
 		break;
 	case Scene::GAME:
+		DrawLives(game);
 		DrawEffectTimers(game.player);
 		DrawScore(game);
 		break;
@@ -76,6 +77,14 @@ void DrawMainMenu(UIAssets& assets, Player& player)
 		break;
 	}
 	DrawTextEx(GameAssets::gameFont, special.c_str(), {GetScreenWidth() - rightOffset - xLen.x, (GetScreenHeight() / 2.0f) - (sizeIncrease * 1.4f) - xLen.y}, fontSize,0.0f, RAYWHITE);
+}
+
+void DrawLives(Game &game)
+{
+	auto& liveTexture = game.player.shipTextures[0];
+	float sizeMultiplier = 1.2f;
+	DrawTexturePro(liveTexture, {0.0f, 0.0f, (float)liveTexture.width, (float)liveTexture.height}, {10, 10, liveTexture.width * sizeMultiplier, liveTexture.height * sizeMultiplier}, {}, 0.0f, WHITE);
+	DrawTextPro(GameAssets::gameFont, TextFormat("%d", game.player.lives), {liveTexture.width * sizeMultiplier + 20, 10},{},0.0f, 34, 0.0f, RAYWHITE);
 }
 
 void DrawScore(Game& game)

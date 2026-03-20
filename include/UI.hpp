@@ -19,6 +19,7 @@ void DrawCenteredText(Font font, const char* text, float y, float size, float sp
 void DrawMainMenu(UIAssets& assets, Player& player);
 void DrawUI(UIAssets& assets, Game& game);
 void InitUI(UIAssets& assets);
+void DrawLives(Game& game);
 void DrawEffectTimers(Player& player);
 void DrawScore(Game& game);
 void UIUpdate(UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies);

@@ -101,7 +101,6 @@ int main()
 		else if (game.currentScene == Scene::GAME)
 		{
 
-			DrawText(TextFormat("%d", game.player.lives), 10, 10, 20, RAYWHITE);
 
 			DrawStars(stars);
 			DrawPowerUps();
@@ -132,7 +131,6 @@ int main()
 		{
 		}
 
-		DrawText(TextFormat("Game Time: %.2f", GetTime() - GameAssets::gameStartTime), 20, 20, 20, WHITE);
 		EndTextureMode();
 
 		gDrawingBegin();
