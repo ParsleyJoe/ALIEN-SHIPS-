@@ -14,40 +14,47 @@ void InitSpawners(SpawnerHolder& holder)
 	holder.fodderSpawner.waveType = EnemyType::FODDER;
 	holder.fodderSpawner.spawnInterval = 0.6f;
 	holder.fodderSpawner.spawnedEnemies = 0;
+	holder.fodderSpawner.lastSpawnTime = 0.0f;
 
 	holder.shipSpawner.waveType = EnemyType::SHIP;
 	holder.shipSpawner.spawnInterval = 0.3f;
 	holder.shipSpawner.enemyAmmount = 15;
-	holder.sinwaveShooter.spawnedEnemies = 0;
+	holder.shipSpawner.spawnedEnemies = 0;
+	holder.shipSpawner.lastSpawnTime = 0.0f;
 
 	holder.sinwaveShooter.waveType = EnemyType::SINWAVE_SHOOTER;
 	holder.sinwaveShooter.enemyAmmount = 1;
 	holder.sinwaveShooter.spawnInterval = 2.0f;
 	holder.sinwaveShooter.spawnedEnemies = 0;
+	holder.sinwaveShooter.lastSpawnTime = 0.0f;
 
 	holder.bossSpawner.waveType = EnemyType::BOSS_SHIP;
 	holder.bossSpawner.enemyAmmount = 1;
 	holder.bossSpawner.spawnInterval = 4.0f;
 	holder.bossSpawner.spawnedEnemies = 0;
+	holder.bossSpawner.lastSpawnTime = 0.0f;
 
 	holder.asteroidSpawner.waveType = EnemyType::ASTEROID;
 	holder.asteroidSpawner.spawnInterval = GetRandomValue(15, 25) + 0.0f;
 	holder.asteroidSpawner.enemyAmmount = 1;
 	holder.asteroidSpawner.spawnedEnemies = 0;
+	holder.asteroidSpawner.lastSpawnTime = 0.0f;
 
 	holder.barrierSpawner.waveType = EnemyType::BARRIER;
 	holder.barrierSpawner.spawnInterval = 5.0f;
 	holder.barrierSpawner.enemyAmmount = GetRandomValue(1, 3);
 	holder.barrierSpawner.spawnedEnemies = 0;
+	holder.barrierSpawner.lastSpawnTime = 0.0f;
 
 	holder.creeperSpawner.waveType = EnemyType::CREEPER;
 	holder.creeperSpawner.spawnedEnemies = 0;
 	holder.creeperSpawner.enemyAmmount = 1;
 	holder.creeperSpawner.spawnInterval = 3.0f;
+	holder.creeperSpawner.lastSpawnTime = 0.0f;
 
 	holder.eventSpawner.enemyAmmount = 1;
 	holder.eventSpawner.spawnInterval = 3.0f;
-
+	holder.eventSpawner.lastSpawnTime = 0.0f;
 }
 
 
