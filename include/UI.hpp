@@ -16,7 +16,7 @@ struct UIAssets {
 };
 
 void DrawCenteredText(Font font, const char* text, float y, float size, float spacing, Color color);
-void DrawMainMenu(UIAssets& assets, Texture2D& playerSprite);
+void DrawMainMenu(UIAssets& assets, Player& player);
 void DrawUI(UIAssets& assets, Scene& currentScene, Game& game);
 void InitUI(UIAssets& assets);
 void DrawEffectTimers(Player& player);

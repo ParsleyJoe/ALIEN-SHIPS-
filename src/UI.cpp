@@ -9,7 +9,7 @@
 
 void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
 {
-	static bool showGrid = true;
+	static bool showGrid = false;
 	if (IsKeyPressed(KEY_G))
 		showGrid = !showGrid;
 
@@ -18,7 +18,7 @@ void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
 	switch (currentScene)
 	{
 	case Scene::MAIN_MENU:
-		DrawMainMenu(assets, game.player.shipTextures[game.player.selectedShipIndex]);
+		DrawMainMenu(assets, game.player);
 		break;
 	case Scene::GAME:
 		DrawEffectTimers(game.player);
@@ -38,18 +38,44 @@ void DrawUI(UIAssets& assets, Scene& currentScene, Game& game)
 	}
 }
 
-void DrawMainMenu(UIAssets& assets, Texture2D& playerSprite)
+void DrawMainMenu(UIAssets& assets, Player& player)
 {
 	DrawCenteredText(GameAssets::gameFont, "Alien Ships", 60.0f, 40.0f, 0.0f, RAYWHITE);
 	DrawButton(assets.btns["Start"]);
 
 	float sizeIncrease = 40.0f;
+	Texture2D& sprite = player.shipTextures[player.selectedShipIndex];
 	// Draw Cycling of Ships
-	DrawTexturePro(playerSprite, {0.0f, 0.0f, (float)playerSprite.width, (float)playerSprite.height},{(GetScreenWidth() / 2.0f) - ((playerSprite.width + sizeIncrease) / 2.0f),
-	     (GetScreenHeight() / 2.0f) - sizeIncrease * 1.4f, (float)playerSprite.width + sizeIncrease, (float)playerSprite.height + sizeIncrease},{}, 0.0f, WHITE);
+	DrawTexturePro(sprite, {0.0f, 0.0f, (float)sprite.width, (float)sprite.height},{(GetScreenWidth() / 2.0f) - ((sprite.width + sizeIncrease) / 2.0f),
+	     (GetScreenHeight() / 2.0f) - sizeIncrease * 1.4f, (float)sprite.width + sizeIncrease, (float)sprite.height + sizeIncrease},{}, 0.0f, WHITE);
 
 	DrawButton(assets.btns["LeftCycle"]);
 	DrawButton(assets.btns["RightCycle"]);
+
+	int fontSize = 30;
+	Vector2 xLen = MeasureTextEx(GameAssets::gameFont,"Special: ", fontSize, 0.0f);
+	float rightOffset = 60.0f;
+	std::string special = "None:";
+
+	DrawText("Special: ", GetScreenWidth() - rightOffset - xLen.x, (GetScreenHeight() / 2.0f) - (sizeIncrease * 1.4f) - 50.0f - xLen.y, fontSize, RAYWHITE);
+
+	// Draw Special for selected ship
+	switch (player.selectedShipIndex) 
+	{
+	case 0:
+		xLen = MeasureTextEx(GameAssets::gameFont,"None", fontSize, 0.0f);
+		special = "None";
+		break;
+	case 1:
+		xLen = MeasureTextEx(GameAssets::gameFont,"Dodge Roll", fontSize, 0.0f);
+		special = "Dodge Roll";
+		break;
+	case 2:
+		xLen = MeasureTextEx(GameAssets::gameFont,"Extra Shots", fontSize, 0.0f);
+		special = "Extra Shots";
+		break;
+	}
+	DrawTextEx(GameAssets::gameFont, special.c_str(), {GetScreenWidth() - rightOffset - xLen.x, (GetScreenHeight() / 2.0f) - (sizeIncrease * 1.4f) - xLen.y}, fontSize,0.0f, RAYWHITE);
 }
 
 void DrawScore(Game& game)
