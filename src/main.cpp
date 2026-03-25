@@ -58,6 +58,10 @@ int main()
 			{
 				game.active = false;
 				game.currentScene = Scene::GAME_OVER;
+ 
+				Image img = LoadImageFromScreen();
+				uiAssets.gameOverSS = LoadTextureFromImage(img);
+				UnloadImage(img);
 
 				SaveData sav = gGetSaveData(game);
 				sfs::writeEntireFileWithCheckSum( (void*)&sav, sizeof(SaveData), GameAssets::saveFileName);

@@ -80,7 +80,7 @@ void DrawPlayer(Player& player)
 
 void MovePlayer(Player& player)
 {
-	if (!player.active)
+	if (!player.active && !player.specialActive)
 	{
 		player.active = PlayerStartAnimation(player);
 		return;
@@ -118,12 +118,41 @@ void SpecialAbility(Player& player)
 		break;
 	case 1:
 		std::cout << "Dodge Roll" << '\n';
+		if (!DodgeRoll(player))
+		{
+			player.specialActive = false;
+			player.specialMeter = 0;
+		}
 		break;
 	case 2:
 		std::cout << "Extra Shots" << '\n';
 		break;
 	}
 	player.specialMeter = 0;
+}
+
+bool DodgeRoll(Player& player)
+{
+	static bool animationActive = false;
+	float dodgeOffset = 40.0f;
+
+	if (!animationActive)
+	{
+		player.active = false;
+		animationActive = true;
+		player.specialActive = true;
+	}
+	else
+	{
+		player.rec.x += dodgeOffset * 0.2f;
+		if (player.rec.x >= dodgeOffset)
+		{
+			animationActive = false;
+		}
+	}
+
+
+	return animationActive;
 }
 
 void ShootBullet(Player& player, Rectangle bullet)

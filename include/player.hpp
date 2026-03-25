@@ -21,6 +21,7 @@ struct Player
 	int specialFullLevel = 40;
 	int specialMeter = 0;
 	int specialIncrement = 5;
+	bool specialActive = false;
 
 	float shotCooldown = 0.1f;
 	float lastShot = 0;
@@ -51,6 +52,7 @@ void AddPowerUpEffect(Player& player, PowerUp powerUp);
 void CheckEffects(Player& player);
 
 void SpecialAbility(Player& player);
+bool DodgeRoll(Player& player);
 
 void BulletsHit(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies);
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);

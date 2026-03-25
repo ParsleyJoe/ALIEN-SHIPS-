@@ -24,18 +24,35 @@ void DrawUI(UIAssets& assets, Game& game)
 		DrawLives(game);
 		DrawEffectTimers(game.player);
 		DrawScore(game);
+		DrawSpecialMeter(assets, game.player);
 		break;
 	case Scene::GAME_OVER:
-		int textWidth = MeasureText("GAME OVER", 30);
-		int x = (GetScreenWidth() / 2) - (textWidth / 2);
-		int y = (GetScreenHeight() / 2) - (30 / 2); // optional, for vertical center
-		DrawText("GAME OVER", x, y, 30, DARKGRAY);
-
-		Button btn = assets.btns["Restart"];
-		DrawButton(btn);
-		btn = assets.btns["Menu"];
-		DrawButton(btn);
+		DrawGameOver(assets, game);
 		break;
+	}
+}
+
+void DrawGameOver(UIAssets& assets, Game& game)
+{
+	int fontSize = 40;
+	Vector2 textWidth = MeasureTextEx(GameAssets::gameFont, "GAME OVER", fontSize, 0.0f);
+	int x = (GetScreenWidth() / 2.0f) - (textWidth.x / 2.0f);
+	int y = (GetScreenHeight() * 0.18f) - (fontSize) - textWidth.y; // optional, for vertical center
+	DrawTextEx(GameAssets::gameFont, "GAME OVER", {(float)x, (float)y}, fontSize, 0.0f, RAYWHITE);
+
+	Button btn = assets.btns["Restart"];
+	DrawButton(btn);
+	btn = assets.btns["Menu"];
+	DrawButton(btn);
+
+	Rectangle rect = {GetScreenWidth() * 0.14f, GetScreenHeight() * 0.14f, GetScreenWidth() * 0.7f, GetScreenHeight() * 0.7f};
+	DrawTexturePro(assets.menuBackground, {0.0f, 0.0f, (float)assets.menuBackground.width, (float)assets.menuBackground.height},
+			rect, {}, 0.0f, {255, 255, 255, 60});
+
+	if (IsTextureReady(assets.gameOverSS))
+	{
+		DrawTexturePro(assets.gameOverSS,
+		 {0.0f, 0.0f, (float)assets.gameOverSS.width, (float)assets.gameOverSS.height}, {rect.x * 1.2f, rect.y * 1.2f, GetScreenWidth() * 0.6f, GetScreenHeight() * 0.6f}, {}, 0.0f, WHITE);
 	}
 }
 
@@ -133,6 +150,7 @@ void DrawEffectTimers(Player& player)
 void InitUI(UIAssets& assets)
 {
 
+	assets.menuBackground = LoadTexture("resources/menuBackground.png");
 
 	Button startBtn;
 	startBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) + 90.0f, 120, 50 };
@@ -227,3 +245,10 @@ void DrawGridLines(int screenWidth, int screenHeight, int cellSize)
 		DrawLine(0, y, screenWidth, y, LIGHTGRAY);
 	}
 }
+
+void DrawSpecialMeter(UIAssets& assets, Player& player)
+{
+	float specialPercentage = (float)player.specialMeter / (float)player.specialFullLevel;
+	DrawRectangle(20.0f, 60.0f, 100.0f * specialPercentage, 30.0f, BLUE);
+}
+
