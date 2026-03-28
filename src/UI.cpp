@@ -4,6 +4,7 @@
 #include "player.hpp"
 #include "powerup.hpp"
 #include "raylib.h"
+#include "safeSave.h"
 #include <UI.hpp>
 #include <sceneManager.hpp>
 
@@ -40,6 +41,16 @@ void DrawGameOver(UIAssets& assets, Game& game)
 	int y = (GetScreenHeight() * 0.18f) - (fontSize) - textWidth.y; // optional, for vertical center
 	DrawTextEx(GameAssets::gameFont, "GAME OVER", {(float)x, (float)y}, fontSize, 0.0f, RAYWHITE);
 
+	SaveData sav{};
+	sfs::readEntireFileWithCheckSum((void*)&sav, sizeof(sav), GameAssets::saveFileName);
+	const char* str = TextFormat("Highscore: %d", sav.score);
+	textWidth = MeasureTextEx(GameAssets::gameFont, str, fontSize, 0.0f);
+	DrawTextEx(GameAssets::gameFont, str, {(GetScreenWidth() * 0.5f) - (textWidth.x * 0.5f), (GetScreenHeight() * 0.5f) - textWidth.y}, fontSize, 0.0f, RAYWHITE);
+
+	str = TextFormat("Score: %d", game.score);
+	textWidth = MeasureTextEx(GameAssets::gameFont, str, fontSize, 0.0f);
+	DrawTextEx(GameAssets::gameFont, str, {(GetScreenWidth() * 0.45f) - (textWidth.x * 0.5f), (GetScreenHeight() * 0.45f) - textWidth.y}, fontSize, 0.0f, RAYWHITE);
+
 	Button btn = assets.btns["Restart"];
 	DrawButton(btn);
 	btn = assets.btns["Menu"];
@@ -49,11 +60,6 @@ void DrawGameOver(UIAssets& assets, Game& game)
 	DrawTexturePro(assets.menuBackground, {0.0f, 0.0f, (float)assets.menuBackground.width, (float)assets.menuBackground.height},
 			rect, {}, 0.0f, {255, 255, 255, 60});
 
-	if (IsTextureReady(assets.gameOverSS))
-	{
-		DrawTexturePro(assets.gameOverSS,
-		 {0.0f, 0.0f, (float)assets.gameOverSS.width, (float)assets.gameOverSS.height}, {rect.x * 1.2f, rect.y * 1.2f, GetScreenWidth() * 0.6f, GetScreenHeight() * 0.6f}, {}, 0.0f, WHITE);
-	}
 }
 
 void DrawMainMenu(UIAssets& assets, Player& player)

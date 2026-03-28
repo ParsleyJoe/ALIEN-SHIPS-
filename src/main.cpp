@@ -42,8 +42,8 @@ int main()
 
 	RenderTexture2D target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 	Shader bloom = LoadShader(0, "resources/shader/bloom_fragment.glsl");
-	GameAssets::gameFont = LoadFont("resources/PixelifySans.ttf");
-
+	GameAssets::gameFont = LoadFont("resources/TitilliumWeb-SemiBold.ttf");
+	SetTextureFilter(GameAssets::gameFont.texture, TEXTURE_FILTER_POINT);
 	//! Game loop
 	while (!WindowShouldClose())
 	{
@@ -59,10 +59,6 @@ int main()
 				game.active = false;
 				game.currentScene = Scene::GAME_OVER;
  
-				Image img = LoadImageFromScreen();
-				uiAssets.gameOverSS = LoadTextureFromImage(img);
-				UnloadImage(img);
-
 				SaveData sav = gGetSaveData(game);
 				sfs::writeEntireFileWithCheckSum( (void*)&sav, sizeof(SaveData), GameAssets::saveFileName);
 			}

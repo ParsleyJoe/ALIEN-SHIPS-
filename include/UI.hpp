@@ -15,7 +15,6 @@ struct UIAssets {
 	Font defaultFont;
 
 	Texture2D menuBackground;
-	Texture2D gameOverSS;
 };
 
 void DrawCenteredText(Font font, const char* text, float y, float size, float spacing, Color color);
