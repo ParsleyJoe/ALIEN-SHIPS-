@@ -148,7 +148,6 @@ void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawn
 
 		spawner.spawnedEnemies++;
 		count++;
-		std::cout << "Enemy vector Size: " << enemies.size() << std::endl;
 	}
 	
 	if (spawner.spawnedEnemies >= spawner.enemyAmmount && count <= 0)

@@ -32,7 +32,8 @@ struct Player
 
 	int baseSpeed = 7;
 	int speed = 7;
-	Vector2 direction = { 0 };
+	Vector2 movDir = { 0 };
+	Vector2 dir = {};
 
 	std::vector<PowerUpEffect> activeEffects;
 

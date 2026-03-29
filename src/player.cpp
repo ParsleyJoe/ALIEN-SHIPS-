@@ -6,6 +6,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include <algorithm>
+#include <cstdlib>
 #include <iostream>
 #include <memory>
 
@@ -28,8 +29,7 @@ void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 	BulletsHit(game, enemies);
 	CheckEffects(game.player);
 
-	if (IsKeyDown(KEY_R))
-		SpecialAbility(game.player);
+	SpecialAbility(game.player);
 }
 
 
@@ -80,78 +80,104 @@ void DrawPlayer(Player& player)
 
 void MovePlayer(Player& player)
 {
-	if (!player.active && !player.specialActive)
+	if (!player.active)
 	{
-		player.active = PlayerStartAnimation(player);
+		if (!player.specialActive)
+			player.active = PlayerStartAnimation(player);
 		return;
 	}
 
 	if (IsKeyDown(KEY_A) && player.rec.x >= 0)
-		player.direction.x = -1;
+		player.movDir.x = -1;
 	if (IsKeyDown(KEY_D) && player.rec.x <= (GetScreenWidth() - player.rec.width))
-		player.direction.x = 1;
+		player.movDir.x = 1;
 	if (IsKeyDown(KEY_W) && player.rec.y >= player.rec.height)
-		player.direction.y = -1;
+		player.movDir.y = -1;
 	if (IsKeyDown(KEY_S) && player.rec.y <= (GetScreenHeight() - player.rec.height))
-		player.direction.y += 1;
+		player.movDir.y += 1;
 
-	if (Vector2Length(player.direction) > 0)
-		player.direction = Vector2Normalize(player.direction);
+	if (Vector2Length(player.movDir) > 0)
+		player.movDir = Vector2Normalize(player.movDir);
 
-	player.rec.x += player.direction.x * player.speed;
-	player.rec.y += player.direction.y * player.speed;
-	player.direction = { 0, 0 };
+	player.rec.x += player.movDir.x * player.speed;
+	player.rec.y += player.movDir.y * player.speed;
+	player.dir = player.movDir;
+	player.movDir = { 0, 0 };
 }
 
 void SpecialAbility(Player& player)
 {
-	if (player.specialMeter < player.specialFullLevel)
+	if (player.selectedShipIndex == 0 || player.specialMeter < player.specialFullLevel && !player.specialActive)
 	{
-		std::cout << "Ability not ready yet, Special Meter at: " << player.specialMeter << std::endl;
 		return;
 	}
 
-	switch (player.selectedShipIndex) 
+	std::cout << "SpecailAbility Called" << std::endl;
+	
+	if (IsKeyPressed(KEY_R) && !player.specialActive)
+		player.specialActive = true;
+
+	if (player.specialActive)
 	{
-	case 0:
-		std::cout << "This ship has no ability" << '\n';
-		break;
-	case 1:
-		std::cout << "Dodge Roll" << '\n';
-		if (!DodgeRoll(player))
+		switch (player.selectedShipIndex) 
 		{
-			player.specialActive = false;
-			player.specialMeter = 0;
+		case 0:
+			std::cout << "This ship has no ability" << '\n';
+			break;
+		case 1:
+			std::cout << "Dodge Roll" << '\n';
+			if (!DodgeRoll(player))
+			{
+				player.specialActive = false;
+				player.active = true;
+			}
+			std::cout << "Dodge Rolling ";
+			break;
+		case 2:
+			std::cout << "Extra Shots" << '\n';
+			break;
 		}
-		break;
-	case 2:
-		std::cout << "Extra Shots" << '\n';
-		break;
+		std::cout << "Switch Executed";
+		player.specialMeter = 0;
 	}
-	player.specialMeter = 0;
 }
 
 bool DodgeRoll(Player& player)
 {
 	static bool animationActive = false;
-	float dodgeOffset = 40.0f;
+	static int dir = 1;
+
+	float dodgeOffset = 70.0f;
+	static float distMoved = 0.0f;
+	int speed = 20;
+
+	if (player.dir.x != 0)
+		dir = player.dir.x;
 
 	if (!animationActive)
 	{
 		player.active = false;
 		animationActive = true;
 		player.specialActive = true;
+		player.specialMeter = 0;
+		std::cout << "Animation Started" << std::endl;
+		//dir = Vector2Normalize(player.direction).x;
+		//std::cout << "direction: " << dir;
 	}
 	else
 	{
-		player.rec.x += dodgeOffset * 0.2f;
-		if (player.rec.x >= dodgeOffset)
+		float movingDist = speed * dir;
+		float x = player.rec.x;
+		player.rec.x += movingDist;
+		distMoved += std::abs(x - player.rec.x);
+		
+		if (distMoved >= dodgeOffset)
 		{
 			animationActive = false;
+			distMoved = 0.0f;
+			std::cout << "Animation Ended" << std::endl;
 		}
 	}
-
-
 	return animationActive;
 }
 
@@ -208,6 +234,10 @@ void BulletsHit(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 			enemy->Die();
 			gEnemyKilled(game, enemy);
 			game.player.specialMeter += game.player.specialIncrement;
+			if (game.player.specialMeter > game.player.specialFullLevel)
+			{
+				game.player.specialMeter = game.player.specialFullLevel;
+			}
 		}
 
 		game.player.playerBullets.erase(std::remove_if(game.player.playerBullets.begin(), game.player.playerBullets.end(), [&enemy](const Bullet& blt) {
