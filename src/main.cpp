@@ -1,4 +1,6 @@
 #include "gameAssets.hpp"
+#include <chrono>
+#include <format>
 #include <raylib.h>
 #include <raymath.h>
 #include <rlImGui.h>
@@ -44,6 +46,8 @@ int main()
 	Shader bloom = LoadShader(0, "resources/shader/bloom_fragment.glsl");
 	GameAssets::gameFont = LoadFont("resources/TitilliumWeb-SemiBold.ttf");
 	SetTextureFilter(GameAssets::gameFont.texture, TEXTURE_FILTER_POINT);
+
+	int screenShotIndex = 0;
 	//! Game loop
 	while (!WindowShouldClose())
 	{
@@ -144,8 +148,16 @@ int main()
 			Rectangle{0, 0, (float)target.texture.width, (float)-target.texture.height},
 			{},
 			WHITE);
+		if (IsKeyPressed(KEY_F12))
+		{
+			auto t = std::chrono::system_clock::now();
+			std::string s = std::format("{:%d-%m-%Y %H_%M_%OS}", t);
+			std::string filename = "ss" + s + ".png";
+			TakeScreenshot(filename.c_str());
+		}
 
 		EndShaderMode();
+
 
 		gDrawingEnd(game);
 	}

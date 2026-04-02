@@ -60,6 +60,7 @@ void gInitGame(Game& game)
 void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
 	PlayerRestart(game.player);
+	game.player.specialMeter = 0;
 
 	game.player.lives = 3;
 	game.wave = 1;

@@ -35,6 +35,7 @@ void DrawUI(UIAssets& assets, Game& game)
 
 void DrawGameOver(UIAssets& assets, Game& game)
 {
+	// NOTE: This code is for sickos
 	int fontSize = 40;
 	Vector2 textWidth = MeasureTextEx(GameAssets::gameFont, "GAME OVER", fontSize, 0.0f);
 	int x = (GetScreenWidth() / 2.0f) - (textWidth.x / 2.0f);
@@ -49,7 +50,7 @@ void DrawGameOver(UIAssets& assets, Game& game)
 
 	str = TextFormat("Score: %d", game.score);
 	textWidth = MeasureTextEx(GameAssets::gameFont, str, fontSize, 0.0f);
-	DrawTextEx(GameAssets::gameFont, str, {(GetScreenWidth() * 0.45f) - (textWidth.x * 0.5f), (GetScreenHeight() * 0.45f) - textWidth.y}, fontSize, 0.0f, RAYWHITE);
+	DrawTextEx(GameAssets::gameFont, str, {(GetScreenWidth() * 0.5f) - (textWidth.x * 0.5f), (GetScreenHeight() * 0.45f) - textWidth.y}, fontSize, 0.0f, RAYWHITE);
 
 	Button btn = assets.btns["Restart"];
 	DrawButton(btn);
@@ -254,6 +255,8 @@ void DrawGridLines(int screenWidth, int screenHeight, int cellSize)
 
 void DrawSpecialMeter(UIAssets& assets, Player& player)
 {
+	if (player.selectedShipIndex == 0)
+		return;
 	float specialPercentage = (float)player.specialMeter / (float)player.specialFullLevel;
 	DrawRectangle(20.0f, 60.0f, 100.0f * specialPercentage, 30.0f, BLUE);
 }
