@@ -54,7 +54,7 @@ struct Ship : Enemy
 struct SinwaveShooter : Enemy
 {
 	BulletSpawner bltSpawner;
-	float shootAngle;
+	float shootAngle = 0.0f;
 	float sinMultiplier = 0.0f;
 	void Update(EnemyUpdateContext& ctx) override;
 	void Draw() override;

@@ -39,6 +39,8 @@ struct Player
 
 	int selectedShipIndex = 0;
 	std::array<Texture2D, 3> shipTextures;
+
+	BulletSpawner extraBulletsSpawner = MakeSpawner({rec.x, rec.y}, 0.1f);
 };
 
 void pLoadTxt(Player& player);
@@ -54,6 +56,7 @@ void CheckEffects(Player& player);
 
 void SpecialAbility(Player& player);
 bool DodgeRoll(Player& player);
+bool ExtraShots(Player& player);
 
 void BulletsHit(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies);
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies);
