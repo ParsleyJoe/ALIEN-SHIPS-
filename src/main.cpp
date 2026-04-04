@@ -28,12 +28,15 @@ int main()
 	gInitGame(game);
 	gLoadTextures(game);
 
+	// Main Enemies vector, now that I think about it maybe its a bad idea to use polymorphism, but
+	// I havent have any problems because of it so its being kept
 	std::vector<std::unique_ptr<Enemy>> enemies; // NOTE: Polymorphism to store any enemy type
 	std::vector<Star> stars;
 
 	// Init Spawners and Holder
 	InitSpawners(game.spawnerHolder);
 
+	// Buttons map, and other assets
 	UIAssets uiAssets;
 	InitUI(uiAssets);
 
@@ -42,13 +45,15 @@ int main()
 	starSpawner.enemyAmmount = 40;
 	starSpawner.spawnInterval = 2.0f;
 
+	// Shaders
 	RenderTexture2D target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 	Shader bloom = LoadShader(0, "resources/shader/bloom_fragment.glsl");
+
+	// GameFont
 	GameAssets::gameFont = LoadFont("resources/TitilliumWeb-SemiBold.ttf");
 	SetTextureFilter(GameAssets::gameFont.texture, TEXTURE_FILTER_POINT);
 
-	int screenShotIndex = 0;
-	//! Game loop
+	// Game loop
 	while (!WindowShouldClose())
 	{
 		if (IsKeyPressed(KEY_ESCAPE) && game.currentScene == Scene::GAME)
@@ -63,6 +68,7 @@ int main()
 				game.active = false;
 				game.currentScene = Scene::GAME_OVER;
  
+				// All we need for saving, for now
 				SaveData sav = gGetSaveData(game);
 				sfs::writeEntireFileWithCheckSum( (void*)&sav, sizeof(SaveData), GameAssets::saveFileName);
 			}
@@ -73,6 +79,7 @@ int main()
 			PowerUpCollision(game.player);
 
 			// Enemy Spawning
+			// After this the functions go in a heirarchial order to spawn types of enemies
 			StartSpawning(game.wave, enemies, game.spawnerHolder, &game.player);
 			
 			EnemyUpdateContext context = { enemies };
@@ -96,6 +103,7 @@ int main()
 		// -----------------------------------------------
 		BeginTextureMode(target);
 
+		// Drawing everything first to the renderTexture
 		ClearBackground(Color{ 13, 13, 13, 255 });
 		DrawUI(uiAssets, game);
 		UIUpdate(uiAssets, game, enemies);
@@ -143,11 +151,14 @@ int main()
 
 		BeginShaderMode(bloom);
 
+		// Drawing The render Texture on Shaders
 		DrawTextureRec(
 			target.texture, 
 			Rectangle{0, 0, (float)target.texture.width, (float)-target.texture.height},
 			{},
 			WHITE);
+
+		// To Take Screenshots
 		if (IsKeyPressed(KEY_F12))
 		{
 			auto t = std::chrono::system_clock::now();
