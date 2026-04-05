@@ -27,6 +27,7 @@ int main()
 	// Initialize Raylib and Load game textures
 	gInitGame(game);
 	gLoadTextures(game);
+	gLoadSounds(game);
 
 	// Main Enemies vector, now that I think about it maybe its a bad idea to use polymorphism, but
 	// I havent have any problems because of it so its being kept
@@ -53,6 +54,7 @@ int main()
 	GameAssets::gameFont = LoadFont("resources/TitilliumWeb-SemiBold.ttf");
 	SetTextureFilter(GameAssets::gameFont.texture, TEXTURE_FILTER_POINT);
 
+	Color backgroundColor = { 13, 13, 13, 255 };
 	// Game loop
 	while (!WindowShouldClose())
 	{
@@ -104,7 +106,7 @@ int main()
 		BeginTextureMode(target);
 
 		// Drawing everything first to the renderTexture
-		ClearBackground(Color{ 13, 13, 13, 255 });
+		ClearBackground(backgroundColor);
 		DrawUI(uiAssets, game);
 		UIUpdate(uiAssets, game, enemies);
 		if (game.currentScene == Scene::MAIN_MENU)
@@ -147,7 +149,7 @@ int main()
 
 		gDrawingBegin();
 
-		ClearBackground(Color{ 13, 13, 13, 255 });
+		ClearBackground(backgroundColor);
 
 		BeginShaderMode(bloom);
 
@@ -176,6 +178,7 @@ int main()
 	rlImGuiShutdown();
 
 	CloseWindow();
+	CloseAudioDevice();
 
 	return 0;
 }

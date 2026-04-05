@@ -24,22 +24,28 @@ void gLoadTextures(Game& game)
 	GameAssets::asteroidSprite = LoadTexture("resources/assteroid.png");
 	GameAssets::sinSprite = LoadTexture("resources/sinShooter.png");
 	GameAssets::enemyBulletSprite = LoadTexture("resources/enemyBullet.png");
+	GameAssets::creeperSprite = LoadTexture("resources/creeper.png");
 
 	GameAssets::powerUpSprites["Speed"] = LoadTexture("resources/speed.png");
 	GameAssets::powerUpSprites["Power"] = LoadTexture("resources/power.png");
 	GameAssets::powerUpSprites["OneUp"] = LoadTexture("resources/gear.png");
 }
 
+void gLoadSounds(Game& game)
+{
+	pLoadSounds(game.player);
+}
 
 
 void gInitGame(Game& game)
 {
 	InitWindow(800, 600, "SpaceGame");
 	SetTargetFPS(60);
-
 	SetExitKey(KEY_F4);
+	InitAudioDevice();
 
 	rlImGuiSetup(true);
+
 
 	imguiThemes::embraceTheDarkness();
 

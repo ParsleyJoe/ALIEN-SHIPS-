@@ -41,9 +41,13 @@ struct Player
 	std::array<Texture2D, 3> shipTextures;
 
 	BulletSpawner extraBulletsSpawner = MakeSpawner({rec.x, rec.y}, 0.1f);
+
+	Sound shootSound{};
 };
 
 void pLoadTxt(Player& player);
+
+void pLoadSounds(Player& player);
 
 void DrawPlayer(Player& player);
 

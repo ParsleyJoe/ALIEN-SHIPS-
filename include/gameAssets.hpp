@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "bulletSpawning.hpp"
+#include "sound.hpp"
 #include <powerup.hpp>
 
 
@@ -26,6 +27,8 @@ namespace GameAssets
 	inline Texture2D fodderSprite;
 	inline Texture2D sinSprite;
 	inline Texture2D asteroidSprite;
+	inline Texture2D creeperSprite;
+
 	inline std::map<std::string, Texture2D> powerUpSprites; // Speed, Power, OneUp
 	constexpr inline Rectangle bullet = { 0, 0, 5, 10 }; // note: x, y, width, height
 	
@@ -34,4 +37,6 @@ namespace GameAssets
 	inline float gameStartTime = 0.0f;
 
 	inline Font gameFont;
+
+	inline SoundChannel mainSoundChannel;
 }

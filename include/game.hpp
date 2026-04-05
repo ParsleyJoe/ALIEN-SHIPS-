@@ -13,7 +13,7 @@ struct Game {
 	bool active = false;
 	SpawnerHolder spawnerHolder;
 	Scene currentScene = Scene::MAIN_MENU;
-	
+
 	int score = 0;
 };
 
@@ -28,6 +28,7 @@ void gDrawingBegin();
 void gDrawingEnd(Game& game);
 
 void gLoadTextures(Game& game);
+void gLoadSounds(Game& game);
 
 void gRestartGame(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies);
 

@@ -18,6 +18,12 @@ void Enemy::Die()
 
 	if (chance(gen) == 0)
 		SpawnPowerUp({rec.x, rec.y});
+	PlaySound(dieSound);
+}
+
+Enemy::Enemy()
+{
+	dieSound = LoadSound("resources/sounds/enemydie.wav");
 }
 
 // NOTE: Fodder Functions
@@ -257,7 +263,7 @@ Creeper::Creeper()
 
 void Creeper::Draw()
 {
-	DrawRectangleRec(rec, RED);
+	DrawTexture(GameAssets::creeperSprite, rec.x, rec.y, WHITE);
 }
 
 void Creeper::Update(EnemyUpdateContext& ctx)

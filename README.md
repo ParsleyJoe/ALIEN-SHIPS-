@@ -7,7 +7,7 @@ Work in progress project, endless bullet hell made in Raylib.
 Cmake Project, build by:
 
 ```
-cmake --preset ninja-debug
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DPRODUCTION_BUILD=ON
 cmake --build build/
 ```
 

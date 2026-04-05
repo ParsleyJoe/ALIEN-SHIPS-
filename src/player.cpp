@@ -15,14 +15,18 @@
 void pLoadTxt(Player& player)
 {
 	player.shipTextures[0] = LoadTexture("resources/ship.png");
-	player.shipTextures[1] = LoadTexture("resources/rollingship.png");
-	player.shipTextures[2] = LoadTexture("resources/extrabulletsship.png");
+	player.shipTextures[1] = LoadTexture("resources/dodgeRollShip.png");
+	player.shipTextures[2] = LoadTexture("resources/extraShotsShip.png");
 	player.bulletSprite = LoadTexture("resources/bullet.png");
 
 	// NOTE: maybe move this out
 	player.extraBulletsSpawner.direction = {0.2f, -1};
 }
 
+void pLoadSounds(Player& player)
+{
+	player.shootSound = LoadSound("resources/sounds/playerShoot.wav");
+}
 
 void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
@@ -129,6 +133,7 @@ void SpecialAbility(Player& player)
 		case 1:
 			if (!DodgeRoll(player))
 			{
+				std::cout << "Done Rolling" << '\n';
 				player.specialActive = false;
 				player.active = true;
 			}
@@ -191,7 +196,7 @@ bool DodgeRoll(Player& player)
 	static bool animationActive = false;
 	static int dir = 1;
 
-	float dodgeOffset = 70.0f;
+	float dodgeOffset = 170.0f;
 	static float distMoved = 0.0f;
 	int speed = 20;
 
@@ -243,6 +248,7 @@ void ShootBullet(Player& player, Rectangle bullet)
 		player.playerBullets.push_back(blt);
 
 		player.lastShot = GetTime();
+		PlaySound(player.shootSound);
 	}
 
 	// Remove Bullets out of bounds
