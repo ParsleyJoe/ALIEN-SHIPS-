@@ -1,15 +1,14 @@
 {
-  "version": 3,
-  "configurePresets": [
-    {
-      "name": "ninja-debug",
-      "displayName": "Ninja Debug",
-      "generator": "Ninja",
-      "binaryDir": "build/ninja-debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-	"CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-      }
-    }
-]
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "vs-fix",
+            "displayName": "Use System CMake",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build",
+            "cacheVariables": {
+                "CMAKE_MAKE_PROGRAM": "C:/Program Files/CMake/bin/ninja.exe"
+            }
+        }
+    ]
 }

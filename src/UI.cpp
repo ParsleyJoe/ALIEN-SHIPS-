@@ -26,6 +26,15 @@ void DrawUI(UIAssets& assets, Game& game)
 		DrawEffectTimers(game.player);
 		DrawScore(game);
 		DrawSpecialMeter(assets, game.player);
+		if (!game.active)
+		{
+			// Gray panel
+			DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(GRAY, 0.5f));
+
+			DrawCenteredText(GameAssets::gameFont, "Paused", GetScreenHeight() * 0.45f, 40, 0.0f, LIGHTGRAY);
+			DrawButton(assets.btns["Restart"]);
+			DrawButton(assets.btns["Menu"]);
+		}
 		break;
 	case Scene::GAME_OVER:
 		DrawGameOver(assets, game);
@@ -170,13 +179,13 @@ void InitUI(UIAssets& assets)
 	Button restartBtn;
 	restartBtn.text = "Restart";
 	restartBtn.txtColor = RAYWHITE;
-	restartBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 50.0f, (GetScreenHeight() / 2.0f) + 20.0f, 120, 50 };
+	restartBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) + 20.0f, 120, 50 };
 	restartBtn.fontSize = 20;
 	restartBtn.color = GRAY;
 	assets.btns.insert({"Restart", restartBtn});
 
 	Button menuBtn;
-	menuBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 50.0f, (GetScreenHeight() / 2.0f) + 80.0f, 120, 50 };
+	menuBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) + 80.0f, 120, 50 };
 	menuBtn.text = "Menu";
 	menuBtn.txtColor = RAYWHITE;
 	menuBtn.fontSize = 20;
@@ -213,6 +222,16 @@ void UIUpdate(UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>
 			CycleSelectedShip(game.player, 1);
 		break;
         case Scene::GAME:
+		if (!game.active)
+		{
+			if (IsButtonClicked(uiAssets.btns["Restart"]))
+				gRestartGame(game, enemies);
+			if (IsButtonClicked(uiAssets.btns["Menu"]))
+			{
+				game.currentScene = Scene::MAIN_MENU;
+				game.active = false;
+			}
+		}
 		break;
         case Scene::GAME_OVER:
 		if (IsButtonClicked(uiAssets.btns["Restart"]))

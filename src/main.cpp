@@ -107,7 +107,6 @@ int main()
 
 		// Drawing everything first to the renderTexture
 		ClearBackground(backgroundColor);
-		DrawUI(uiAssets, game);
 		UIUpdate(uiAssets, game, enemies);
 		if (game.currentScene == Scene::MAIN_MENU)
 		{
@@ -135,15 +134,13 @@ int main()
 			{
 				blt.Draw();
 			}
-			if (!game.active)
-			{
-				DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(GRAY, 0.5f));
-				DrawText("Paused", 600, 300, 40, GRAY);
-			}
+
 		}
 		else if (game.currentScene == Scene::GAME_OVER)
 		{
 		}
+		DrawUI(uiAssets, game);
+
 
 		EndTextureMode();
 

@@ -3,14 +3,7 @@
 # Future Features
 
     - Different Ships and ship abilities
-        - Dodge rolling ship
-        - ability to get a extra wide shot
-        - ability to activate shield at will
-    == Extension of Abilites
-        - Special Meter
-        - Better Sprites [This dude man]
-        - Actually applying the specials
-
+        - [MAYBE] ability to activate shield at will
 
 # Enemy Types
 	- "Explodes" bullets around a radius
