@@ -84,7 +84,8 @@ void DrawPlayer(Player& player)
 {
 	DrawRectangleLines(player.rec.x, player.rec.y, player.rec.width, player.rec.height, RED);
 
-	DrawTexture(player.shipTextures[player.selectedShipIndex], player.rec.x, player.rec.y, WHITE);
+	auto& tex = player.shipTextures[player.selectedShipIndex];
+	DrawTexturePro(tex, {0.0f, 0.0f, (float)tex.width, (float)tex.height}, player.rec, {0.0f}, 0.0f, WHITE);
 }
 
 void MovePlayer(Player& player)

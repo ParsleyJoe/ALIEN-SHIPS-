@@ -20,6 +20,7 @@ void DrawUI(UIAssets& assets, Game& game)
 	{
 	case Scene::MAIN_MENU:
 		DrawMainMenu(assets, game.player);
+		DrawButton(assets.btns["Settings"]);
 		break;
 	case Scene::GAME:
 		DrawLives(game);
@@ -39,9 +40,67 @@ void DrawUI(UIAssets& assets, Game& game)
 	case Scene::GAME_OVER:
 		DrawGameOver(assets, game);
 		break;
+	case Scene::SETTINGS:
+		DrawButton(assets.btns["SettingsBack"]);
+		DrawButton(assets.btns["LeftCycle"]);
+		DrawButton(assets.btns["RightCycle"]);
+		int vol = GetMasterVolume() * 10.0f;
+
+		DrawCenteredText(GameAssets::gameFont, "Volume", GetScreenHeight() * 0.4f, 30, 0.0f, RAYWHITE);
+		DrawCenteredText(GameAssets::gameFont, TextFormat("%d", vol), GetScreenHeight() * 0.45f, 30.0f, 0.0f, RAYWHITE);
+		break;
 	}
 }
 
+void UIUpdate(UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies)
+{
+	switch (game.currentScene)
+	{
+        case Scene::MAIN_MENU:
+		if (IsButtonClicked(uiAssets.btns["Start"]))
+			gRestartGame(game, enemies);
+
+
+		if (IsButtonClicked(uiAssets.btns["LeftCycle"]))
+			CycleSelectedShip(game.player, -1);
+		if (IsButtonClicked(uiAssets.btns["RightCycle"]))
+			CycleSelectedShip(game.player, 1);
+
+		if (IsButtonClicked(uiAssets.btns["Settings"]))
+			game.currentScene = Scene::SETTINGS;
+
+		break;
+        case Scene::GAME:
+		if (!game.active)
+		{
+			if (IsButtonClicked(uiAssets.btns["Restart"]))
+				gRestartGame(game, enemies);
+			if (IsButtonClicked(uiAssets.btns["Menu"]))
+			{
+				game.currentScene = Scene::MAIN_MENU;
+				game.active = false;
+			}
+		}
+		break;
+        case Scene::GAME_OVER:
+		if (IsButtonClicked(uiAssets.btns["Restart"]))
+			gRestartGame(game, enemies);
+		if (IsButtonClicked(uiAssets.btns["Menu"]))
+		{
+			game.currentScene = Scene::MAIN_MENU;
+		}
+		break;
+        case Scene::SETTINGS:
+		if (IsButtonClicked(uiAssets.btns["SettingsBack"]))
+      			game.currentScene = Scene::MAIN_MENU;
+
+		if (IsButtonClicked(uiAssets.btns["LeftCycle"]))
+			SetMasterVolume(GetMasterVolume() - 0.1f);
+		if (IsButtonClicked(uiAssets.btns["RightCycle"]))
+			SetMasterVolume(GetMasterVolume() + 0.1f);
+		break;
+        }
+}
 void DrawGameOver(UIAssets& assets, Game& game)
 {
 	// NOTE: This code is for sickos
@@ -91,7 +150,7 @@ void DrawMainMenu(UIAssets& assets, Player& player)
 	float rightOffset = 60.0f;
 	std::string special = "None:";
 
-	DrawText("Special: ", GetScreenWidth() - rightOffset - xLen.x, (GetScreenHeight() / 2.0f) - (sizeIncrease * 1.4f) - 50.0f - xLen.y, fontSize, RAYWHITE);
+	DrawText("Special: ", GetScreenWidth() - (rightOffset * 1.4f) - xLen.x, (GetScreenHeight() / 2.0f) - (sizeIncrease * 1.4f) - 50.0f - xLen.y, fontSize, RAYWHITE);
 
 	// Draw Special for selected ship
 	switch (player.selectedShipIndex) 
@@ -205,44 +264,20 @@ void InitUI(UIAssets& assets)
 	rightCycle.rec = {(GetScreenWidth() / 2.0f) + 70.0f , (GetScreenHeight() / 2.0f) - 30, 50.0f, 40.0f};
 	rightCycle.srcRec = {0.0f, 0.0f, (float)leftCycle.customSprite.width, (float)leftCycle.customSprite.height};
 	assets.btns.insert({"RightCycle", rightCycle});
+
+	Button settingsBtn;
+	settingsBtn.rec = {GetScreenWidth() - 50.0f, GetScreenHeight() - 50.0f, 30.0f, 30.0f};
+	settingsBtn.customSprite = GameAssets::powerUpSprites["OneUp"];
+	settingsBtn.srcRec = {0.0f, 0.0f, (float)settingsBtn.customSprite.width, (float)settingsBtn.customSprite.height};
+	assets.btns.insert({"Settings", settingsBtn});
+
+	Button settingsBackBtn;
+	settingsBackBtn.rec = {GetScreenWidth() - 50.0f, GetScreenHeight() - 50.0f, 30.0f, 30.0f};
+	settingsBackBtn.customSprite = rightCycle.customSprite;
+	settingsBackBtn.srcRec = rightCycle.srcRec;
+	assets.btns.insert({"SettingsBack", settingsBackBtn});
 }
 
-void UIUpdate(UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>> &enemies)
-{
-	switch (game.currentScene)
-	{
-        case Scene::MAIN_MENU:
-		if (IsButtonClicked(uiAssets.btns["Start"]))
-			gRestartGame(game, enemies);
-
-
-		if (IsButtonClicked(uiAssets.btns["LeftCycle"]))
-			CycleSelectedShip(game.player, -1);
-		if (IsButtonClicked(uiAssets.btns["RightCycle"]))
-			CycleSelectedShip(game.player, 1);
-		break;
-        case Scene::GAME:
-		if (!game.active)
-		{
-			if (IsButtonClicked(uiAssets.btns["Restart"]))
-				gRestartGame(game, enemies);
-			if (IsButtonClicked(uiAssets.btns["Menu"]))
-			{
-				game.currentScene = Scene::MAIN_MENU;
-				game.active = false;
-			}
-		}
-		break;
-        case Scene::GAME_OVER:
-		if (IsButtonClicked(uiAssets.btns["Restart"]))
-			gRestartGame(game, enemies);
-		if (IsButtonClicked(uiAssets.btns["Menu"]))
-		{
-			game.currentScene = Scene::MAIN_MENU;
-		}
-		break;
-        }
-}
 
 void DrawCenteredText(Font font, const char* text, float y, float size, float spacing, Color color)
 {

@@ -27,7 +27,7 @@ struct Player
 	float lastShot = 0;
 	std::vector<Bullet> playerBullets;
 
-	Rectangle rec = { 500.0f, 350.0f, 33, 33 };
+	Rectangle rec = { 500.0f, 350.0f, 40, 40 };
 	Texture2D bulletSprite;
 
 	int baseSpeed = 7;
