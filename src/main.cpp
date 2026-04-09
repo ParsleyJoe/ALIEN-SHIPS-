@@ -172,8 +172,8 @@ int main()
 		gDrawingEnd(game);
 	}
 
-	rlImGuiShutdown();
 
+	rlImGuiShutdown();
 	CloseWindow();
 	CloseAudioDevice();
 

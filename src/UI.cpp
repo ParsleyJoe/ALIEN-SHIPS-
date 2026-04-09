@@ -208,6 +208,9 @@ void DrawEffectTimers(Player& player)
 		case PowerUpType::ONEUP:
 			break;
 		case PowerUpType::SHIELD:
+			DrawTexturePro(GameAssets::powerUpSprites["Shield"], {0.0f, 0.0f, (float)GameAssets::powerUpSprites["Shield"].width, (float)GameAssets::powerUpSprites["Shield"].height},
+		  		destRect, {0.0f}, 0.0f, WHITE
+		  	);
 			break;
                 }
                 float progress = effect.timeLeft / effect.totalTime;

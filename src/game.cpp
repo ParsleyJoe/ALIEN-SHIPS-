@@ -29,6 +29,7 @@ void gLoadTextures(Game& game)
 	GameAssets::powerUpSprites["Speed"] = LoadTexture("resources/speed.png");
 	GameAssets::powerUpSprites["Power"] = LoadTexture("resources/power.png");
 	GameAssets::powerUpSprites["OneUp"] = LoadTexture("resources/gear.png");
+	GameAssets::powerUpSprites["Shield"] = LoadTexture("resources/shield.png");
 }
 
 void gLoadSounds(Game& game)

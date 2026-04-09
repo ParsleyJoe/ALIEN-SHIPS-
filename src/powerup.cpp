@@ -2,7 +2,6 @@
 #include "player.hpp"
 #include <algorithm>
 #include <iostream>
-#include <memory>
 #include <powerup.hpp>
 #include <raylib.h>
 
@@ -22,7 +21,7 @@ void SpawnPowerUp(Vector2 pos)
 		powerUp.sprite = GameAssets::powerUpSprites["OneUp"];
 		break;
 	case PowerUpType::SHIELD:
-		std::cout << "Shield Sprite not loaded [powerup.cpp]\n";
+		powerUp.sprite = GameAssets::powerUpSprites["Shield"];
 		break;
 	}
 	GameAssets::powerUps.push_back(powerUp);
