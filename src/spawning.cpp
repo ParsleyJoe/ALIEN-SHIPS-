@@ -2,6 +2,7 @@
 #include <iostream>
 #include "gameAssets.hpp"
 #include "enemy.hpp"
+#include "player.hpp"
 #include "raylib.h"
 #include <algorithm>
 #include <memory>
@@ -233,8 +234,17 @@ void SpawnCreeper(std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner
 	if (gameTime - spawner.lastSpawnTime >= spawner.spawnInterval)
 	{
 		std::unique_ptr<Creeper> creeper = std::make_unique<Creeper>();
-		creeper->rec.x = 300;
-		creeper->rec.y = 300;
+
+		Vector2 pos = {300, 300};
+		float dist = Vector2Distance(pos, {player->rec.x, player->rec.y});
+
+		if (dist <= 100.0f)
+		{
+			pos.x += 200.0f;
+		}
+
+		creeper->rec.x = pos.x;
+		creeper->rec.y = pos.y;
 		creeper->player = player;
 		enemies.push_back(std::move(creeper));
 		spawner.lastSpawnTime = gameTime;
