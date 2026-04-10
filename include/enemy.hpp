@@ -26,7 +26,6 @@ struct Enemy
 	bool alive = true;
 
 	int scoreIncrement = 5;
-	Sound dieSound{};
 
 	virtual void Draw() = 0;
 	virtual void Update(EnemyUpdateContext& ctx) = 0;

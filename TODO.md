@@ -2,8 +2,11 @@
 
 # Future Features
 
-    - Different Ships and ship abilities
-        - [MAYBE] ability to activate shield at will
+    - Creeper doesnt explode
+    - Barrier sprite doesnt exist
+    - UI is still kinda whack
+
+
 
 # Enemy Types
 	- "Explodes" bullets around a radius

@@ -35,6 +35,8 @@ void gLoadTextures(Game& game)
 void gLoadSounds(Game& game)
 {
 	pLoadSounds(game.player);
+	GameAssets::enemyHitSound = LoadSound("resources/sounds/enemyHit.wav");
+	GameAssets::enemyDieSound = LoadSound("resources/sounds/enemyDie.wav");
 }
 
 

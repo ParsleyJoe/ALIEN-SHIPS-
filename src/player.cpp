@@ -25,7 +25,8 @@ void pLoadTxt(Player& player)
 
 void pLoadSounds(Player& player)
 {
-	player.shootSound = LoadSound("resources/sounds/playerShoot.wav");
+//	player.shootSound = LoadSound("resources/sounds/playerShoot.wav");
+	player.powerUpSound = LoadSound("resources/sounds/powerUp.wav");
 }
 
 void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
@@ -249,7 +250,9 @@ void ShootBullet(Player& player, Rectangle bullet)
 		player.playerBullets.push_back(blt);
 
 		player.lastShot = GetTime();
-		PlaySound(player.shootSound);
+
+		// Sounds bad with so many bullets
+		// PlaySound(player.shootSound);
 	}
 
 	// Remove Bullets out of bounds
@@ -272,7 +275,10 @@ void BulletsHit(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 				if (enemy->health <= 0)
 					enemy->alive = false;
 				else
+				{
 					enemy->health -= 20;
+					PlaySound(GameAssets::enemyHitSound);
+				}
 			}
 		}
 	}
@@ -327,6 +333,7 @@ bool PlayerStartAnimation(Player& player)
 void AddPowerUpEffect(Player& player, PowerUp powerUp)
 {
 	PowerUpEffect effect;
+	PlaySound(player.powerUpSound);
 	effect = {.type = powerUp.type, .timeLeft = effect.totalTime};
 	player.activeEffects.push_back(effect);
 }

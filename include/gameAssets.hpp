@@ -3,12 +3,11 @@
 #include <string>
 #include <vector>
 #include "bulletSpawning.hpp"
-#include "sound.hpp"
 #include <powerup.hpp>
 
-
-
-#define DEBUG 0
+#ifndef DEBUG
+#define DEBUG 1
+#endif
 
 // Global Variables
 // ----------------
@@ -37,6 +36,6 @@ namespace GameAssets
 	inline float gameStartTime = 0.0f;
 
 	inline Font gameFont;
-
-	inline SoundChannel mainSoundChannel;
+	inline Sound enemyHitSound;
+	inline Sound enemyDieSound;
 }

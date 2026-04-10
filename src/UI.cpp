@@ -98,6 +98,7 @@ void UIUpdate(UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>
 			SetMasterVolume(GetMasterVolume() - 0.1f);
 		if (IsButtonClicked(uiAssets.btns["RightCycle"]))
 			SetMasterVolume(GetMasterVolume() + 0.1f);
+
 		break;
         }
 }

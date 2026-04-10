@@ -43,6 +43,7 @@ struct Player
 	BulletSpawner extraBulletsSpawner = MakeSpawner({rec.x, rec.y}, 0.1f);
 
 	Sound shootSound{};
+	Sound powerUpSound{};
 };
 
 void pLoadTxt(Player& player);

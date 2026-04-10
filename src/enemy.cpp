@@ -18,12 +18,11 @@ void Enemy::Die()
 
 	if (chance(gen) == 0)
 		SpawnPowerUp({rec.x, rec.y});
-	PlaySound(dieSound);
+	PlaySound(GameAssets::enemyDieSound);
 }
 
 Enemy::Enemy()
 {
-	dieSound = LoadSound("resources/sounds/enemydie.wav");
 }
 
 // NOTE: Fodder Functions
