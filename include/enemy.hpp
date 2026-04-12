@@ -29,7 +29,7 @@ struct Enemy
 
 	virtual void Draw() = 0;
 	virtual void Update(EnemyUpdateContext& ctx) = 0;
-	void Die();
+	virtual void Die();
 	Enemy();
 };
 
@@ -110,7 +110,12 @@ struct Creeper : Enemy
 {
 	int speed = 4;
 	Player* player;
+	float explodeFor = 1.0f;
+	float explosionRadius = 40.0f;
+	bool exploding = false;
 	void Draw() override;
 	void Update(EnemyUpdateContext& ctx) override;
+	void Move(Vector2& playerPos, Vector2& pos);
+	void Explode();
 	Creeper();
 };

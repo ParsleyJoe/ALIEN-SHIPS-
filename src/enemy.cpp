@@ -6,6 +6,7 @@
 #include <random>
 #include "powerup.hpp"
 #include "gameAssets.hpp"
+#include "raymath.h"
 
 
 // NOTE: Base Enemy Class Functions
@@ -19,6 +20,7 @@ void Enemy::Die()
 	if (chance(gen) == 0)
 		SpawnPowerUp({rec.x, rec.y});
 	PlaySound(GameAssets::enemyDieSound);
+	alive = false;
 }
 
 Enemy::Enemy()
@@ -258,18 +260,56 @@ Creeper::Creeper()
 {
 	health = 40;
 	type = EnemyType::CREEPER;
+	rec = {0.0f, 0.0f, 30.0f, 30.0f};
 }
 
 void Creeper::Draw()
 {
-	DrawTexture(GameAssets::creeperSprite, rec.x, rec.y, WHITE);
+	if (!alive) return;
+	DrawTexturePro(GameAssets::creeperSprite,{0.0f, 0.0f, (float)GameAssets::creeperSprite.width, (float)GameAssets::creeperSprite.height},
+		rec, {}, 0.0f, WHITE);
+
+	if (exploding)
+	{
+		
+		DrawCircleLines(rec.x + (rec.width * 0.5f), rec.y + (rec.height * 0.5f), explosionRadius, RED);
+	}
 }
 
 void Creeper::Update(EnemyUpdateContext& ctx)
 {
+	if (!alive) return;
 	Vector2 playerPos = {player->rec.x, player->rec.y};
-	Vector2 pos =  {rec.x, rec.y};
+	Vector2 pos = {rec.x, rec.y};
+	float dist = Vector2Distance(pos, playerPos);
+
+	if (exploding || dist < explosionRadius)
+	{
+		Explode();
+	}
+	else
+	{
+		Move(playerPos, pos);
+	}
+}
+
+void Creeper::Move(Vector2& playerPos, Vector2& pos)
+{
 	Vector2 dir = Vector2Normalize(Vector2Subtract(playerPos, pos));
 	rec.x += dir.x * speed;
-	rec.y += dir.y * speed;
+	rec.y += dir.y * speed; 
+}
+
+void Creeper::Explode()
+{
+	static float time = 0.0f;
+	if (!exploding) exploding = true;
+	// player->lives--;
+	// PlayerRestart(*player);
+	std::cout << "Exploding" << '\n';
+	time += GetFrameTime();
+	if (time >= explodeFor)
+	{
+		Die();
+	}
 }

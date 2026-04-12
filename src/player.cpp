@@ -27,6 +27,8 @@ void pLoadSounds(Player& player)
 {
 //	player.shootSound = LoadSound("resources/sounds/playerShoot.wav");
 	player.powerUpSound = LoadSound("resources/sounds/powerUp.wav");
+	player.dieSound = LoadSound("resources/sounds/playerDie.wav");
+	player.dieLastSound = LoadSound("resources/sounds/playerDieLast.wav");
 }
 
 void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
@@ -62,6 +64,12 @@ void ContactCollision(Player& player, std::unique_ptr<Enemy>& enemy)
 	{
 		player.lives--;
 		PlayerRestart(player);
+		if (player.lives <= 0)
+		{
+			PlaySound(player.dieLastSound);
+			return;
+		}
+		PlaySound(player.dieSound);
 	}
 }
 
@@ -75,6 +83,11 @@ void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy)
 			{
 				player.lives--;
 				PlayerRestart(player);
+				if (player.lives <= 0)
+				{
+					PlaySound(player.dieLastSound);
+				}
+				PlaySound(player.dieSound);
 			}
 			blt.rec = {GetScreenWidth() + blt.rec.width, GetScreenHeight() + blt.rec.height, 0.0f, 0.0f};
 		}

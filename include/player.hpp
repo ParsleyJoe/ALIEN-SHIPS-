@@ -44,6 +44,8 @@ struct Player
 
 	Sound shootSound{};
 	Sound powerUpSound{};
+	Sound dieSound{};
+	Sound dieLastSound{};
 };
 
 void pLoadTxt(Player& player);
