@@ -53,9 +53,10 @@ void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemie
 		if (enemy->type == EnemyType::CREEPER)
 		{
 			Creeper* creeper = (Creeper*)enemy.get();
+
 			Vector2 center = {creeper->rec.x + (creeper->rec.width * 0.5f), creeper->rec.y + (creeper->rec.height * 0.5f)};
 			bool inRadius = CheckCollisionCircleRec(center, creeper->explosionRadius, player.rec);
-			if (inRadius)
+			if (creeper->exploding && inRadius)
 			{
 				player.lives--;
 				PlayerRestart(player);
@@ -113,7 +114,8 @@ void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy)
 
 void DrawPlayer(Player& player)
 {
-	DrawRectangleLines(player.rec.x, player.rec.y, player.rec.width, player.rec.height, RED);
+	if (DEBUG)
+		DrawRectangleLines(player.rec.x, player.rec.y, player.rec.width, player.rec.height, RED);
 
 	auto& tex = player.shipTextures[player.selectedShipIndex];
 	DrawTexturePro(tex, {0.0f, 0.0f, (float)tex.width, (float)tex.height}, player.rec, {0.0f}, 0.0f, WHITE);

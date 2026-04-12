@@ -70,7 +70,8 @@ Fodder::Fodder()
 // --------------------
 void Ship::Draw()
 {
-	//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, BLACK);
+	if (DEBUG)
+		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, BLACK);
 	DrawTexture(GameAssets::shipSprite, rec.x, rec.y, WHITE);
 }
 
@@ -101,7 +102,8 @@ void SinwaveShooter::Draw()
 	  rec, {rec.width, rec.height}, 180.0f, WHITE);
 	else
 		DrawRectangleRec(rec, BLUE);
-	//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, WHITE);
+	if (DEBUG)
+		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, WHITE);
 }
 SinwaveShooter::SinwaveShooter()
 {
@@ -196,7 +198,9 @@ void Asteroid::Draw()
 	}
 	else
 		DrawCircle(rec.x + (rec.width / 2), rec.y + (rec.height / 2), rec.width / sizeDivider, RED);
-	//DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, GREEN);
+	
+	if (DEBUG)
+		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, GREEN);
 }
 
 void Asteroid::Update(EnemyUpdateContext& ctx)
@@ -268,10 +272,13 @@ void Creeper::Draw()
 	if (!alive) return;
 	DrawTexturePro(GameAssets::creeperSprite,{0.0f, 0.0f, (float)GameAssets::creeperSprite.width, (float)GameAssets::creeperSprite.height},
 		rec, {}, 0.0f, WHITE);
-
-	if (exploding)
+	if (DEBUG)
 	{
-		
+		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, RED);
+	}
+
+	if (exploding && DEBUG)
+	{
 		DrawCircleLines(rec.x + (rec.width * 0.5f), rec.y + (rec.height * 0.5f), explosionRadius, RED);
 	}
 }
