@@ -50,6 +50,23 @@ void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemie
 {
 	for (auto& enemy : enemies)
 	{
+		if (enemy->type == EnemyType::CREEPER)
+		{
+			Creeper* creeper = (Creeper*)enemy.get();
+			Vector2 center = {creeper->rec.x + (creeper->rec.width * 0.5f), creeper->rec.y + (creeper->rec.height * 0.5f)};
+			bool inRadius = CheckCollisionCircleRec(center, creeper->explosionRadius, player.rec);
+			if (inRadius)
+			{
+				player.lives--;
+				PlayerRestart(player);
+				if (player.lives <= 0)
+				{
+					PlaySound(player.dieLastSound);
+					return;
+				}
+				PlaySound(player.dieSound);
+			}
+		}
 		if ((GetTime() - player.lastHit) >= player.hitCooldown)
 		{
 			ContactCollision(player, enemy);

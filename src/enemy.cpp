@@ -304,9 +304,7 @@ void Creeper::Explode()
 {
 	static float time = 0.0f;
 	if (!exploding) exploding = true;
-	// player->lives--;
-	// PlayerRestart(*player);
-	std::cout << "Exploding" << '\n';
+
 	time += GetFrameTime();
 	if (time >= explodeFor)
 	{
