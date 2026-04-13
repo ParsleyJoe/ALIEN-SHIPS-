@@ -270,27 +270,44 @@ Creeper::Creeper()
 void Creeper::Draw()
 {
 	if (!alive) return;
-	DrawTexturePro(GameAssets::creeperSprite,{0.0f, 0.0f, (float)GameAssets::creeperSprite.width, (float)GameAssets::creeperSprite.height},
-		rec, {}, 0.0f, WHITE);
 	if (DEBUG)
 	{
 		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, RED);
 	}
 
-	if (exploding && DEBUG)
+	if (exploding)
 	{
-		DrawCircleLines(rec.x + (rec.width * 0.5f), rec.y + (rec.height * 0.5f), explosionRadius, RED);
+		if (DEBUG)
+			DrawCircleLines(rec.x + (rec.width * 0.5f), rec.y + (rec.height * 0.5f), explosionRadius, RED);
+		
+		float offset = (rec.width) * 0.5f;
+		float whiteSpaceAdjust = 7.0f;
+		Rectangle destRec = {rec.x - offset - whiteSpaceAdjust, rec.y - rec.height * 0.5f - whiteSpaceAdjust, rec.width + explosionRadius + whiteSpaceAdjust, rec.height + explosionRadius + whiteSpaceAdjust};
+		DrawTexturePro(GameAssets::explosionSprite, {0.0f, 0.0f, (float)GameAssets::explosionSprite.width, (float)GameAssets::explosionSprite.width},
+		 destRec, {}, 0.0f, WHITE);
+	}
+	else
+	{
+
+		DrawTexturePro(GameAssets::creeperSprite,{0.0f, 0.0f, (float)GameAssets::creeperSprite.width, (float)GameAssets::creeperSprite.height},
+		 rec, {}, 0.0f, WHITE);
 	}
 }
 
 void Creeper::Update(EnemyUpdateContext& ctx)
 {
 	if (!alive) return;
-	Vector2 playerPos = {player->rec.x, player->rec.y};
-	Vector2 pos = {rec.x, rec.y};
+	Vector2 playerPos = {
+		player->rec.x + player->rec.width / 2.0f,
+		player->rec.y + player->rec.height / 2.0f
+	};
+	Vector2 pos = {
+        rec.x + rec.width / 2.0f,
+        rec.y + rec.height / 2.0f
+	};
 	float dist = Vector2Distance(pos, playerPos);
 
-	if (exploding || dist <= explosionRadius)
+	if (exploding || dist <= explosionRadius + 20.0f)
 	{
 		Explode();
 	}
@@ -316,5 +333,6 @@ void Creeper::Explode()
 	if (time >= explodeFor)
 	{
 		Die();
+		time = 0.0f;
 	}
 }

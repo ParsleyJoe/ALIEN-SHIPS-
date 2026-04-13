@@ -30,7 +30,7 @@ void DrawUI(UIAssets& assets, Game& game)
 		if (!game.active)
 		{
 			// Gray panel
-			DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(GRAY, 0.5f));
+			// DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(GRAY, 0.5f));
 
 			DrawCenteredText(GameAssets::gameFont, "Paused", GetScreenHeight() * 0.45f, 40, 0.0f, LIGHTGRAY);
 			DrawButton(assets.btns["Restart"]);

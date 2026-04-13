@@ -27,6 +27,7 @@ namespace GameAssets
 	inline Texture2D sinSprite;
 	inline Texture2D asteroidSprite;
 	inline Texture2D creeperSprite;
+	inline Texture2D explosionSprite;
 
 	inline std::map<std::string, Texture2D> powerUpSprites; // Speed, Power, OneUp, Shield
 	constexpr inline Rectangle bullet = { 0, 0, 5, 10 }; // note: x, y, width, height
