@@ -290,7 +290,7 @@ void Creeper::Update(EnemyUpdateContext& ctx)
 	Vector2 pos = {rec.x, rec.y};
 	float dist = Vector2Distance(pos, playerPos);
 
-	if (exploding || dist < explosionRadius)
+	if (exploding || dist <= explosionRadius)
 	{
 		Explode();
 	}

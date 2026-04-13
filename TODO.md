@@ -2,10 +2,9 @@
 
 # Future Features
 
-    - Creeper doesnt explode
     - Barrier sprite doesnt exist
     - UI is still kinda whack
-
+    - Add play button in Pause Menu
 
 
 # Enemy Types

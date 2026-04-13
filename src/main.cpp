@@ -4,6 +4,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <rlImGui.h>
+#include <imgui.h>
 
 #include <vector>
 
@@ -55,16 +56,27 @@ int main()
 	SetTextureFilter(GameAssets::gameFont.texture, TEXTURE_FILTER_POINT);
 
 	Color backgroundColor = { 13, 13, 13, 255 };
+	
+	// Normal Volume is kinda much
+	SetMasterVolume(0.6f);
+
 	// Game loop
 	while (!WindowShouldClose())
 	{
 		if (IsKeyPressed(KEY_ESCAPE) && game.currentScene == Scene::GAME)
+		{
 			game.active = !game.active;
+			if (game.active)
+				ResumeMusicStream(game.gameMusic);
+			else
+				PauseMusicStream(game.gameMusic);
+		}
 
 		// Updating Logic ================================
 		// -----------------------------------------------
 		if (game.active)
 		{
+			UpdateMusicStream(game.gameMusic);
 			if (game.player.lives <= 0)
 			{
 				game.active = false;
@@ -113,8 +125,7 @@ int main()
 		}
 		else if (game.currentScene == Scene::GAME)
 		{
-
-
+			
 			DrawStars(stars);
 			DrawPowerUps();
 
@@ -134,7 +145,6 @@ int main()
 			{
 				blt.Draw();
 			}
-
 		}
 		else if (game.currentScene == Scene::GAME_OVER)
 		{
@@ -157,6 +167,7 @@ int main()
 			{},
 			WHITE);
 
+		ImGui::Text("Player Active: %s", game.player.active ? "true" : "false");
 		// To Take Screenshots
 		if (IsKeyPressed(KEY_F12))
 		{
@@ -173,6 +184,7 @@ int main()
 	}
 
 
+	UnloadMusicStream(game.gameMusic);
 	rlImGuiShutdown();
 	CloseWindow();
 	CloseAudioDevice();

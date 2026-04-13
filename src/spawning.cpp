@@ -110,6 +110,8 @@ void SpawnEvents(std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& ho
 	}
 	holder.eventSpawner.lastSpawnTime = gameTime;
 
+	float time = GetRandomValue(5, 9);
+	holder.eventSpawner.spawnInterval = time;
 }
 
 void SpawnEnemies(int& wave, std::vector<std::unique_ptr<Enemy>>& enemies, Spawner& spawner)
@@ -354,6 +356,8 @@ void SpawnBarrier(std::vector<std::unique_ptr<Enemy>>& enemies, SpawnerHolder& h
 	{
 		std::cout << "Spawned Barrier" << std::endl;
 		std::unique_ptr<Barrier> barrier = std::make_unique<Barrier>();
+
+
 		holder.barrierSpawner.lastSpawnTime = gameTime;
 		enemies.push_back(std::move(barrier));
 	}

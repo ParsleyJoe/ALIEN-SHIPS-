@@ -37,6 +37,9 @@ void gLoadSounds(Game& game)
 	pLoadSounds(game.player);
 	GameAssets::enemyHitSound = LoadSound("resources/sounds/enemyHit.wav");
 	GameAssets::enemyDieSound = LoadSound("resources/sounds/enemyDie.wav");
+	
+	game.gameMusic = LoadMusicStream("resources/sounds/music.mp3");
+	game.gameMusic.looping = true;
 }
 
 
@@ -86,6 +89,11 @@ void gRestartGame(Game &game, std::vector<std::unique_ptr<Enemy>>& enemies)
 
 	game.player.playerBullets.clear();
 	InitSpawners(game.spawnerHolder);
+
+	// Restart Music
+	StopMusicStream(game.gameMusic);
+	SeekMusicStream(game.gameMusic, 0.0f);
+	PlayMusicStream(game.gameMusic);
 }
 
 void gEnemyKilled(Game &game, std::unique_ptr<Enemy>& enemy)
@@ -108,8 +116,6 @@ void gDrawingBegin()
 	ImGui::Begin("Test");
 	ImGui::Text("FPS: %i", GetFPS());
 	ImGui::Text("Size of bullets Vector: %zu", GameAssets::enemyBullets.size());
-//	ImGui::Text("Star vector size: %zu", stars.size());
-
 }
 
 void gDrawingEnd(Game& game)

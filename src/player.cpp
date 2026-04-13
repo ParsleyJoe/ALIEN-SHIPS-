@@ -3,6 +3,7 @@
 #include "enemy.hpp"
 #include "game.hpp"
 #include "gameAssets.hpp"
+#include "imgui.h"
 #include "powerup.hpp"
 #include "raylib.h"
 #include "raymath.h"
@@ -119,6 +120,7 @@ void DrawPlayer(Player& player)
 
 	auto& tex = player.shipTextures[player.selectedShipIndex];
 	DrawTexturePro(tex, {0.0f, 0.0f, (float)tex.width, (float)tex.height}, player.rec, {0.0f}, 0.0f, WHITE);
+
 }
 
 void MovePlayer(Player& player)

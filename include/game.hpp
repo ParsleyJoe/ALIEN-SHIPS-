@@ -15,6 +15,7 @@ struct Game {
 	Scene currentScene = Scene::MAIN_MENU;
 
 	int score = 0;
+	Music gameMusic;
 };
 
 struct SaveData {

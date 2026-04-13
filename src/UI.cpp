@@ -35,6 +35,7 @@ void DrawUI(UIAssets& assets, Game& game)
 			DrawCenteredText(GameAssets::gameFont, "Paused", GetScreenHeight() * 0.45f, 40, 0.0f, LIGHTGRAY);
 			DrawButton(assets.btns["Restart"]);
 			DrawButton(assets.btns["Menu"]);
+			DrawButton(assets.btns["Resume"]);
 		}
 		break;
 	case Scene::GAME_OVER:
@@ -79,6 +80,10 @@ void UIUpdate(UIAssets &uiAssets, Game &game, std::vector<std::unique_ptr<Enemy>
 			{
 				game.currentScene = Scene::MAIN_MENU;
 				game.active = false;
+			}
+			if (IsButtonClicked(uiAssets.btns["Resume"]))
+			{
+				game.active = true;
 			}
 		}
 		break;
@@ -235,26 +240,33 @@ void InitUI(UIAssets& assets)
 	startBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) + 90.0f, 120, 50 };
 	startBtn.color = DARKGRAY;
 	startBtn.text = "Play";
-	startBtn.txtColor = WHITE;
+	startBtn.txtColor = RAYWHITE;
 	startBtn.fontSize = 15;
 	assets.btns.insert({"Start", startBtn});
+
+	Button resumeBtn;
+	resumeBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) - 30.0f, 120, 50 };
+	resumeBtn.text = "Resume";
+	resumeBtn.txtColor = RAYWHITE;
+	resumeBtn.fontSize = 20;
+	resumeBtn.color = BLACK;
+	assets.btns.insert({"Resume", resumeBtn});
 
 	Button restartBtn;
 	restartBtn.text = "Restart";
 	restartBtn.txtColor = RAYWHITE;
-	restartBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) + 20.0f, 120, 50 };
+	restartBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) + 30.0f, 120, 50 };
 	restartBtn.fontSize = 20;
-	restartBtn.color = GRAY;
+	restartBtn.color = BLACK;
 	assets.btns.insert({"Restart", restartBtn});
 
 	Button menuBtn;
-	menuBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) + 80.0f, 120, 50 };
+	menuBtn.rec = Rectangle{ (GetScreenWidth() / 2.0f) - 60.0f, (GetScreenHeight() / 2.0f) + 90.0f, 120, 50 };
 	menuBtn.text = "Menu";
 	menuBtn.txtColor = RAYWHITE;
 	menuBtn.fontSize = 20;
-	menuBtn.color = GRAY;
+	menuBtn.color = BLACK;
 	assets.btns.insert({"Menu", menuBtn});
-	
 
 	// Cycling Buttons
 	Button leftCycle;
@@ -280,6 +292,7 @@ void InitUI(UIAssets& assets)
 	settingsBackBtn.customSprite = rightCycle.customSprite;
 	settingsBackBtn.srcRec = rightCycle.srcRec;
 	assets.btns.insert({"SettingsBack", settingsBackBtn});
+
 }
 
 
