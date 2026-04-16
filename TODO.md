@@ -3,9 +3,7 @@
 # Future Features
 
     - Barrier sprite doesnt exist
-    - UI is still kinda whack
-    - Add play button in Pause Menu
-
+    - UI is still kinda whack [hella vague, IDK what to do]
 
 # Enemy Types
 	- "Explodes" bullets around a radius

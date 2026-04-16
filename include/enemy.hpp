@@ -111,6 +111,8 @@ struct Creeper : Enemy
 	int speed = 4;
 	Player* player;
 	float explodeFor = 1.0f;
+	float time = 0.0f;
+
 	float explosionRadius = 40.0f;
 	bool exploding = false;
 	void Draw() override;

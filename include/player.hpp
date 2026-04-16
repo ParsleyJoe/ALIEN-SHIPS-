@@ -56,6 +56,7 @@ void DrawPlayer(Player& player);
 
 void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies);
 void MovePlayer(Player& player);
+void PlayerDie(Player& player);
 void ShootBullet(Player& player, Rectangle bullet);
 
 void AddPowerUpEffect(Player& player, PowerUp powerUp);

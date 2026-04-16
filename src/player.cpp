@@ -49,6 +49,8 @@ void UpdatePlayer(Game& game, std::vector<std::unique_ptr<Enemy>>& enemies)
 // If Enemy Collided with player
 void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies)
 {
+	if (!player.active)
+		return;
 	for (auto& enemy : enemies)
 	{
 		if (enemy->type == EnemyType::CREEPER)
@@ -59,14 +61,7 @@ void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemie
 			bool inRadius = CheckCollisionCircleRec(center, creeper->explosionRadius, player.rec);
 			if (creeper->exploding && inRadius)
 			{
-				player.lives--;
-				PlayerRestart(player);
-				if (player.lives <= 0)
-				{
-					PlaySound(player.dieLastSound);
-					return;
-				}
-				PlaySound(player.dieSound);
+				PlayerDie(player);
 			}
 		}
 		if ((GetTime() - player.lastHit) >= player.hitCooldown)
@@ -77,18 +72,25 @@ void PlayerCollision(Player& player, std::vector<std::unique_ptr<Enemy>>& enemie
 	}
 }
 
+void PlayerDie(Player& player)
+{
+	if (!player.active || player.shieldActive || (GetTime() - player.lastHit) < player.hitCooldown)
+		return;
+	player.lives--;
+	PlayerRestart(player);
+	if (player.lives <= 0)
+	{
+		PlaySound(player.dieLastSound);
+		return;
+	}
+	PlaySound(player.dieSound);
+}
+
 void ContactCollision(Player& player, std::unique_ptr<Enemy>& enemy)
 {
-	if (!player.shieldActive && CheckCollisionRecs(player.rec, enemy->rec))
+	if (CheckCollisionRecs(player.rec, enemy->rec))
 	{
-		player.lives--;
-		PlayerRestart(player);
-		if (player.lives <= 0)
-		{
-			PlaySound(player.dieLastSound);
-			return;
-		}
-		PlaySound(player.dieSound);
+		PlayerDie(player);
 	}
 }
 
@@ -98,16 +100,7 @@ void BulletCollision(Player& player, std::unique_ptr<Enemy>& enemy)
 	{
 		if (CheckCollisionRecs(player.rec, blt.rec))
 		{
-			if (!player.shieldActive)
-			{
-				player.lives--;
-				PlayerRestart(player);
-				if (player.lives <= 0)
-				{
-					PlaySound(player.dieLastSound);
-				}
-				PlaySound(player.dieSound);
-			}
+			PlayerDie(player);
 			blt.rec = {GetScreenWidth() + blt.rec.width, GetScreenHeight() + blt.rec.height, 0.0f, 0.0f};
 		}
 	}

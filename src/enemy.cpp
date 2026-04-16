@@ -307,6 +307,8 @@ void Creeper::Update(EnemyUpdateContext& ctx)
 	};
 	float dist = Vector2Distance(pos, playerPos);
 
+	// Explodde before reaching player to give a better effect
+	float explodeOffset = 20.0f;
 	if (exploding || dist <= explosionRadius + 20.0f)
 	{
 		Explode();
@@ -326,7 +328,6 @@ void Creeper::Move(Vector2& playerPos, Vector2& pos)
 
 void Creeper::Explode()
 {
-	static float time = 0.0f;
 	if (!exploding) exploding = true;
 
 	time += GetFrameTime();
