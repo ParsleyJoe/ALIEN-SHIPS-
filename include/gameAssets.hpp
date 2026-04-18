@@ -26,6 +26,7 @@ namespace GameAssets
 	inline Texture2D fodderSprite;
 	inline Texture2D sinSprite;
 	inline Texture2D asteroidSprite;
+	inline Texture2D barrierSprite;
 	inline Texture2D creeperSprite;
 	inline Texture2D explosionSprite;
 

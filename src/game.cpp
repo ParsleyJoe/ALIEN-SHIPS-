@@ -26,6 +26,7 @@ void gLoadTextures(Game& game)
 	GameAssets::enemyBulletSprite = LoadTexture("resources/enemyBullet.png");
 	GameAssets::creeperSprite = LoadTexture("resources/creeper.png");
 	GameAssets::explosionSprite = LoadTexture("resources/explosion.png");
+	GameAssets::barrierSprite = LoadTexture("resources/barrierEnemy.png");
 
 	GameAssets::powerUpSprites["Speed"] = LoadTexture("resources/speed.png");
 	GameAssets::powerUpSprites["Power"] = LoadTexture("resources/power.png");

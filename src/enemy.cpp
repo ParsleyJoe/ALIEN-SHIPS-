@@ -28,7 +28,7 @@ Enemy::Enemy()
 }
 
 // NOTE: Fodder Functions
-// ----------------------	
+// ----------------------
 void Fodder::Draw()
 {
 	if (IsTextureReady(GameAssets::fodderSprite))
@@ -244,7 +244,16 @@ Barrier::Barrier()
 
 void Barrier::Draw()
 {
-	DrawRectangleRec(rec, Fade(GREEN, 0.7f));
+	if (IsTextureReady(GameAssets::barrierSprite))
+	{
+		DrawTexturePro(GameAssets::barrierSprite, {0.0f, 0.0f, (float)GameAssets::barrierSprite.width, (float)GameAssets::barrierSprite.height},
+		 rec, {}, 0.0f, WHITE);
+	}
+	else
+		DrawRectangleRec(rec, Fade(GREEN, 0.7f));
+#ifdef DEBUG
+	DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, RED);
+#endif
 }
 
 void Barrier::Update(EnemyUpdateContext& ctx)
@@ -254,7 +263,8 @@ void Barrier::Update(EnemyUpdateContext& ctx)
 	if (aliveFor > startMovingIn)
 		rec.y += speed;
 
-	bltSpawner.position = {rec.x, rec.y};
+	Vector2 center = {rec.x + (rec.width * 0.5f), rec.y + (rec.height * 0.5f)};
+	bltSpawner.position = center;
 	SpawnBullets(bltSpawner, GameAssets::enemyBullets, GameAssets::bullet, DEG2RAD * 0.0f);
 }
 

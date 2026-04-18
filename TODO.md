@@ -2,7 +2,7 @@
 
 # Future Features
 
-    - Barrier sprite doesnt exist
+    - Barrier doesnt shoot from center
     - UI is still kinda whack [hella vague, IDK what to do]
 
 # Enemy Types
