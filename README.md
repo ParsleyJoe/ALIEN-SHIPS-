@@ -2,6 +2,9 @@
 
 Work in progress project, endless bullet hell made in Raylib.
 
+## Download
+https://parsleyjoe.itch.io/alien-ships
+
 # Building
 
 Cmake Project, build by:
