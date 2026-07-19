@@ -251,9 +251,9 @@ void Barrier::Draw()
 	}
 	else
 		DrawRectangleRec(rec, Fade(GREEN, 0.7f));
-#ifdef DEBUG
-	DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, RED);
-#endif
+	if (DEBUG)
+		DrawRectangleLines(rec.x, rec.y, rec.width, rec.height, RED);
+
 }
 
 void Barrier::Update(EnemyUpdateContext& ctx)
