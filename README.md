@@ -1,15 +1,25 @@
 # ALIEN SHIPS!
 
-Endless bullet hell game, made in C++, Raylib.
+An endless **bullet hell** shooter written in **C++** using **Raylib**.
+
+🎥 **Gameplay**
 
 https://github.com/user-attachments/assets/691fdd50-bfa5-4342-9d67-b66da3024060
 
-*Recording is laggy as my pc can't handle OBS*
+> **Note:** The gameplay recording is a little choppy because it was captured on low-end hardware.
 
-## Download
- - [here](https://parsleyjoe.itch.io/alien-ships)
+---
 
-# Building
+## 📥 Download
+Download on **itch.io**
+ - https://parsleyjoe.itch.io/alien-ships
+
+# 🔨 Building
+
+## Requirements
+* Cmake
+* Ninja
+* C++17 or newer compiler
 
 ### Windows
 
