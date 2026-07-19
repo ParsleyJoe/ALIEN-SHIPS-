@@ -6,8 +6,7 @@ https://github.com/user-attachments/assets/691fdd50-bfa5-4342-9d67-b66da3024060
 
 *Recording is laggy as my pc can't handle OBS*
 
-## Download
-https://parsleyjoe.itch.io/alien-ships
+## Download the game [here](https://parsleyjoe.itch.io/alien-ships)
 
 # Building
 
